@@ -1,26 +1,40 @@
 package br.eti.clairton.vraptor.crud;
 
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
+import static javax.enterprise.inject.spi.CDI.current;
+
 import org.junit.runners.BlockJUnit4ClassRunner;
+
+import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
+import br.com.caelum.vraptor.test.container.CdiContainer;
+import br.com.caelum.vraptor.test.requestflow.UserFlow;
+import br.com.caelum.vraptor.test.requestflow.VRaptorNavigation;
 
 public class CdiJUnit4Runner extends BlockJUnit4ClassRunner {
 
-	private final Class<?> klass;
-	private final Weld weld;
-	private final WeldContainer container;
+	private static CdiContainer cdiContainer;
+
+	private static CDIBasedContainer cdiBasedContainer;
 
 	public CdiJUnit4Runner(final Class<?> klass)
 			throws org.junit.runners.model.InitializationError {
 		super(klass);
-		this.klass = klass;
-		this.weld = new Weld();
-		this.container = weld.initialize();
+		if (cdiContainer == null) {
+			cdiContainer = new CdiContainer();
+			cdiContainer.start();
+			cdiBasedContainer = current().select(CDIBasedContainer.class).get();
+			System.setProperty(Resource.ENVIROMENT_PARAM, "test");
+		}
 	}
 
 	@Override
 	protected Object createTest() throws Exception {
-		final Object test = container.instance().select(klass).get();
-		return test;
+		return current().select(getTestClass().getJavaClass()).get();
+	}
+
+	public static UserFlow navigate() {
+		final VRaptorNavigation navigation = cdiBasedContainer
+				.instanceFor(VRaptorNavigation.class);
+		navigation.setContainer(cdiContainer);
+		return navigation.start().withoutJsp();
 	}
 }

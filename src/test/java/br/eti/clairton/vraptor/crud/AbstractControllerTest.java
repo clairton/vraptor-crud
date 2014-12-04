@@ -1,5 +1,6 @@
 package br.eti.clairton.vraptor.crud;
 
+import static br.eti.clairton.vraptor.crud.CdiJUnit4Runner.navigate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -20,7 +21,6 @@ import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import br.com.caelum.vraptor.controller.HttpMethod;
-import br.com.caelum.vraptor.test.VRaptorIntegration;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
@@ -29,7 +29,7 @@ import br.eti.clairton.repository.Repository;
 import com.google.gson.Gson;
 
 @RunWith(CdiJUnit4Runner.class)
-public class AbstractControllerTest extends VRaptorIntegration {
+public class AbstractControllerTest {
 	private final Gson gson = new Gson();
 
 	private @Inject Repository repository;
@@ -87,8 +87,8 @@ public class AbstractControllerTest extends VRaptorIntegration {
 			public void fill(final MockHttpServletRequest request) {
 				decorator.fill(request);
 				// page=1&per_page=2
-				request.addParameter("page", "1");
-				request.addParameter("per_page", "2");
+				request.addParameter(Param.PAGE, "1");
+				request.addParameter(Param.PER_PAGE, "2");
 			}
 		};
 		json = "{}";
@@ -119,7 +119,8 @@ public class AbstractControllerTest extends VRaptorIntegration {
 				request.addParameter(Param.field(), id);
 				request.addParameter(Param.operation(id), ">=");
 				request.addParameter(Param.value(id),
-						AbstractControllerTest.this.id.toString());
+						Long.valueOf(AbstractControllerTest.this.id + 2)
+								.toString());
 			}
 		};
 		json = "{}";

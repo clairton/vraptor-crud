@@ -17,7 +17,7 @@ import br.eti.clairton.repository.Operators;
 import br.eti.clairton.repository.Predicate;
 
 @Dependent
-class QueryParamParser {
+public class QueryParamParser {
     private final AttributeBuilder attributeBuilder;
     
     private final Converters converters;

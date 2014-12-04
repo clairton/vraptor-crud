@@ -1,5 +1,6 @@
 package br.eti.clairton.vraptor.crud;
 
+import static br.eti.clairton.vraptor.crud.CdiJUnit4Runner.navigate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -13,11 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import br.com.caelum.vraptor.test.VRaptorIntegration;
 import br.eti.clairton.repository.Predicate;
 
 @RunWith(CdiJUnit4Runner.class)
-public class QueryParamParserTest extends VRaptorIntegration {
+public class QueryParamParserTest {
 	private @Inject QueryParamParser queryParser;
 
 	private MockHttpServletRequest request = new MockHttpServletRequest();
