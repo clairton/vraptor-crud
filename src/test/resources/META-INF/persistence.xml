@@ -6,6 +6,7 @@
 	<persistence-unit name="default">
 		<provider>org.batoo.jpa.core.BatooPersistenceProvider</provider>
 		<class>br.eti.clairton.vraptor.crud.Aplicacao</class>
+		<class>br.eti.clairton.vraptor.crud.Recurso</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />

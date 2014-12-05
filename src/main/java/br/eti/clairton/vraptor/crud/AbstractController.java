@@ -1,10 +1,14 @@
 package br.eti.clairton.vraptor.crud;
 
 import static br.com.caelum.vraptor.view.Results.json;
+import static javax.enterprise.inject.spi.CDI.current;
 
 import java.util.Collection;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
 import javax.servlet.ServletRequest;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -14,6 +18,7 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.serialization.Serializer;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Model;
@@ -57,7 +62,7 @@ public abstract class AbstractController<T extends Model> {
 	@Consumes(value = "application/json")
 	public @ExceptionVerifier @Post void create(final T model) {
 		final T response = repository.save(model);
-		result.use(json()).from(response).serialize();
+		serialize(response);
 	}
 
 	// @Consumes(value = "application/json")
@@ -79,19 +84,19 @@ public abstract class AbstractController<T extends Model> {
 				.where(predicates).collection(page, perPage);
 		final String plural = inflector.pluralize(modelType.getSimpleName());
 		final String tag = inflector.uncapitalize(plural);
-		result.use(json()).from(collection, tag).serialize();
+		serialize(result.use(json()).from(collection, tag));
 	}
 
 	@Consumes(value = "application/json")
 	public @ExceptionVerifier @Get("{id}") void show(final Long id) {
 		final T response = repository.byId(modelType, id);
-		result.use(json()).from(response).serialize();
+		serialize(response);
 	}
 
 	@Consumes(value = "application/json")
 	public @ExceptionVerifier @Delete("{id}") void delete(final Long id) {
-		final T response = repository.byId(modelType, id);
-		repository.remove(response);
+		final T model = repository.byId(modelType, id);
+		repository.remove(model);
 	}
 
 	@Consumes(value = "application/json")
@@ -99,6 +104,22 @@ public abstract class AbstractController<T extends Model> {
 			final T model) {
 		mirror.on(model).set().field("id").withValue(id);
 		final T response = repository.save(model);
-		result.use(json()).from(response).serialize();
+		serialize(response);
+	}
+
+	private void serialize(final T model) {
+		final Serializer serializer = result.use(json()).from(model);
+		serialize(serializer);
+	}
+
+	private void serialize(final Serializer serializer) {
+		final EntityManager em = current().select(EntityManager.class).get();
+		final EntityType<T> entity = em.getMetamodel().entity(modelType);
+		for (final Attribute<? super T, ?> attribute : entity.getAttributes()) {
+			if (attribute.isAssociation() || attribute.isCollection()) {
+				serializer.include(attribute.getName());
+			}
+		}
+		serializer.serialize();
 	}
 }

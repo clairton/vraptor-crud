@@ -51,15 +51,20 @@ public class AbstractControllerTest {
 
 	private Long id;
 
+	private Long recursoId;
+
 	@Before
 	public void init() throws Exception {
 		entityManager.getTransaction().begin();
 		final Connection connection = entityManager.unwrap(Connection.class);
-		final String sql = "DELETE FROM aplicacoes;";
+		final String sql = "DELETE FROM recursos;DELETE FROM aplicacoes;";
 		connection.createStatement().execute(sql);
 		entityManager.getTransaction().commit();
 		Aplicacao aplicacao = new Aplicacao("Teste");
-		repository.save(aplicacao);
+		final Recurso recurso = new Recurso(aplicacao, "Teste");
+		// repository.save(aplicacao);
+		repository.save(recurso);
+		recursoId = recurso.getId();
 		id = aplicacao.getId();
 		aplicacao = new Aplicacao("TesteOutro");
 		repository.save(aplicacao);
@@ -70,7 +75,7 @@ public class AbstractControllerTest {
 	@Test
 	public void testCreate() {
 		final Long count = repository.from(Aplicacao.class).count() + 1;
-		json = "{\"model\":{\"nome\":\"teste\"}}";
+		json = "{'model':{'nome':'teste'}}";
 		final UserFlow userFlow = navigate().post("/aplicacoes", parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
@@ -162,6 +167,19 @@ public class AbstractControllerTest {
 	}
 
 	@Test
+	public void testShowRecursive() {
+		final VRaptorTestResult result = navigate().get(
+				"/recursos/" + recursoId).execute();
+		assertEquals(200, result.getResponse().getStatus());
+		final Map<?, ?> o = gson.fromJson(result.getResponseBody(),
+				HashMap.class);
+		final Map<?, ?> recurso = (Map<?, ?>) o.get("recurso");
+		assertEquals("Teste", recurso.get("nome"));
+		assertNotNull(recurso.get("aplicacao"));
+		assertEquals(Double.valueOf(recursoId), recurso.get("id"));
+	}
+
+	@Test
 	public void testDelete() {
 		entityManager.clear();
 		final Long count = repository.from(Aplicacao.class).count() - 1;
@@ -179,7 +197,8 @@ public class AbstractControllerTest {
 				id);
 		final String nome = "abc" + new Date().getTime();
 		mirror.on(aplicacaoAtualizar).set().field("nome").withValue(nome);
-		json = "{\"model\":{\"nome\":\"" + nome + "\", \"id\":\"" + id + "\"}}";
+		json = "{'model':{'nome':'" + nome + "', 'id':'" + id
+				+ "'},recursos:[{'nome':'outroRecurso'}]}";
 		final UserFlow userFlow = navigate().to("/aplicacoes/" + id,
 				HttpMethod.PUT, parameters);
 		final VRaptorTestResult result = userFlow.execute();
