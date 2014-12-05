@@ -23,7 +23,7 @@ import br.eti.clairton.repository.Repository;
 public abstract class AbstractController<T extends Model> {
 	private final Repository repository;
 
-	private final Class<? extends Model> modelType;
+	private final Class<T> modelType;
 
 	private final Result result;
 
@@ -40,7 +40,7 @@ public abstract class AbstractController<T extends Model> {
 		this(null, null, null, null, null, null, null);
 	}
 
-	public AbstractController(final Class<? extends Model> modelType,
+	public AbstractController(final Class<T> modelType,
 			final Repository repository, final Result result,
 			@Language final Inflector inflector, final Mirror mirror,
 			final ServletRequest request, final QueryParamParser queryParser) {
@@ -56,11 +56,11 @@ public abstract class AbstractController<T extends Model> {
 
 	@Consumes(value = "application/json")
 	public @ExceptionVerifier @Post void create(final T model) {
-		final Model response = repository.save(model);
+		final T response = repository.save(model);
 		result.use(json()).from(response).serialize();
 	}
 
-	//@Consumes(value = "application/json")
+	// @Consumes(value = "application/json")
 	public @ExceptionVerifier @Get void index() {
 		final Map<String, String[]> params = request.getParameterMap();
 		final Integer page;
@@ -84,13 +84,13 @@ public abstract class AbstractController<T extends Model> {
 
 	@Consumes(value = "application/json")
 	public @ExceptionVerifier @Get("{id}") void show(final Long id) {
-		final Model response = repository.byId(modelType, id);
+		final T response = repository.byId(modelType, id);
 		result.use(json()).from(response).serialize();
 	}
 
 	@Consumes(value = "application/json")
 	public @ExceptionVerifier @Delete("{id}") void delete(final Long id) {
-		final Model response = repository.byId(modelType, id);
+		final T response = repository.byId(modelType, id);
 		repository.remove(response);
 	}
 
@@ -98,7 +98,7 @@ public abstract class AbstractController<T extends Model> {
 	public @ExceptionVerifier @Put("{id}") void update(final Long id,
 			final T model) {
 		mirror.on(model).set().field("id").withValue(id);
-		final Model response = repository.save(model);
+		final T response = repository.save(model);
 		result.use(json()).from(response).serialize();
 	}
 }
