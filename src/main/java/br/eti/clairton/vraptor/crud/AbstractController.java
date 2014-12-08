@@ -6,6 +6,7 @@ import static javax.enterprise.inject.spi.CDI.current;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.enterprise.inject.Instance;
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
@@ -112,12 +113,19 @@ public abstract class AbstractController<T extends Model> {
 		serialize(serializer);
 	}
 
+	protected Boolean isRecursiveSerializer() {
+		return Boolean.FALSE;
+	}
+
 	private void serialize(final Serializer serializer) {
-		final EntityManager em = current().select(EntityManager.class).get();
-		final EntityType<T> entity = em.getMetamodel().entity(modelType);
-		for (final Attribute<? super T, ?> attribute : entity.getAttributes()) {
-			if (attribute.isAssociation() || attribute.isCollection()) {
-				serializer.include(attribute.getName());
+		if(isRecursiveSerializer()){
+			final Instance<EntityManager> instance = current().select(EntityManager.class);
+			final EntityManager em = instance.get();
+			final EntityType<T> entity = em.getMetamodel().entity(modelType);
+			for (final Attribute<? super T, ?> attribute : entity.getAttributes()) {
+				if (attribute.isAssociation() || attribute.isCollection()) {
+					serializer.include(attribute.getName());
+				}
 			}
 		}
 		serializer.serialize();

@@ -24,4 +24,9 @@ public class RecursoController extends AbstractController<Recurso> {
 		super(Recurso.class, repository, result, inflector, mirror, request,
 				queryParser);
 	}
+
+	@Override
+	protected Boolean isRecursiveSerializer() {
+		return Boolean.TRUE;
+	}
 }
