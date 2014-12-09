@@ -95,8 +95,7 @@ public abstract class AbstractController<T extends Model> {
 	}
 
 	public @ExceptionVerifier @Delete("{id}") void delete(final Long id) {
-		final T model = repository.byId(modelType, id);
-		repository.remove(model);
+		repository.remove(modelType, id);
         result.use(http()).setStatusCode(200);
 	}
 
