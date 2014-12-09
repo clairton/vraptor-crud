@@ -1,5 +1,6 @@
 package br.eti.clairton.vraptor.crud;
 
+import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
 import static javax.enterprise.inject.spi.CDI.current;
 
@@ -88,16 +89,15 @@ public abstract class AbstractController<T extends Model> {
 		serialize(result.use(json()).from(collection, tag));
 	}
 
-	@Consumes(value = "application/json")
 	public @ExceptionVerifier @Get("{id}") void show(final Long id) {
 		final T response = repository.byId(modelType, id);
 		serialize(response);
 	}
 
-	@Consumes(value = "application/json")
 	public @ExceptionVerifier @Delete("{id}") void delete(final Long id) {
 		final T model = repository.byId(modelType, id);
 		repository.remove(model);
+        result.use(http()).setStatusCode(200);
 	}
 
 	@Consumes(value = "application/json")
@@ -118,11 +118,13 @@ public abstract class AbstractController<T extends Model> {
 	}
 
 	private void serialize(final Serializer serializer) {
-		if(isRecursiveSerializer()){
-			final Instance<EntityManager> instance = current().select(EntityManager.class);
+		if (isRecursiveSerializer()) {
+			final Instance<EntityManager> instance = current().select(
+					EntityManager.class);
 			final EntityManager em = instance.get();
 			final EntityType<T> entity = em.getMetamodel().entity(modelType);
-			for (final Attribute<? super T, ?> attribute : entity.getAttributes()) {
+			for (final Attribute<? super T, ?> attribute : entity
+					.getAttributes()) {
 				if (attribute.isAssociation() || attribute.isCollection()) {
 					serializer.include(attribute.getName());
 				}
