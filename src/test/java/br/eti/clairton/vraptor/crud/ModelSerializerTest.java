@@ -5,7 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.vidageek.mirror.dsl.Mirror;
 
@@ -34,7 +36,6 @@ public class ModelSerializerTest {
 	@Test
 	public void testOneToMany() {
 		final Aplicacao object = new Aplicacao("Teste");
-		final String json = "{\"recursos\":[1,2],\"nome\":\"Teste\",\"id\":0}";
 		final Recurso recurso = new Recurso(object, "Teste");
 		final Recurso recurso2 = new Recurso(object, "Outro");
 		mirror.on(object).set().field("id").withValue(0l);
@@ -49,7 +50,12 @@ public class ModelSerializerTest {
 			}
 		});
 		object.adicionar(recursos);
-		assertEquals(json, gson.toJson(object));
+		final String json = gson.toJson(object);
+		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
+		final List<?> list = (List<?>) resultado.get("recursos");
+		assertEquals(2, list.size());
+		assertEquals("Teste", resultado.get("nome"));
+		assertEquals(0.0, resultado.get("id"));
 	}
 
 	@Test
@@ -61,9 +67,11 @@ public class ModelSerializerTest {
 		final Recurso object = new Recurso(aplicacao, "teste");
 		final Long idRecurso = 2000l;
 		mirror.on(object).set().field("id").withValue(idRecurso);
-		final String expected = "{\"aplicacao\":1000,\"nome\":\"teste\",\"id\":2000}";
-		final String result = gson.toJson(object, Recurso.class);
-		assertEquals(expected, result);
+		final String json = gson.toJson(object, Recurso.class);
+		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
+		assertEquals("teste", resultado.get("nome"));
+		assertEquals(2000.0, resultado.get("id"));
+		assertEquals(1000.0, resultado.get("aplicacao"));
 	}
 
 }
