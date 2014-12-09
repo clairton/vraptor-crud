@@ -13,13 +13,13 @@
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>inflector</artifactId>
 			<version>0.0.1</version>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>repository</artifactId>
 			<version>0.1.1</version>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -225,6 +225,14 @@
 		<repository>
 			<id>repository-mvn-repo</id>
 			<url>https://raw.github.com/clairton/repository/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>identificator-mvn-repo</id>
+			<url>https://raw.github.com/clairton/identificator/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
