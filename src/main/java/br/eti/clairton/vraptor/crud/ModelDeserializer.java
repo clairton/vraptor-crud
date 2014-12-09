@@ -23,6 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
@@ -70,7 +71,11 @@ public class ModelDeserializer implements JsonDeserializer<Model> {
 					value = field.getType().newInstance();
 					final SetterHandler handler = mirror.on(value).set();
 					final FieldSetter fieldSetter = handler.field("id");
-					fieldSetter.withValue(entry.getValue().getAsLong());
+					if (JsonNull.class.isInstance(entry.getValue())) {
+						fieldSetter.withValue(null);
+					} else {
+						fieldSetter.withValue(entry.getValue().getAsLong());
+					}
 				} else {
 					value = context.deserialize(entry.getValue(),
 							field.getType());
@@ -82,5 +87,4 @@ public class ModelDeserializer implements JsonDeserializer<Model> {
 			throw new JsonParseException(e);
 		}
 	}
-
 }

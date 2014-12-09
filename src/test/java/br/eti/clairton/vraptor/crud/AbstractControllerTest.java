@@ -182,13 +182,13 @@ public class AbstractControllerTest {
 	@Test
 	public void testDelete() {
 		entityManager.clear();
-		final Long count = repository.from(Aplicacao.class).count() - 1;
-		final UserFlow userFlow = navigate().to("/aplicacoes/" + id,
+		final Long count = repository.from(Recurso.class).count() - 1;
+		final UserFlow userFlow = navigate().to("/recursos/" + recursoId,
 				HttpMethod.DELETE, new Parameters());
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 		assertEquals("", result.getResponseBody());
-		assertEquals(count, repository.from(Aplicacao.class).count());
+		assertEquals(count, repository.from(Recurso.class).count());
 	}
 
 	@Test
