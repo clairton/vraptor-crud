@@ -3,10 +3,9 @@
   <groupId>br.eti.clairton</groupId>
   <artifactId>vraptor-crud</artifactId>
   <versioning>
-    <release>0.2.1</release>
     <versions>
-      <version>0.2.1</version>
+      <version>0.1.0-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20141209171825</lastUpdated>
+    <lastUpdated>20141211154534</lastUpdated>
   </versioning>
 </metadata>
