@@ -9,6 +9,7 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.metamodel.Metamodel;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.cache.CacheStore;
@@ -48,6 +49,11 @@ public class Resource {
 	@Produces
 	public EntityManager getEm() {
 		return em;
+	}
+
+	@Produces
+	public Metamodel getMetamodel() {
+		return em.getMetamodel();
 	}
 
 	@Produces

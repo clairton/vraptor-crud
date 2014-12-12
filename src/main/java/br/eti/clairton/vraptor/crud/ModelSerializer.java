@@ -43,7 +43,7 @@ public class ModelSerializer implements JsonSerializer<Model> {
 			final AccessorsController controller = mirror.on(src);
 			for (final Field field : fields) {
 				final String tag = field.getName();
-				if ("serialVersionUID".equals(tag)) {
+				if ("serialVersionUID".equals(tag) || "MIRROR".equals(tag)) {
 					continue;
 				}
 				final Object value;

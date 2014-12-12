@@ -7,6 +7,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import br.eti.clairton.identificator.Identificator;
+
 @Entity
 @Table(name = "recursos")
 public class Recurso extends br.eti.clairton.repository.Model {
@@ -18,6 +20,7 @@ public class Recurso extends br.eti.clairton.repository.Model {
 
 	@NotNull
 	@Size(min = 1, max = 50)
+	@Identificator
 	private final String nome;
 
 	@Deprecated

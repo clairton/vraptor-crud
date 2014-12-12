@@ -101,7 +101,7 @@ public abstract class AbstractController<T extends Model> {
 		serialize(response);
 	}
 
-	private void serialize(final T model) {
+	protected void serialize(final T model) {
 		final Serializer serializer = result.use(json()).from(model);
 		serialize(serializer);
 	}

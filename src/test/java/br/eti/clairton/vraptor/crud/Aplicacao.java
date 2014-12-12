@@ -72,15 +72,15 @@ public class Aplicacao extends br.eti.clairton.repository.Model {
 		this(nome, Collections.<Recurso> emptyList());
 	}
 
-	public void adicionar(Recurso recurso) {
+	public void adicionar(final Recurso recurso) {
 		recursos.add(recurso);
 	}
 
-	public void adicionar(Collection<Recurso> recursos) {
+	public void adicionar(final Collection<Recurso> recursos) {
 		this.recursos.addAll(recursos);
 	}
 
-	public void remover(Recurso recurso) {
+	public void remover(final Recurso recurso) {
 		recursos.remove(recurso);
 	}
 

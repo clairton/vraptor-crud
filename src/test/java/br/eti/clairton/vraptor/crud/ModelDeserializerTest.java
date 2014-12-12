@@ -5,32 +5,27 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
 
+import javax.inject.Inject;
+
 import net.vidageek.mirror.dsl.Mirror;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import br.eti.clairton.repository.Model;
+import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
 
+@RunWith(CdiJUnit4Runner.class)
 public class ModelDeserializerTest {
-	private final Mirror mirror = new Mirror();
+	private @Inject Mirror mirror;
+	private @Inject GsonBuilderWrapper builder;
 	private Gson gson;
 
 	@Before
 	public void init() {
-		final GsonBuilder gsonBuilder = new GsonBuilder();
-		final JsonSerializer<Model> serializer = new ModelSerializer();
-		gsonBuilder.registerTypeAdapter(Aplicacao.class, serializer);
-		gsonBuilder.registerTypeAdapter(Recurso.class, serializer);
-		final JsonDeserializer<Model> deserializer = new ModelDeserializer();
-		gsonBuilder.registerTypeAdapter(Aplicacao.class, deserializer);
-		gsonBuilder.registerTypeAdapter(Recurso.class, deserializer);
-		gson = gsonBuilder.create();
+		gson = builder.create();
 	}
 
 	@Test
