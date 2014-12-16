@@ -6,10 +6,13 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.persistence.Cache;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.metamodel.Metamodel;
+
+import org.mockito.Mockito;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.cache.CacheStore;
@@ -54,6 +57,11 @@ public class Resource {
 	@Produces
 	public Metamodel getMetamodel() {
 		return em.getMetamodel();
+	}
+
+	@Produces
+	public Cache getCache() {
+		return Mockito.mock(Cache.class);
 	}
 
 	@Produces

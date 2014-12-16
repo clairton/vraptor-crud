@@ -22,7 +22,15 @@ import br.eti.clairton.repository.Model;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
 
-public abstract class AbstractController<T extends Model> {
+/**
+ * Controller abstrato para servir como base para um crud.
+ * 
+ * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ *
+ * @param <T>
+ *            tipo do modelo
+ */
+public abstract class CrudController<T extends Model> extends Resourceable {
 	private final Repository repository;
 
 	private final Class<T> modelType;
@@ -37,16 +45,37 @@ public abstract class AbstractController<T extends Model> {
 
 	private final QueryParamParser queryParser;
 
+	/**
+	 * CDI only.
+	 */
 	@Deprecated
-	public AbstractController() {
+	protected CrudController() {
 		this(null, null, null, null, null, null, null);
 	}
 
-	public AbstractController(final Class<T> modelType,
+	/**
+	 * Construtor Padrão.
+	 * 
+	 * @param modelType
+	 *            tipo do modelo
+	 * @param repository
+	 *            instancia do repository
+	 * @param result
+	 *            instancia de result
+	 * @param inflector
+	 *            instancia de inflector
+	 * @param mirror
+	 *            instancia de mirror
+	 * @param request
+	 *            instancia de request
+	 * @param queryParser
+	 *            instancia de quey parser
+	 */
+	public CrudController(final Class<T> modelType,
 			final Repository repository, final Result result,
 			@Language final Inflector inflector, final Mirror mirror,
 			final ServletRequest request, final QueryParamParser queryParser) {
-		super();
+		super(modelType);
 		this.repository = repository;
 		this.result = result;
 		this.modelType = modelType;
@@ -56,13 +85,30 @@ public abstract class AbstractController<T extends Model> {
 		this.queryParser = queryParser;
 	}
 
+	/**
+	 * Cria um novo registro do recurso.
+	 * 
+	 * @param model
+	 *            novo registro
+	 */
 	@Consumes(value = "application/json")
-	public @ExceptionVerifier @Post void create(final T model) {
+	@ExceptionVerifier
+	@Post
+	@Authorized
+	@Authenticated
+	public void create(final T model) {
 		final T response = repository.save(model);
 		serialize(response);
 	}
 
-	public @ExceptionVerifier @Get void index() {
+	/**
+	 * Mostra os recursos. Parametros para filtagem são mandados na URL.
+	 */
+	@ExceptionVerifier
+	@Get
+	@Authorized
+	@Authenticated
+	public void index() {
 		final Map<String, String[]> params = request.getParameterMap();
 		final Integer page;
 		final Integer perPage;
@@ -83,24 +129,70 @@ public abstract class AbstractController<T extends Model> {
 		serialize(result.use(json()).from(collection, tag));
 	}
 
-	public @ExceptionVerifier @Get("{id}") void show(final Long id) {
+	/**
+	 * Mostra um recurso.
+	 * 
+	 * @param id
+	 *            id do recurso
+	 */
+	@ExceptionVerifier
+	@Get("{id}")
+	@Authorized
+	@Authenticated
+	public void show(final Long id) {
 		final T response = repository.byId(modelType, id);
 		serialize(response);
 	}
 
-	public @ExceptionVerifier @Delete("{id}") void delete(final Long id) {
+	/**
+	 * Deleta um recurso.
+	 * 
+	 * @param id
+	 *            id do recurso
+	 */
+	@ExceptionVerifier
+	@Delete("{id}")
+	@Authorized
+	@Authenticated
+	public void delete(final Long id) {
 		repository.remove(modelType, id);
 		result.use(http()).setStatusCode(200);
 	}
 
+	/**
+	 * Atualiza um recurso.
+	 * 
+	 * @param id
+	 *            id do recurso
+	 * @param model
+	 *            recurso a ser atualizado
+	 */
 	@Consumes(value = "application/json")
-	public @ExceptionVerifier @Put("{id}") void update(final Long id,
-			final T model) {
+	@ExceptionVerifier
+	@Put("{id}")
+	@Authorized
+	@Authenticated
+	public void update(final Long id, final T model) {
 		mirror.on(model).set().field("id").withValue(id);
 		final T response = repository.save(model);
 		serialize(response);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@Ignore
+	public String getResourceName() {
+		return super.getResourceName();
+	}
+
+	/**
+	 * Serializa um model.
+	 * 
+	 * @param model
+	 *            model a ser serilizado
+	 */
 	protected void serialize(final T model) {
 		final Serializer serializer = result.use(json()).from(model);
 		serialize(serializer);

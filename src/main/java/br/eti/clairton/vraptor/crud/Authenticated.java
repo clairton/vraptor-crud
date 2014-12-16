@@ -10,14 +10,15 @@ import java.lang.annotation.Target;
 import javax.interceptor.InterceptorBinding;
 
 /**
- * Annotação Interceptar metodos e tratar exceções.
+ * Annotation para interceptar metodo verificar autenticacão.
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
 @Inherited
 @Documented
 @InterceptorBinding
+@Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(value = RetentionPolicy.RUNTIME)
-public @interface ExceptionVerifier {
+public @interface Authenticated {
+
 }

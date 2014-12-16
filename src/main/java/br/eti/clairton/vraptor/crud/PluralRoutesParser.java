@@ -1,5 +1,6 @@
 package br.eti.clairton.vraptor.crud;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -53,7 +54,7 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritDoc}. adiciona o nome do controller para ficar /aplicacoes/{id}
 	 */
 	@Override
 	protected void fixURIs(final Class<?> type, final String[] uris) {
@@ -82,6 +83,19 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 			return "/" + inflector.pluralize(baseName);
 		} else {
 			return prefix;
+		}
+	}
+
+	/**
+	 * Se o method não estiver anotado com {@link Ignore} chama super.
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean isEligible(Method javaMethod) {
+		if (javaMethod.isAnnotationPresent(Ignore.class)) {
+			return Boolean.FALSE;
+		} else {
+			return super.isEligible(javaMethod);
 		}
 	}
 }

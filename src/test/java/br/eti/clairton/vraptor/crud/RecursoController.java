@@ -11,7 +11,7 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Repository;
 
 @Controller
-public class RecursoController extends AbstractController<Recurso> {
+public class RecursoController extends CrudController<Recurso> {
 	@Deprecated
 	protected RecursoController() {
 		this(null, null, null, null, null, null);

@@ -11,7 +11,7 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Repository;
 
 @Controller
-public class AplicacaoController extends AbstractController<Aplicacao> {
+public class AplicacaoController extends CrudController<Aplicacao> {
     @Deprecated
     protected AplicacaoController() {
         this(null, null, null, null, null, null);

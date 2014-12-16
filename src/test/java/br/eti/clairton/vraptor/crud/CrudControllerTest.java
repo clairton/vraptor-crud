@@ -29,7 +29,7 @@ import br.eti.clairton.repository.Repository;
 import com.google.gson.Gson;
 
 @RunWith(CdiJUnit4Runner.class)
-public class AbstractControllerTest {
+public class CrudControllerTest {
 	private final Gson gson = new Gson();
 
 	private @Inject Repository repository;
@@ -62,7 +62,6 @@ public class AbstractControllerTest {
 		entityManager.getTransaction().commit();
 		Aplicacao aplicacao = new Aplicacao("Teste");
 		final Recurso recurso = new Recurso(aplicacao, "Teste");
-		// repository.save(aplicacao);
 		repository.save(recurso);
 		recursoId = recurso.getId();
 		id = aplicacao.getId();
@@ -97,8 +96,8 @@ public class AbstractControllerTest {
 			}
 		};
 		json = "{}";
-		final VRaptorTestResult result = navigate().get(url, parameters)
-				.execute();
+		final UserFlow flow = navigate().get(url, parameters);
+		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 		final String response = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
@@ -124,14 +123,14 @@ public class AbstractControllerTest {
 				request.addParameter(Param.field(), id);
 				request.addParameter(Param.operation(id), ">=");
 				request.addParameter(Param.value(id),
-						Long.valueOf(AbstractControllerTest.this.id + 2)
+						Long.valueOf(CrudControllerTest.this.id + 2)
 								.toString());
 			}
 		};
 		json = "{}";
 		final String url = "/aplicacoes";
-		final VRaptorTestResult result = navigate().get(url, parameters)
-				.execute();
+		final UserFlow flow = navigate().get(url, parameters);
+		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 		final String response = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
@@ -143,11 +142,11 @@ public class AbstractControllerTest {
 
 	@Test
 	public void testIndex() {
-		final VRaptorTestResult result = navigate().get("/aplicacoes")
-				.execute();
+		final UserFlow flow = navigate().get("/aplicacoes");
+		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
-		final Map<?, ?> o = gson.fromJson(result.getResponseBody(),
-				HashMap.class);
+		final String response = result.getResponseBody();
+		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		assertNotNull(o);
 		final List<?> aplicacoes = (List<?>) o.get("aplicacoes");
 		assertNotNull(aplicacoes);
@@ -156,11 +155,11 @@ public class AbstractControllerTest {
 
 	@Test
 	public void testShow() {
-		final VRaptorTestResult result = navigate().get("/aplicacoes/" + id)
-				.execute();
+		final UserFlow flow = navigate().get("/aplicacoes/" + id);
+		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
-		final Map<?, ?> o = gson.fromJson(result.getResponseBody(),
-				HashMap.class);
+		final String response = result.getResponseBody();
+		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		final Map<?, ?> aplicacao = (Map<?, ?>) o.get("aplicacao");
 		assertEquals("Teste", aplicacao.get("nome"));
 		assertEquals(Double.valueOf(id), aplicacao.get("id"));
@@ -168,11 +167,11 @@ public class AbstractControllerTest {
 
 	@Test
 	public void testShowRecursive() {
-		final VRaptorTestResult result = navigate().get(
-				"/recursos/" + recursoId).execute();
+		final UserFlow flow = navigate().get("/recursos/" + recursoId);
+		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
-		final Map<?, ?> o = gson.fromJson(result.getResponseBody(),
-				HashMap.class);
+		final String response = result.getResponseBody();
+		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		final Map<?, ?> recurso = (Map<?, ?>) o.get("recurso");
 		assertEquals("Teste", recurso.get("nome"));
 		assertNotNull(recurso.get("aplicacao"));
@@ -183,8 +182,9 @@ public class AbstractControllerTest {
 	public void testDelete() {
 		entityManager.clear();
 		final Long count = repository.from(Recurso.class).count() - 1;
-		final UserFlow userFlow = navigate().to("/recursos/" + recursoId,
-				HttpMethod.DELETE, new Parameters());
+		final HttpMethod method = HttpMethod.DELETE;
+		final String url = "/recursos/" + recursoId;
+		final UserFlow userFlow = navigate().to(url, method, new Parameters());
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 		assertEquals("", result.getResponseBody());
@@ -193,18 +193,19 @@ public class AbstractControllerTest {
 
 	@Test
 	public void testUpdate() {
-		final Aplicacao aplicacaoAtualizar = repository.byId(Aplicacao.class,
-				id);
+		final Class<Aplicacao> type = Aplicacao.class;
+		final Aplicacao atualizar = repository.byId(type, id);
 		final String nome = "abc" + new Date().getTime();
-		mirror.on(aplicacaoAtualizar).set().field("nome").withValue(nome);
+		mirror.on(atualizar).set().field("nome").withValue(nome);
 		json = "{'model':{'nome':'" + nome + "', 'id':'" + id
 				+ "'},recursos:[{'nome':'outroRecurso'}]}";
-		final UserFlow userFlow = navigate().to("/aplicacoes/" + id,
-				HttpMethod.PUT, parameters);
-		final VRaptorTestResult result = userFlow.execute();
+		final String url = "/aplicacoes/" + id;
+		final HttpMethod method = HttpMethod.PUT;
+		final UserFlow flow = navigate().to(url, method, parameters);
+		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
-		assertAplicacao(aplicacaoAtualizar, result.getResponseBody());
-		final Aplicacao resultado = repository.byId(Aplicacao.class, id);
+		assertAplicacao(atualizar, result.getResponseBody());
+		final Aplicacao resultado = repository.byId(type, id);
 		assertEquals(nome, resultado.getNome());
 	}
 
