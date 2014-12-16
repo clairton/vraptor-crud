@@ -21,6 +21,9 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Model;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
+import br.eti.clairton.vraptor.crud.security.Authenticated;
+import br.eti.clairton.vraptor.crud.security.Authorized;
+import br.eti.clairton.vraptor.crud.security.Resourceable;
 
 /**
  * Controller abstrato para servir como base para um crud.

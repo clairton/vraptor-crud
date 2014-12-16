@@ -4,6 +4,7 @@ import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
 import static java.lang.String.format;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +17,8 @@ import javax.persistence.NoResultException;
 import javax.validation.ConstraintViolationException;
 
 import br.com.caelum.vraptor.Result;
+import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
+import br.eti.clairton.vraptor.crud.security.UnauthorizedException;
 
 /**
  * Verifica o encaminhando diante das exceções lançadas para os metodos
@@ -70,7 +73,7 @@ public class ExceptionVerifierInterceptor {
 	 */
 	@AroundInvoke
 	public Object verify(final InvocationContext invocationContext)
-			throws Exception {
+			throws Throwable {
 		try {
 			return invocationContext.proceed();
 		} catch (final NoResultException e) {
@@ -87,6 +90,8 @@ public class ExceptionVerifierInterceptor {
 			result.use(http()).setStatusCode(422);
 			final Map<?, ?> errors = adapter.to(e.getConstraintViolations());
 			result.use(json()).from(errors, "errors").serialize();
+		} catch (final InvocationTargetException e) {
+			throw e.getTargetException();
 		} catch (final Throwable e) {
 			logger.log(Level.SEVERE, "Throwable", e);
 			throw e;

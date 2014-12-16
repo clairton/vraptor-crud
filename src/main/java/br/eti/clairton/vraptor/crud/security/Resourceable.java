@@ -1,4 +1,4 @@
-package br.eti.clairton.vraptor.crud;
+package br.eti.clairton.vraptor.crud.security;
 
 import br.eti.clairton.repository.Model;
 

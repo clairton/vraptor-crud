@@ -23,7 +23,7 @@ public class ConstraintValidationAdapterTest {
 	private final ConstraintValidationAdapter adapter = new ConstraintValidationAdapter();
 
 	@Test
-	public void testSerialize() throws Exception {
+	public void testSerialize() throws Throwable {
 		final MockResult result = new MockResult();
 		final Logger logger = Logger.getAnonymousLogger();
 		final ExceptionVerifierInterceptor interceptor = new ExceptionVerifierInterceptor(

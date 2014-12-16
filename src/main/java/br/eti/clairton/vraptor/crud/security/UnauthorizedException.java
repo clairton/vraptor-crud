@@ -1,0 +1,45 @@
+package br.eti.clairton.vraptor.crud.security;
+
+/**
+ * Exceção lançada quando o usuario não tem autorização.
+ * 
+ * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ *
+ */
+public class UnauthorizedException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Construtor Padrão.
+	 */
+	public UnauthorizedException() {
+		super();
+	}
+
+	/**
+	 * Construtor com Parametros.
+	 * 
+	 * @param message
+	 *            mensagem a ser mostrada
+	 */
+	public UnauthorizedException(final String message) {
+		super(message);
+	}
+
+	/**
+	 * Construtor com possibilidade de detalhamento da não autorização.
+	 * 
+	 * @param usuario
+	 *            usuario que não esta autorizado
+	 * @param resource
+	 *            recurso que não esta autorizado
+	 * @param operation
+	 *            operação que não esta autorizado
+	 */
+	public UnauthorizedException(final String usuario, final String resource,
+			final String operation) {
+		this(String.format("%s não autorizado para acessar %s#%s", usuario,
+				resource, operation));
+	}
+
+}

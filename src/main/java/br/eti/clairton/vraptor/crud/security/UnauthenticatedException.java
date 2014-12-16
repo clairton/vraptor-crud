@@ -1,4 +1,5 @@
-package br.eti.clairton.vraptor.crud;
+package br.eti.clairton.vraptor.crud.security;
+
 
 /**
  * Exceção para lançar quando tentar acessar um recurso sem estar autenticado.
@@ -25,5 +26,4 @@ public class UnauthenticatedException extends RuntimeException {
 	public UnauthenticatedException(final String message) {
 		super(message);
 	}
-
 }

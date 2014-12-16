@@ -26,6 +26,8 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.view.HttpResult;
+import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
+import br.eti.clairton.vraptor.crud.security.UnauthorizedException;
 
 public class ExceptionVerifierInterceptorTest {
 	private ExceptionVerifierInterceptor interceptor;
@@ -46,7 +48,7 @@ public class ExceptionVerifierInterceptorTest {
 	}
 
 	@Test
-	public void testVerifyUnauthorizedException() throws Exception {
+	public void testVerifyUnauthorizedException() throws Throwable {
 		final Throwable exception = new UnauthorizedException("lskhdflksdhg");
 		when(context.proceed()).thenThrow(exception);
 		interceptor.verify(context);
@@ -54,7 +56,7 @@ public class ExceptionVerifierInterceptorTest {
 	}
 
 	@Test
-	public void testVerifyUnauthenticatedException() throws Exception {
+	public void testVerifyUnauthenticatedException() throws Throwable {
 		final Throwable exception = new UnauthenticatedException(
 				"sgdsalkghhhyk");
 		when(context.proceed()).thenThrow(exception);
@@ -63,7 +65,7 @@ public class ExceptionVerifierInterceptorTest {
 	}
 
 	@Test
-	public void testVerifyNoResultException() throws Exception {
+	public void testVerifyNoResultException() throws Throwable {
 		final Throwable exception = new NoResultException();
 		when(context.proceed()).thenThrow(exception);
 		interceptor.verify(context);
@@ -71,7 +73,7 @@ public class ExceptionVerifierInterceptorTest {
 	}
 
 	@Test
-	public void testVerifyConstraintViolationException() throws Exception {
+	public void testVerifyConstraintViolationException() throws Throwable {
 		final JSONSerialization jsonResult = mock(JSONSerialization.class);
 		when(result.use(json())).thenReturn(jsonResult);
 		final Validator v = buildDefaultValidatorFactory().getValidator();
@@ -86,7 +88,7 @@ public class ExceptionVerifierInterceptorTest {
 	}
 
 	@Test(expected = Exception.class)
-	public void testVerifyThrowable() throws Exception {
+	public void testVerifyThrowable() throws Throwable {
 		when(context.proceed()).thenThrow(new Exception());
 		interceptor.verify(context);
 	}
