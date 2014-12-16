@@ -22,6 +22,8 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
+import br.eti.clairton.vraptor.crud.security.Authorizator;
+import br.eti.clairton.vraptor.crud.security.User;
 
 /**
  * Produz os recursos.
@@ -74,6 +76,23 @@ public class Resource {
 	@Produces
 	public Mirror getMirror() {
 		return mirror;
+	}
+
+	@User
+	@Produces
+	public String getUser() {
+		return "jose";
+	}
+
+	@Produces
+	public Authorizator getAuthorizator() {
+		return new Authorizator() {
+
+			@Override
+			public Boolean isAble(String user, String resource, String operation) {
+				return Boolean.TRUE;
+			}
+		};
 	}
 
 	/**

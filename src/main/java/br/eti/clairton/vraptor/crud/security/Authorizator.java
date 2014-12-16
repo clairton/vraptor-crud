@@ -1,6 +1,5 @@
 package br.eti.clairton.vraptor.crud.security;
 
-
 /**
  * Serviço que verifica se o usuario está autorizado.
  * 
@@ -19,6 +18,6 @@ public interface Authorizator {
 	 *            operation
 	 * @return true/false
 	 */
-	public boolean isAble(final String user, final String resource,
+	public Boolean isAble(final String user, final String resource,
 			final String operation);
 }

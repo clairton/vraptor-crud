@@ -28,7 +28,7 @@ public class AuthorizationInterceptor {
 	}
 
 	@Inject
-	public AuthorizationInterceptor(final String user,
+	public AuthorizationInterceptor(@User final String user,
 			final Authorizator authorizator) {
 		super();
 		this.user = user;
