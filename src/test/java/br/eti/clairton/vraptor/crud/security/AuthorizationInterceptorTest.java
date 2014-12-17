@@ -23,11 +23,12 @@ public class AuthorizationInterceptorTest {
 	private InvocationContext context;
 	private Authorizator authorizator;
 	private final String usuario = "jose";
+	private final String app = "test";
 
 	@Before
 	public void setUp() throws Exception {
 		authorizator = mock(Authorizator.class);
-		interceptor = new AuthorizationInterceptor(usuario, authorizator);
+		interceptor = new AuthorizationInterceptor(app, usuario, authorizator);
 		final Object[] parameters = {};
 		final Resourceable target = new Resourceable(Aplicacao.class) {
 			@Authorized
@@ -87,8 +88,9 @@ public class AuthorizationInterceptorTest {
 
 	@Test
 	public void testInvokeAuthorized() throws Throwable {
-		when(authorizator.isAble(anyObject(), anyString(), anyString()))
-				.thenReturn(Boolean.TRUE);
+		when(
+				authorizator.isAble(anyObject(), anyObject(), anyString(),
+						anyString())).thenReturn(Boolean.TRUE);
 		final Object expected = "çegjweargihjjhjsfkhgsdlçgjusdayjicodtaiotiow";
 		final InvocationContext spy = spy(context);
 		when(spy.proceed()).thenReturn(expected);
@@ -97,8 +99,9 @@ public class AuthorizationInterceptorTest {
 
 	@Test(expected = TestException.class)
 	public void testOriginalException() throws Throwable {
-		when(authorizator.isAble(anyObject(), anyString(), anyString()))
-				.thenThrow(new TestException());
+		when(
+				authorizator.isAble(anyObject(), anyObject(), anyString(),
+						anyString())).thenThrow(new TestException());
 		interceptor.invoke(context);
 	}
 }

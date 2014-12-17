@@ -22,6 +22,7 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
+import br.eti.clairton.vraptor.crud.security.App;
 import br.eti.clairton.vraptor.crud.security.Authorizator;
 import br.eti.clairton.vraptor.crud.security.User;
 
@@ -84,12 +85,19 @@ public class Resource {
 		return "jose";
 	}
 
+	@App
+	@Produces
+	public String getApp() {
+		return "test";
+	}
+
 	@Produces
 	public Authorizator getAuthorizator() {
 		return new Authorizator() {
 
 			@Override
-			public Boolean isAble(String user, String resource, String operation) {
+			public Boolean isAble(final String user, final String app,
+					final String resource, final String operation) {
 				return Boolean.TRUE;
 			}
 		};

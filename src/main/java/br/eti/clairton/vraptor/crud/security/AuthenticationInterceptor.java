@@ -19,7 +19,7 @@ public class AuthenticationInterceptor {
 	/**
 	 * CDI eyes only.
 	 */
-	@Deprecated
+	// @Deprecated
 	protected AuthenticationInterceptor() {
 		// this(null, null);
 	}

@@ -17,6 +17,7 @@ import javax.interceptor.InvocationContext;
 @Authorized
 public class AuthorizationInterceptor {
 	private final String user;
+	private final String app;
 	private final Authorizator authorizator;
 
 	/**
@@ -24,13 +25,14 @@ public class AuthorizationInterceptor {
 	 */
 	@Deprecated
 	protected AuthorizationInterceptor() {
-		this(null, null);
+		this(null, null, null);
 	}
 
 	@Inject
-	public AuthorizationInterceptor(@User final String user,
-			final Authorizator authorizator) {
+	public AuthorizationInterceptor(@App final String app,
+			@User final String user, final Authorizator authorizator) {
 		super();
+		this.app = app;
 		this.user = user;
 		this.authorizator = authorizator;
 	}
@@ -51,7 +53,7 @@ public class AuthorizationInterceptor {
 		final Resourceable resourceable = (Resourceable) target;
 		final String resource = resourceable.getResourceName();
 		final String operation = context.getMethod().getName();
-		if (!authorizator.isAble(user, resource, operation)) {
+		if (!authorizator.isAble(app, user, resource, operation)) {
 			throw new UnauthorizedException(user, resource, operation);
 		} else {
 			try {

@@ -10,6 +10,9 @@ public interface Authorizator {
 	/**
 	 * Verifica se o usuario esta habilitado a acessar.
 	 * 
+	 * @param app
+	 *            aplicacão
+	 * 
 	 * @param user
 	 *            usuario
 	 * @param resource
@@ -18,6 +21,6 @@ public interface Authorizator {
 	 *            operation
 	 * @return true/false
 	 */
-	public Boolean isAble(final String user, final String resource,
-			final String operation);
+	public Boolean isAble(final String user, final String app,
+			final String resource, final String operation);
 }
