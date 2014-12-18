@@ -18,6 +18,10 @@ public class CdiJUnit4Runner extends BlockJUnit4ClassRunner {
 	public CdiJUnit4Runner(final Class<?> klass)
 			throws org.junit.runners.model.InitializationError {
 		super(klass);
+		start();
+	}
+
+	private void start() {
 		if (cdiContainer == null) {
 			cdiContainer = new CdiContainer();
 			cdiContainer.start();
