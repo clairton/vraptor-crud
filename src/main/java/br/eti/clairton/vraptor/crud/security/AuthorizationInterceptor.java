@@ -7,6 +7,8 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
+import org.apache.logging.log4j.Logger;
+
 /**
  * INterceptor para metodos anotados com {@link Authorized}.
  * 
@@ -19,22 +21,17 @@ public class AuthorizationInterceptor {
 	private final String user;
 	private final String app;
 	private final Authorizator authorizator;
-
-	/**
-	 * CDI eyes only.
-	 */
-	@Deprecated
-	protected AuthorizationInterceptor() {
-		this(null, null, null);
-	}
+	private final Logger logger;
 
 	@Inject
 	public AuthorizationInterceptor(@App final String app,
-			@User final String user, final Authorizator authorizator) {
+			@User final String user, final Authorizator authorizator,
+			final Logger logger) {
 		super();
 		this.app = app;
 		this.user = user;
 		this.authorizator = authorizator;
+		this.logger = logger;
 	}
 
 	/**
@@ -53,7 +50,9 @@ public class AuthorizationInterceptor {
 		final Resourceable resourceable = (Resourceable) target;
 		final String resource = resourceable.getResourceName();
 		final String operation = context.getMethod().getName();
-		if (!authorizator.isAble(app, user, resource, operation)) {
+		logger.debug("Interceptando {}#{}", new Object[] {
+				target.getClass().getSimpleName(), operation });
+		if (!authorizator.isAble(user, app, resource, operation)) {
 			throw new UnauthorizedException(user, resource, operation);
 		} else {
 			try {

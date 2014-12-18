@@ -12,13 +12,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Set;
-import java.util.logging.Logger;
 
 import javax.interceptor.InvocationContext;
 import javax.persistence.NoResultException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +34,7 @@ public class ExceptionVerifierInterceptorTest {
 	private ExceptionVerifierInterceptor interceptor;
 	private InvocationContext context;
 	private ConstraintValidationAdapter adapter;
-	private Logger logger = Logger.getLogger("Test");
+	private Logger logger = LogManager.getLogger("Test");
 	private Result result;
 	private HttpResult httpResult;
 

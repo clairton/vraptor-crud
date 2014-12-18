@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.interceptor.InvocationContext;
 
+import org.apache.logging.log4j.LogManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class AuthorizationInterceptorTest {
 	@Before
 	public void setUp() throws Exception {
 		authorizator = mock(Authorizator.class);
-		interceptor = new AuthorizationInterceptor(app, usuario, authorizator);
+		interceptor = new AuthorizationInterceptor(app, usuario, authorizator, LogManager.getLogger());
 		final Object[] parameters = {};
 		final Resourceable target = new Resourceable(Aplicacao.class) {
 			@Authorized

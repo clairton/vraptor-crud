@@ -8,13 +8,14 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import javax.interceptor.InvocationContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -25,7 +26,7 @@ public class ConstraintValidationAdapterTest {
 	@Test
 	public void testSerialize() throws Throwable {
 		final MockResult result = new MockResult();
-		final Logger logger = Logger.getAnonymousLogger();
+		final Logger logger = LogManager.getLogger();
 		final ExceptionVerifierInterceptor interceptor = new ExceptionVerifierInterceptor(
 				result, logger, adapter);
 		final InvocationContext invocationContext = mock(InvocationContext.class);

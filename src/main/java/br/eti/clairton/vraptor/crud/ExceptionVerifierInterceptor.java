@@ -6,8 +6,6 @@ import static java.lang.String.format;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -15,6 +13,8 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.persistence.NoResultException;
 import javax.validation.ConstraintViolationException;
+
+import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Result;
 import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
@@ -77,23 +77,23 @@ public class ExceptionVerifierInterceptor {
 		try {
 			return invocationContext.proceed();
 		} catch (final NoResultException e) {
-			logger.fine(format("NoResult: %s", e.getMessage()));
+			logger.debug(format("NoResult: %s", e.getMessage()));
 			result.notFound();
 		} catch (final UnauthorizedException e) {
-			logger.fine(format("Unauthorized: %s", e.getMessage()));
+			logger.debug(format("Unauthorized: %s", e.getMessage()));
 			result.use(http()).sendError(413, e.getMessage());
 		} catch (final UnauthenticatedException e) {
-			logger.fine(format("Unauthenticated: %s", e.getMessage()));
+			logger.debug(format("Unauthenticated: %s", e.getMessage()));
 			result.use(http()).sendError(401, e.getMessage());
 		} catch (final ConstraintViolationException e) {
-			logger.fine(format("Violation: %s", e.getMessage()));
+			logger.debug(format("Violation: %s", e.getMessage()));
 			result.use(http()).setStatusCode(422);
 			final Map<?, ?> errors = adapter.to(e.getConstraintViolations());
 			result.use(json()).from(errors, "errors").serialize();
 		} catch (final InvocationTargetException e) {
 			throw e.getTargetException();
 		} catch (final Throwable e) {
-			logger.log(Level.SEVERE, "Throwable", e);
+			logger.error("Throwable", e);
 			throw e;
 		}
 		return null;

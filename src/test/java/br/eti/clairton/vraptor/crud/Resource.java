@@ -1,7 +1,5 @@
 package br.eti.clairton.vraptor.crud;
 
-import java.util.logging.Logger;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
@@ -12,6 +10,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.metamodel.Metamodel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mockito.Mockito;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -71,7 +71,7 @@ public class Resource {
 	public Logger produceLogger(final InjectionPoint injectionPoint) {
 		final Class<?> type = injectionPoint.getMember().getDeclaringClass();
 		final String klass = type.getName();
-		return Logger.getLogger(klass);
+		return LogManager.getLogger(klass);
 	}
 
 	@Produces
