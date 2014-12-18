@@ -29,17 +29,19 @@ public class UnauthorizedException extends RuntimeException {
 	/**
 	 * Construtor com possibilidade de detalhamento da não autorização.
 	 * 
-	 * @param usuario
+	 * @param user
 	 *            usuario que não esta autorizado
+	 * @param app
+	 *            aplicação em que não esta autorizado
 	 * @param resource
 	 *            recurso que não esta autorizado
 	 * @param operation
 	 *            operação que não esta autorizado
 	 */
-	public UnauthorizedException(final String usuario, final String resource,
-			final String operation) {
-		this(String.format("%s não autorizado para acessar %s#%s", usuario,
-				resource, operation));
+	public UnauthorizedException(final String user, final String app,
+			final String resource, final String operation) {
+		this(String.format("%s não autorizado para acessar %s#%s em %s", user,
+				resource, operation, app));
 	}
 
 }

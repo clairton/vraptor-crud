@@ -52,14 +52,14 @@ public class AuthorizationInterceptor {
 		final String operation = context.getMethod().getName();
 		logger.debug("Interceptando {}#{}", new Object[] {
 				target.getClass().getSimpleName(), operation });
-		if (!authorizator.isAble(user, app, resource, operation)) {
-			throw new UnauthorizedException(user, resource, operation);
-		} else {
+		if (authorizator.isAble(user, app, resource, operation)) {
 			try {
 				return context.proceed();
 			} catch (InvocationTargetException e) {
 				throw e.getTargetException();
 			}
+		} else {
+			throw new UnauthorizedException(user, app, resource, operation);
 		}
 	}
 }

@@ -17,19 +17,6 @@ import javax.interceptor.InvocationContext;
 public class AuthenticationInterceptor {
 
 	/**
-	 * CDI eyes only.
-	 */
-	// @Deprecated
-	protected AuthenticationInterceptor() {
-		// this(null, null);
-	}
-
-	// @Inject
-	// public AuthorizationInterceptor() {
-	// super();
-	// }
-
-	/**
 	 * Intercepta cada chamada de método anotado com {@link Authorized}.
 	 * 
 	 * @param context
@@ -41,7 +28,6 @@ public class AuthenticationInterceptor {
 	 */
 	@AroundInvoke
 	public Object invoke(final InvocationContext context) throws Throwable {
-
 		try {
 			return context.proceed();
 		} catch (InvocationTargetException e) {
