@@ -2,9 +2,11 @@ package br.eti.clairton.vraptor.crud.security;
 
 import java.lang.reflect.InvocationTargetException;
 
+import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * INterceptor para metodos anotados com {@link Authorized}.
@@ -15,9 +17,14 @@ import javax.interceptor.InvocationContext;
 @Interceptor
 @Authenticated
 public class AuthenticationInterceptor {
+	private final TokenManager tokenManager;
+	private final HttpServletRequest request;
 
-	public AuthenticationInterceptor() {
-
+	@Inject
+	public AuthenticationInterceptor(final TokenManager tokenManager,
+			final HttpServletRequest request) {
+		this.tokenManager = tokenManager;
+		this.request = request;
 	}
 
 	/**
@@ -33,7 +40,12 @@ public class AuthenticationInterceptor {
 	@AroundInvoke
 	public Object invoke(final InvocationContext context) throws Throwable {
 		try {
-			return context.proceed();
+			final String token = request.getHeader("Authorization");
+			if (tokenManager.isValid(token)) {
+				return context.proceed();
+			} else {
+				throw new UnauthenticatedException();
+			}
 		} catch (InvocationTargetException e) {
 			throw e.getTargetException();
 		}

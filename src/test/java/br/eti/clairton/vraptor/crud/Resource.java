@@ -10,11 +10,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.metamodel.Metamodel;
 
+import net.vidageek.mirror.dsl.Mirror;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mockito.Mockito;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.cache.CacheStore;
 import br.com.caelum.vraptor.cache.LRU;
 import br.com.caelum.vraptor.cache.LRUCacheStore;
@@ -23,7 +24,6 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
 import br.eti.clairton.vraptor.crud.security.App;
-import br.eti.clairton.vraptor.crud.security.Authorizator;
 import br.eti.clairton.vraptor.crud.security.User;
 
 /**
@@ -89,18 +89,6 @@ public class Resource {
 	@Produces
 	public String getApp() {
 		return "test";
-	}
-
-	@Produces
-	public Authorizator getAuthorizator() {
-		return new Authorizator() {
-
-			@Override
-			public Boolean isAble(final String user, final String app,
-					final String resource, final String operation) {
-				return Boolean.TRUE;
-			}
-		};
 	}
 
 	/**

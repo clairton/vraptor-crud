@@ -1,5 +1,7 @@
 package br.eti.clairton.vraptor.crud.security;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Serviço que verifica se o usuario está autorizado.
  * 
@@ -8,7 +10,7 @@ package br.eti.clairton.vraptor.crud.security;
 public interface Authorizator {
 
 	/**
-	 * Verifica se o usuario esta habilitado a acessar.
+	 * Verifica se o usuario esta habilitado a acessar o recurso discriminado.
 	 * 
 	 * @param app
 	 *            aplicacão
@@ -21,6 +23,7 @@ public interface Authorizator {
 	 *            operation
 	 * @return true/false
 	 */
-	public Boolean isAble(final String user, final String app,
-			final String resource, final String operation);
+	public Boolean isAble(@NotNull final String user,
+			@NotNull final String app, @NotNull final String resource,
+			@NotNull final String operation);
 }
