@@ -64,4 +64,13 @@ public class ModelDeserializerTest {
 		assertEquals(2, result.getRecursos().size());
 	}
 
+	@Test
+	public void testManyToOneWithNull() {
+		final String json = "{'nome': 'Teste', 'aplicacao': null}";
+		final Recurso result = gson.fromJson(json, Recurso.class);
+		assertEquals("Teste", result.getNome());
+		assertNull(result.getId());
+		assertNull(result.getAplicacao());
+	}
+
 }

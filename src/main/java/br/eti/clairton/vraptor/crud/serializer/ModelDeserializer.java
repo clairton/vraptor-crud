@@ -68,12 +68,12 @@ public class ModelDeserializer implements JsonDeserializer<Model> {
 					}
 					value = list;
 				} else if (field.isAnnotationPresent(ManyToOne.class)) {
-					value = field.getType().newInstance();
-					final SetterHandler handler = mirror.on(value).set();
-					final FieldSetter fieldSetter = handler.field("id");
 					if (JsonNull.class.isInstance(entry.getValue())) {
-						fieldSetter.withValue(null);
+						value = null;
 					} else {
+						value = field.getType().newInstance();
+						final SetterHandler handler = mirror.on(value).set();
+						final FieldSetter fieldSetter = handler.field("id");
 						fieldSetter.withValue(entry.getValue().getAsLong());
 					}
 				} else {
