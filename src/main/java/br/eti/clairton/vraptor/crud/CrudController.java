@@ -95,10 +95,10 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 *            novo registro
 	 */
 	@Consumes(value = "application/json")
-	@ExceptionVerifier
 	@Post
 	@Authorized
 	@Authenticated
+	@ExceptionVerifier
 	public void create(final T model) {
 		final T response = repository.save(model);
 		serialize(response);
@@ -107,10 +107,10 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	/**
 	 * Mostra os recursos. Parametros para filtagem são mandados na URL.
 	 */
-	@ExceptionVerifier
 	@Get
 	@Authorized
 	@Authenticated
+	@ExceptionVerifier
 	public void index() {
 		final Map<String, String[]> params = request.getParameterMap();
 		final Integer page;
@@ -138,10 +138,10 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 * @param id
 	 *            id do recurso
 	 */
-	@ExceptionVerifier
 	@Get("{id}")
 	@Authorized
 	@Authenticated
+	@ExceptionVerifier
 	public void show(final Long id) {
 		final T response = repository.byId(modelType, id);
 		serialize(response);
@@ -153,10 +153,10 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 * @param id
 	 *            id do recurso
 	 */
-	@ExceptionVerifier
 	@Delete("{id}")
 	@Authorized
 	@Authenticated
+	@ExceptionVerifier
 	public void delete(final Long id) {
 		repository.remove(modelType, id);
 		result.use(http()).setStatusCode(200);
@@ -171,10 +171,10 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 *            recurso a ser atualizado
 	 */
 	@Consumes(value = "application/json")
-	@ExceptionVerifier
 	@Put("{id}")
 	@Authorized
 	@Authenticated
+	@ExceptionVerifier
 	public void update(final Long id, final T model) {
 		mirror.on(model).set().field("id").withValue(id);
 		final T response = repository.save(model);

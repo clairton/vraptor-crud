@@ -32,7 +32,7 @@ public class ConstraintValidationAdapterTest {
 		final InvocationContext invocationContext = mock(InvocationContext.class);
 		final Throwable e = new ConstraintViolationException(getViolations());
 		when(invocationContext.proceed()).thenThrow(e);
-		interceptor.verify(invocationContext);
+		interceptor.invoke(invocationContext);
 	}
 
 	@Test

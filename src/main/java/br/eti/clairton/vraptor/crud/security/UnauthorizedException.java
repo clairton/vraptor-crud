@@ -40,7 +40,7 @@ public class UnauthorizedException extends RuntimeException {
 	 */
 	public UnauthorizedException(final String user, final String app,
 			final String resource, final String operation) {
-		this(String.format("%s não autorizado para acessar %s#%s em %s", user,
+		this(String.format("\"%s\" não está autorizado(a) a acessar \"%s#%s\" em \"%s\"", user,
 				resource, operation, app));
 	}
 

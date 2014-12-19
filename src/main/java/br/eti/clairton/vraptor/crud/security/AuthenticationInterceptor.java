@@ -16,6 +16,10 @@ import javax.interceptor.InvocationContext;
 @Authenticated
 public class AuthenticationInterceptor {
 
+	public AuthenticationInterceptor() {
+
+	}
+
 	/**
 	 * Intercepta cada chamada de método anotado com {@link Authorized}.
 	 * 

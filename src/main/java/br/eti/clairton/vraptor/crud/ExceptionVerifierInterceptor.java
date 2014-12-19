@@ -5,7 +5,6 @@ import static br.com.caelum.vraptor.view.Results.json;
 import static java.lang.String.format;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -36,14 +35,6 @@ public class ExceptionVerifierInterceptor {
 	private final ConstraintValidationAdapter adapter;
 
 	/**
-	 * CDI eyes only.
-	 */
-	@Deprecated
-	protected ExceptionVerifierInterceptor() {
-		this(null, null, null);
-	}
-
-	/**
 	 * Construtor padrão.
 	 * 
 	 * @param result
@@ -72,30 +63,37 @@ public class ExceptionVerifierInterceptor {
 	 *             ela é propagada
 	 */
 	@AroundInvoke
-	public Object verify(final InvocationContext invocationContext)
+	public Object invoke(final InvocationContext invocationContext)
 			throws Throwable {
+		Object errors;
+		Integer status;
 		try {
 			return invocationContext.proceed();
 		} catch (final NoResultException e) {
 			logger.debug(format("NoResult: %s", e.getMessage()));
-			result.notFound();
+			status = 404;
+			errors = e.getMessage();
 		} catch (final UnauthorizedException e) {
 			logger.debug(format("Unauthorized: %s", e.getMessage()));
-			result.use(http()).sendError(413, e.getMessage());
+			status = 413;
+			errors = e.getMessage();
 		} catch (final UnauthenticatedException e) {
 			logger.debug(format("Unauthenticated: %s", e.getMessage()));
-			result.use(http()).sendError(401, e.getMessage());
+			status = 401;
+			errors = e.getMessage();
 		} catch (final ConstraintViolationException e) {
 			logger.debug(format("Violation: %s", e.getMessage()));
-			result.use(http()).setStatusCode(422);
-			final Map<?, ?> errors = adapter.to(e.getConstraintViolations());
-			result.use(json()).from(errors, "errors").serialize();
+			errors = adapter.to(e.getConstraintViolations());
+			status = 422;
 		} catch (final InvocationTargetException e) {
+			logger.error("InvocationTarget", e.getTargetException());
 			throw e.getTargetException();
 		} catch (final Throwable e) {
 			logger.error("Throwable", e);
 			throw e;
 		}
+		result.use(http()).setStatusCode(status);
+		result.use(json()).from(errors, "errors").serialize();
 		return null;
 	}
 }

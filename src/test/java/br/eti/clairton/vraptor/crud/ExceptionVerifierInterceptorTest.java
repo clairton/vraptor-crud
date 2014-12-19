@@ -37,6 +37,7 @@ public class ExceptionVerifierInterceptorTest {
 	private Logger logger = LogManager.getLogger("Test");
 	private Result result;
 	private HttpResult httpResult;
+	private JSONSerialization jsonResult;
 
 	@Before
 	public void setUp() {
@@ -44,7 +45,11 @@ public class ExceptionVerifierInterceptorTest {
 		adapter = mock(ConstraintValidationAdapter.class);
 		result = mock(Result.class);
 		httpResult = mock(HttpResult.class);
+		jsonResult = mock(JSONSerialization.class);
 		when(result.use(http())).thenReturn(httpResult);
+		when(result.use(json())).thenReturn(jsonResult);
+		final Serializer serializer = mock(Serializer.class);
+		when(jsonResult.from(anyObject(), anyString())).thenReturn(serializer);
 		interceptor = new ExceptionVerifierInterceptor(result, logger, adapter);
 	}
 
@@ -52,8 +57,9 @@ public class ExceptionVerifierInterceptorTest {
 	public void testVerifyUnauthorizedException() throws Throwable {
 		final Throwable exception = new UnauthorizedException("lskhdflksdhg");
 		when(context.proceed()).thenThrow(exception);
-		interceptor.verify(context);
-		verify(httpResult).sendError(413, exception.getMessage());
+		interceptor.invoke(context);
+		verify(httpResult).setStatusCode(413);
+		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
 	}
 
 	@Test
@@ -61,16 +67,18 @@ public class ExceptionVerifierInterceptorTest {
 		final Throwable exception = new UnauthenticatedException(
 				"sgdsalkghhhyk");
 		when(context.proceed()).thenThrow(exception);
-		interceptor.verify(context);
-		verify(httpResult).sendError(401, exception.getMessage());
+		interceptor.invoke(context);
+		verify(httpResult).setStatusCode(401);
+		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
 	}
 
 	@Test
 	public void testVerifyNoResultException() throws Throwable {
 		final Throwable exception = new NoResultException();
 		when(context.proceed()).thenThrow(exception);
-		interceptor.verify(context);
-		verify(result).notFound();
+		interceptor.invoke(context);
+		verify(httpResult).setStatusCode(404);
+		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
 	}
 
 	@Test
@@ -83,7 +91,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(e);
 		final Serializer serializer = mock(Serializer.class);
 		when(jsonResult.from(anyObject(), anyString())).thenReturn(serializer);
-		interceptor.verify(context);
+		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(422);
 		verify(jsonResult).from(any(Set.class), eq("errors"));
 	}
@@ -91,6 +99,6 @@ public class ExceptionVerifierInterceptorTest {
 	@Test(expected = Exception.class)
 	public void testVerifyThrowable() throws Throwable {
 		when(context.proceed()).thenThrow(new Exception());
-		interceptor.verify(context);
+		interceptor.invoke(context);
 	}
 }
