@@ -17,21 +17,21 @@ public class SessionController implements Serializable {
 	private final HttpServletResponse response;
 
 	@Inject
-	public SessionController(final TokenManager session,
+	public SessionController(final TokenManager tokenManager,
 			final HttpServletResponse response) {
-		this.tokenManager = session;
+		this.tokenManager = tokenManager;
 		this.response = response;
 	}
 
-	@Post
-	public void login(final String user, final String password)
+	@Post("/session")
+	public void create(final String user, final String password)
 			throws CredentialNotFoundException {
 		final String token = tokenManager.create(user, password);
 		response.addHeader("Authorization", token);
 	}
 
-	@Delete
-	public void logout(final String user) {
+	@Delete("/session")
+	public void destroy(final String user) {
 		tokenManager.destroy(user);
 	}
 

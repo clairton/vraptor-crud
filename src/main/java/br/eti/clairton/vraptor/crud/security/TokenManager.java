@@ -20,6 +20,9 @@ public interface TokenManager {
 	 *            senha
 	 * 
 	 * @return token para identificação do usuário
+	 * 
+	 * @throws CredentialNotFoundException
+	 *             caso usuario/senha não existam ou sejam incompativeis
 	 */
 	String create(@NotNull final String user, @NotNull final String password)
 			throws CredentialNotFoundException;

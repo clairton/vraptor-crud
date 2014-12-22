@@ -1,7 +1,7 @@
 package br.eti.clairton.vraptor.crud.security;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,18 +12,25 @@ import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.constraints.NotNull;
 
+import org.jboss.weld.exceptions.IllegalStateException;
+
 @ApplicationScoped
 public class TokenManagerInMemory implements TokenManager {
 	private final static Map<String, String> REPOSITORY = new HashMap<>();
 	private final MessageDigest crypt;
 
 	private final Authenticator authenticator;
+	private final Charset charset;
 
 	@Inject
-	public TokenManagerInMemory(final Authenticator authenticator)
-			throws NoSuchAlgorithmException {
-		crypt = MessageDigest.getInstance("SHA-1");
-		this.authenticator = authenticator;
+	public TokenManagerInMemory(final Authenticator authenticator) {
+		try {
+			crypt = MessageDigest.getInstance("SHA-1");
+			this.authenticator = authenticator;
+			charset = Charset.forName("UTF-8");
+		} catch (final Exception e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	@Override
@@ -32,7 +39,9 @@ public class TokenManagerInMemory implements TokenManager {
 		if (authenticator.isValid(user, password)) {
 			byte[] bytes = (user + password + new Random().nextLong())
 					.getBytes();
-			return new String(crypt.digest(bytes));
+			final String token = new String(crypt.digest(bytes), charset);
+			REPOSITORY.put(user, token);
+			return token;
 		} else {
 			throw new CredentialNotFoundException();
 		}

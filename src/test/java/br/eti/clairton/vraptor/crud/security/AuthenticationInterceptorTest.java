@@ -1,8 +1,6 @@
 package br.eti.clairton.vraptor.crud.security;
 
-import static org.mockito.Mockito.mock;
-
-import java.util.Random;
+import static org.mockito.Mockito.*;
 
 import javax.interceptor.InvocationContext;
 import javax.servlet.http.HttpServletRequest;
@@ -13,25 +11,9 @@ import org.junit.Test;
 public class AuthenticationInterceptorTest {
 	private AuthenticationInterceptor interceptor;
 	private InvocationContext context = mock(InvocationContext.class);
-	private Boolean isValid;
 	private HttpServletRequest request = mock(HttpServletRequest.class);
-	private TokenManager tokenManager = new TokenManager() {
-
-		@Override
-		public Boolean isValid(final String token) {
-			return isValid;
-		}
-
-		@Override
-		public void destroy(final String token) {
-
-		}
-
-		@Override
-		public String create(final String user, final String password) {
-			return new Random().toString();
-		}
-	};
+	private Authenticator authenticator = new AuthenticatorInMemory();
+	private TokenManager tokenManager = new TokenManagerInMemory(authenticator);
 
 	@Before
 	public void setUp() throws Exception {
@@ -40,13 +22,13 @@ public class AuthenticationInterceptorTest {
 
 	@Test
 	public void testInvoke() throws Throwable {
-		isValid = Boolean.TRUE;
+		final String token = tokenManager.create("admin", "123456");
+		when(request.getHeader("Authorization")).thenReturn(token);
 		interceptor.invoke(context);
 	}
 
 	@Test(expected = UnauthenticatedException.class)
 	public void testInvokeWithSession() throws Throwable {
-		isValid = Boolean.FALSE;
 		interceptor.invoke(context);
 	}
 }
