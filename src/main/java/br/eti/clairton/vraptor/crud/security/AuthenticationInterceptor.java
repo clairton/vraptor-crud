@@ -7,6 +7,7 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
 /**
  * INterceptor para metodos anotados com {@link Authorized}.
@@ -18,13 +19,19 @@ import javax.servlet.http.HttpServletRequest;
 @Authenticated
 public class AuthenticationInterceptor {
 	private final TokenManager tokenManager;
-	private final HttpServletRequest request;
+	private final String token;
 
 	@Inject
-	public AuthenticationInterceptor(final TokenManager tokenManager,
-			final HttpServletRequest request) {
+	public AuthenticationInterceptor(@NotNull final TokenManager tokenManager,
+			@NotNull final HttpServletRequest request) {
 		this.tokenManager = tokenManager;
-		this.request = request;
+		final String header = request.getHeader("Authorization");
+		if (null == header) {
+
+			throw new UnauthenticatedException(
+					"Header \"Authorization\" must be present");
+		}
+		this.token = header.replaceAll("Basic ", "");
 	}
 
 	/**
@@ -40,7 +47,6 @@ public class AuthenticationInterceptor {
 	@AroundInvoke
 	public Object invoke(final InvocationContext context) throws Throwable {
 		try {
-			final String token = request.getHeader("Authorization");
 			if (tokenManager.isValid(token)) {
 				return context.proceed();
 			} else {

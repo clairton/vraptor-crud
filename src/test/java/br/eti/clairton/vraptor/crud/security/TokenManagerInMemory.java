@@ -16,7 +16,7 @@ import org.jboss.weld.exceptions.IllegalStateException;
 
 @ApplicationScoped
 public class TokenManagerInMemory implements TokenManager {
-	private final static Map<String, String> REPOSITORY = new HashMap<>();
+	private final Map<String, String> repository = new HashMap<>();
 	private final MessageDigest crypt;
 
 	private final Authenticator authenticator;
@@ -40,7 +40,7 @@ public class TokenManagerInMemory implements TokenManager {
 			byte[] bytes = (user + password + new Random().nextLong())
 					.getBytes();
 			final String token = new String(crypt.digest(bytes), charset);
-			REPOSITORY.put(user, token);
+			repository.put(user, token);
 			return token;
 		} else {
 			throw new CredentialNotFoundException();
@@ -49,9 +49,9 @@ public class TokenManagerInMemory implements TokenManager {
 
 	@Override
 	public void destroy(@NotNull final String token) {
-		for (final Entry<String, String> entry : REPOSITORY.entrySet()) {
+		for (final Entry<String, String> entry : repository.entrySet()) {
 			if (token.equals(entry.getValue())) {
-				REPOSITORY.remove(entry.getKey());
+				repository.remove(entry.getKey());
 				break;
 			}
 		}
@@ -59,7 +59,6 @@ public class TokenManagerInMemory implements TokenManager {
 
 	@Override
 	public Boolean isValid(@NotNull final String token) {
-		return REPOSITORY.containsValue(token);
+		return repository.containsValue(token);
 	}
-
 }

@@ -1,11 +1,11 @@
 package br.eti.clairton.vraptor.crud.security;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import javax.interceptor.InvocationContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class AuthenticationInterceptorTest {
@@ -15,20 +15,19 @@ public class AuthenticationInterceptorTest {
 	private Authenticator authenticator = new AuthenticatorInMemory();
 	private TokenManager tokenManager = new TokenManagerInMemory(authenticator);
 
-	@Before
-	public void setUp() throws Exception {
-		interceptor = new AuthenticationInterceptor(tokenManager, request);
-	}
-
 	@Test
 	public void testInvoke() throws Throwable {
 		final String token = tokenManager.create("admin", "123456");
-		when(request.getHeader("Authorization")).thenReturn(token);
+		when(request.getHeader("Authorization")).thenReturn("Basic " + token);
+		interceptor = new AuthenticationInterceptor(tokenManager, request);
 		interceptor.invoke(context);
 	}
 
 	@Test(expected = UnauthenticatedException.class)
 	public void testInvokeWithSession() throws Throwable {
+		when(request.getHeader("Authorization")).thenReturn(
+				"Basic hash_nao_valido");
+		interceptor = new AuthenticationInterceptor(tokenManager, request);
 		interceptor.invoke(context);
 	}
 }
