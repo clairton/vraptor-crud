@@ -1,5 +1,6 @@
 package br.eti.clairton.vraptor.crud.security;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -33,6 +34,12 @@ public class TokenManagerInMemoryTest {
 	public void testIsValid() throws CredentialNotFoundException {
 		final String token = tokenManager.create("admin", "123456");
 		assertTrue(tokenManager.isValid(token));
+	}
+
+	@Test
+	public void testGetUserByToken() throws CredentialNotFoundException {
+		final String token = tokenManager.create("admin", "123456");
+		assertEquals("admin", tokenManager.getUserByToken(token));
 	}
 
 }

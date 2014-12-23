@@ -63,9 +63,9 @@ public class TokenManagerInMemory implements TokenManager {
 	}
 
 	@Override
-	public String getUserBy(@NotNull final String token) {
+	public String getUserByToken(@NotNull final String token) {
 		final Entry<String, String> entry = getEntryByToken(token);
-		return entry.getValue();
+		return entry.getKey();
 	}
 
 	private Entry<String, String> getEntryByToken(@NotNull final String token) {

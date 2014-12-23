@@ -96,7 +96,7 @@ public class Resource {
 	@User
 	@Produces
 	public String getUser(@Token final String token) {
-		return tokenManager.getUserBy(token);
+		return tokenManager.getUserByToken(token);
 	}
 
 	@Token

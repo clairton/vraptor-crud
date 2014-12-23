@@ -51,5 +51,5 @@ public interface TokenManager {
 	 *            token do usuario
 	 * @return usuario do token
 	 */
-	String getUserBy(@NotNull final String token);
+	String getUserByToken(@NotNull final String token);
 }
