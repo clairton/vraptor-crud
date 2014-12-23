@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.constraints.NotNull;
 
-
 @ApplicationScoped
 public class TokenManagerInMemory implements TokenManager {
 	private final Map<String, String> repository = new HashMap<>();
@@ -54,7 +53,7 @@ public class TokenManagerInMemory implements TokenManager {
 
 	@Override
 	public void destroy(@NotNull final String token) {
-		final String user = getUserBy(token);
+		final String user = getEntryByToken(token).getKey();
 		repository.remove(user);
 	}
 
