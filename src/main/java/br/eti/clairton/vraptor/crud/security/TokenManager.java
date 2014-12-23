@@ -43,4 +43,13 @@ public interface TokenManager {
 	 * @return true/false
 	 */
 	Boolean isValid(@NotNull final String token);
+
+	/**
+	 * Retorna o nome do usuario através do token.
+	 * 
+	 * @param token
+	 *            token do usuario
+	 * @return usuario do token
+	 */
+	String getUserBy(@NotNull final String token);
 }

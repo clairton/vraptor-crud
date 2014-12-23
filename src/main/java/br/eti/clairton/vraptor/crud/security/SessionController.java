@@ -1,5 +1,7 @@
 package br.eti.clairton.vraptor.crud.security;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
 
 import javax.inject.Inject;
@@ -27,7 +29,14 @@ public class SessionController implements Serializable {
 	public void create(final String user, final String password)
 			throws CredentialNotFoundException {
 		final String token = tokenManager.create(user, password);
-		response.addHeader("Authorization", token);
+		try {
+			final PrintWriter writer = response.getWriter();
+			writer.print(token);
+			writer.flush();
+			writer.close();
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Delete("/session")

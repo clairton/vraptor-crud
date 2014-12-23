@@ -2,13 +2,16 @@ package br.eti.clairton.vraptor.crud;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
 import javax.persistence.Cache;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.metamodel.Metamodel;
+import javax.servlet.http.HttpServletRequest;
 
 import net.vidageek.mirror.dsl.Mirror;
 
@@ -24,6 +27,9 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
 import br.eti.clairton.vraptor.crud.security.App;
+import br.eti.clairton.vraptor.crud.security.Token;
+import br.eti.clairton.vraptor.crud.security.TokenManager;
+import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
 import br.eti.clairton.vraptor.crud.security.User;
 
 /**
@@ -44,6 +50,14 @@ public class Resource {
 	private EntityManager em;
 
 	private AttributeBuilder attributeBuilder;
+
+	private final TokenManager tokenManager;
+
+	@Inject
+	public Resource(final TokenManager tokenManager) {
+		super();
+		this.tokenManager = tokenManager;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -81,8 +95,19 @@ public class Resource {
 
 	@User
 	@Produces
-	public String getUser() {
-		return "jose";
+	public String getUser(@Token final String token) {
+		return tokenManager.getUserBy(token);
+	}
+
+	@Token
+	@Produces
+	public String getToken(@Default final HttpServletRequest request) {
+		final String header = request.getHeader("Authorization");
+		if (null == header) {
+			throw new UnauthenticatedException(
+					"Header \"Authorization\" must be present");
+		}
+		return header.replaceAll("Basic ", "");
 	}
 
 	@App

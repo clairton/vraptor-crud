@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.constraints.NotNull;
 
-import org.jboss.weld.exceptions.IllegalStateException;
 
 @ApplicationScoped
 public class TokenManagerInMemory implements TokenManager {
@@ -37,9 +36,15 @@ public class TokenManagerInMemory implements TokenManager {
 	public String create(@NotNull final String user,
 			@NotNull final String password) throws CredentialNotFoundException {
 		if (authenticator.isValid(user, password)) {
-			byte[] bytes = (user + password + new Random().nextLong())
-					.getBytes();
-			final String token = new String(crypt.digest(bytes), charset);
+			final String info = (user + password + new Random().nextLong());
+			final byte[] bytes = info.getBytes(charset);
+			crypt.update(bytes);
+			final byte[] digest = crypt.digest();
+			final StringBuffer sb = new StringBuffer();
+			for (final byte b : digest) {
+				sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+			}
+			final String token = sb.toString();
 			repository.put(user, token);
 			return token;
 		} else {
@@ -49,16 +54,28 @@ public class TokenManagerInMemory implements TokenManager {
 
 	@Override
 	public void destroy(@NotNull final String token) {
-		for (final Entry<String, String> entry : repository.entrySet()) {
-			if (token.equals(entry.getValue())) {
-				repository.remove(entry.getKey());
-				break;
-			}
-		}
+		final String user = getUserBy(token);
+		repository.remove(user);
 	}
 
 	@Override
 	public Boolean isValid(@NotNull final String token) {
 		return repository.containsValue(token);
+	}
+
+	@Override
+	public String getUserBy(@NotNull final String token) {
+		final Entry<String, String> entry = getEntryByToken(token);
+		return entry.getValue();
+	}
+
+	private Entry<String, String> getEntryByToken(@NotNull final String token) {
+		for (final Entry<String, String> entry : repository.entrySet()) {
+			if (token.equals(entry.getValue())) {
+				return entry;
+			}
+		}
+		throw new UnauthenticatedException("Token " + token
+				+ " não está valido");
 	}
 }

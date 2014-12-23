@@ -6,7 +6,6 @@ import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -23,15 +22,9 @@ public class AuthenticationInterceptor {
 
 	@Inject
 	public AuthenticationInterceptor(@NotNull final TokenManager tokenManager,
-			@NotNull final HttpServletRequest request) {
+			@Token final String token) {
 		this.tokenManager = tokenManager;
-		final String header = request.getHeader("Authorization");
-		if (null == header) {
-
-			throw new UnauthenticatedException(
-					"Header \"Authorization\" must be present");
-		}
-		this.token = header.replaceAll("Basic ", "");
+		this.token = token;
 	}
 
 	/**
