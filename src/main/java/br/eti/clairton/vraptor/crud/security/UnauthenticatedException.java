@@ -14,7 +14,7 @@ public class UnauthenticatedException extends RuntimeException {
 	 * Construtor Padrão.
 	 */
 	public UnauthenticatedException() {
-		super();
+		this("Unauthenticated");
 	}
 
 	/**

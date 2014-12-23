@@ -50,7 +50,8 @@ public class AuthenticationInterceptor {
 			if (tokenManager.isValid(token)) {
 				return context.proceed();
 			} else {
-				throw new UnauthenticatedException();
+				throw new UnauthenticatedException("Token " + token
+						+ " is invalid");
 			}
 		} catch (InvocationTargetException e) {
 			throw e.getTargetException();

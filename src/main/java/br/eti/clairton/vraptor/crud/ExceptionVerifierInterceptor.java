@@ -94,6 +94,6 @@ public class ExceptionVerifierInterceptor {
 		}
 		result.use(http()).setStatusCode(status);
 		result.use(json()).from(errors, "errors").serialize();
-		return null;
+		return new Object();
 	}
 }
