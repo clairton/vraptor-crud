@@ -6,10 +6,11 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.apache.log4j.xml" level="debug" />
+		<Logger name="org.apache.log4j.xml" level="info" />
 		<Logger name="eti.br.clairton" level="debug" />
-		<Logger name="br.com.caelum" level="debug" />
-		<Logger name="org.batoo" level="debug" />
+		<Logger name="br.com.caelum" level="info" />
+		<Logger name="org.batoo" level="info" />
+		<Logger name="org.apache.directory" level="info" />
 		<Root level="debug">
 			<AppenderRef ref="STDOUT" />
 		</Root>

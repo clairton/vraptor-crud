@@ -1,0 +1,70 @@
+version: 1
+
+dn: o=TEST
+objectclass: domain
+objectclass: top
+objectclass: extensibleObject
+dc: TEST
+o: TEST
+
+dn: ou=ABC,o=TEST
+objectclass: organizationalUnit
+objectclass: top
+ou: ABC
+
+dn: ou=XYZ,o=TEST
+objectclass: organizationalUnit
+objectclass: top
+ou: XYZ
+
+dn: cn=Ulli User+sn=User+uid=user,ou=ABC,o=TEST
+objectclass: organizationalPerson
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: top
+cn: Ulli User
+sn: User
+mail: user@example.com
+title: UIP
+uid: user
+userPassword: 789ABC
+
+dn: cn=Maria da Penha+sn=User+uid=maria,ou=ABC,o=TEST
+objectclass: organizationalPerson
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: top
+cn: Maria da Penha
+sn: User
+mail: maria@example.com
+title: UIP
+uid: maria
+userPassword: 123456
+
+dn: cn=Admin Istrator+sn=Istrator+uid=admin,ou=ABC,o=TEST
+objectclass: organizationalPerson
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: top
+cn: Admin Istrator
+sn: Istrator
+facsimileTelephoneNumber: 01245 123 214
+mail: admin@example.com
+telephoneNumber: 01245 123 213
+title: IT-Consultant
+uid: admin
+userPassword: 123456
+
+dn: uid=ttester+cn=Tim Tester,ou=XYZ,o=TEST
+objectclass: organizationalPerson
+objectclass: person
+objectclass: inetOrgPerson
+objectclass: top
+cn: Tim Tester
+cn: ttester@example.com
+sn: Tester
+mail: ttester@example.com
+title: Technische Produktdesignerin
+uid: ttester
+userPassword: 123456
+userPassword: {SSHA}N2M0YThkMDljYTM3NjJhZjYxZTU5NTIwOTQzZGMyNjQ5NGY4OTQxYg==
