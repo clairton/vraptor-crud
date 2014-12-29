@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -51,7 +50,6 @@ public class Token extends Model {
 	private final Date createAt;
 
 	@Identificator
-	@Future
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "valid_at")
