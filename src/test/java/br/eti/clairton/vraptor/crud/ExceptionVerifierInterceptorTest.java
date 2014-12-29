@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javax.interceptor.InvocationContext;
 import javax.persistence.NoResultException;
+import javax.persistence.OptimisticLockException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
@@ -69,6 +70,15 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(401);
+		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
+	}
+
+	@Test
+	public void testVerifyOptimisticLockException() throws Throwable {
+		final Throwable exception = new OptimisticLockException("putz");
+		when(context.proceed()).thenThrow(exception);
+		interceptor.invoke(context);
+		verify(httpResult).setStatusCode(409);
 		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
 	}
 

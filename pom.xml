@@ -10,11 +10,17 @@
 
 		<apache.ds.version>2.0.0-M19</apache.ds.version>
 	</properties>
-	<dependencies>		
+	<dependencies>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>inflector</artifactId>
 			<version>0.0.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -96,12 +102,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.batoo.jpa</groupId>
-			<artifactId>batoo-jpa</artifactId>
-			<version>2.0.1.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -111,24 +111,6 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>2.3.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>0.7.1.RELEASE</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>guava</artifactId>
-					<groupId>com.google.guava</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.antlr</groupId>
-			<artifactId>antlr-runtime</artifactId>
-			<version>3.4</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -327,7 +309,74 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<profiles>
+		<profile>
+			<id>batoo</id>
+			<dependencies>
+				<dependency>
+					<groupId>com.jolbox</groupId>
+					<artifactId>bonecp</artifactId>
+					<version>0.7.1.RELEASE</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.antlr</groupId>
+					<artifactId>antlr-runtime</artifactId>
+					<version>3.4</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.batoo.jpa</groupId>
+					<artifactId>batoo-jpa</artifactId>
+					<version>2.0.1.2</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>hibernate</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-core</artifactId>
+					<version>4.0.1.Final</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate.common</groupId>
+					<artifactId>hibernate-commons-annotations</artifactId>
+					<version>4.0.1.Final</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-entitymanager</artifactId>
+					<version>4.0.1.Final</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>eclipselink</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.persistence</groupId>
+					<artifactId>eclipselink</artifactId>
+					<version>2.4.2</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.eclipse.persistence</groupId>
+					<artifactId>org.eclipse.persistence.jpa</artifactId>
+					<version>2.4.2</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 	<distributionManagement>
 		<!-- Necessita adicionar em ~/.m2/settings.xml <servers> <server> <id>github</id> 
 			<username>clairton</username> <password>av.ar.823&amp;</password> </server> 

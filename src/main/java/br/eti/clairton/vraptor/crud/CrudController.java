@@ -125,8 +125,11 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 		}
 		final Collection<Predicate> predicates = queryParser.parse(request,
 				modelType);
-		final Collection<?> collection = repository.from(modelType)
-				.where(predicates).collection(page, perPage);
+		repository.from(modelType);
+		if (!predicates.isEmpty()) {
+			repository.where(predicates);
+		}
+		final Collection<?> collection = repository.collection(page, perPage);
 		final String plural = inflector.pluralize(modelType.getSimpleName());
 		final String tag = inflector.uncapitalize(plural);
 		serialize(result.use(json()).from(collection, tag));

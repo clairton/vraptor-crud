@@ -4,16 +4,27 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0">
 	<persistence-unit name="default">
-		<provider>org.batoo.jpa.core.BatooPersistenceProvider</provider>
 		<class>br.eti.clairton.vraptor.crud.Aplicacao</class>
 		<class>br.eti.clairton.vraptor.crud.Recurso</class>
+		<class>br.eti.clairton.vraptor.crud.model.Token</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:target/repository;hsqldb.lock_file=false;create=true" />
 			<property name="javax.persistence.jdbc.user" value="sa" />
 			<property name="javax.persistence.jdbc.password" value="" />
-			<property name="org.batoo.jpa.ddl" value="DROP" />
+
+			<!-- Batto JPA properties -->
+			<property name="org.batoo.jpa.ddl" value="CREATE" />
+
+			<!-- EclipseLink properties -->
+			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="eclipselink.logging.level" value="SEVERE" />
+
+			<!-- Hibernate Properties -->
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
 		</properties>
 	</persistence-unit>
 </persistence>

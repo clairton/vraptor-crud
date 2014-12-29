@@ -12,8 +12,8 @@ import br.com.caelum.vraptor.converter.Converter;
 import br.com.caelum.vraptor.core.Converters;
 import br.eti.clairton.repository.AttributeBuilder;
 import br.eti.clairton.repository.Model;
-import br.eti.clairton.repository.Operator;
-import br.eti.clairton.repository.Operators;
+import br.eti.clairton.repository.Comparator;
+import br.eti.clairton.repository.Comparators;
 import br.eti.clairton.repository.Predicate;
 
 @Dependent
@@ -63,8 +63,8 @@ public class QueryParamParser {
         final Class<T> type = ( Class<T> ) attributes[attributes.length - 1].getJavaType();
         final Converter<T> converter = converters.to(type);
         final T object = converter.convert(value, type);
-        final Operator operator = Operators.bySymbol(symbol);
-        final Predicate predicate = new Predicate(object, operator, attributes);
+        final Comparator comparator = Comparators.bySymbol(symbol);
+        final Predicate predicate = new Predicate(object, comparator, attributes);
         return predicate;
     }
 }

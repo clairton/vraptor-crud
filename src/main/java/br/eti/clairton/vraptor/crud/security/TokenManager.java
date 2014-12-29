@@ -28,12 +28,12 @@ public interface TokenManager {
 			throws CredentialNotFoundException;
 
 	/**
-	 * Destroy a sessão com o token recebido como parametro.
+	 * Destroy a sessão com o token/usuario recebido como parametro.
 	 * 
-	 * @param token
-	 *            que terá a sessão encerrada
+	 * @param key
+	 *            usuario ou token que terá a sessão encerrada
 	 */
-	void destroy(@NotNull final String token);
+	void destroy(@NotNull final String key);
 
 	/**
 	 * Valida se o token esta valido

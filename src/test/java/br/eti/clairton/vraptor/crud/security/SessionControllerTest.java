@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 
+import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,12 +18,14 @@ import org.apache.directory.server.core.annotations.CreateDS;
 import org.apache.directory.server.core.annotations.CreatePartition;
 import org.apache.directory.server.core.integ.CreateLdapServerRule;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.util.test.MockHttpServletResponse;
+import br.eti.clairton.repository.Repository;
 import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
 
 @RunWith(CdiJUnit4Runner.class)
@@ -38,6 +41,8 @@ public class SessionControllerTest {
 	private final String password = "123456";
 	private Authenticator authenticator;
 	private TokenManager tokenManager;
+	private @Inject Repository repository;
+	private @Inject Logger logger;
 
 	private HttpServletResponse response;
 
@@ -49,7 +54,8 @@ public class SessionControllerTest {
 				"simple",
 				"cn=Admin Istrator+sn=Istrator+uid=admin,ou=ABC,o=TEST",
 				"123456", "cn,sn,uid,ou,o", "o=TEST", "uid");
-		tokenManager = new TokenManagerInMemory(authenticator);
+		tokenManager = new TokenManagerPersistent(logger, authenticator,
+				repository, "18000", "SHA-256");
 		Files.deleteIfExists(file.toPath());
 		final FileOutputStream out = new FileOutputStream(file);
 		final PrintWriter printWriter = new PrintWriter(out);

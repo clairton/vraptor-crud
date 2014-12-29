@@ -45,11 +45,11 @@ public class QueryParamParserTest {
 		final Iterator<Predicate> interator = predicates.iterator();
 		final Predicate predicateNome = interator.next();
 		assertEquals("Pass", predicateNome.getValue());
-		assertEquals("*=", predicateNome.getOperator().toString());
+		assertEquals("*=", predicateNome.getComparator().toString());
 		assertTrue(Aplicacao_.nome.equals(predicateNome.getAttribute()));
 		final Predicate predicateId = interator.next();
 		assertEquals(Long.valueOf(0), predicateId.getValue());
-		assertEquals(">=", predicateId.getOperator().toString());
+		assertEquals(">=", predicateId.getComparator().toString());
 		assertEquals("id", predicateId.getAttribute().getName());
 	}
 }

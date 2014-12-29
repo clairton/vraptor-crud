@@ -36,6 +36,7 @@ public class CrudControllerTest {
 
 	private @Inject Mirror mirror;
 	private @Inject EntityManager entityManager;
+	private @Inject Connection connection;
 
 	private Parameters parameters = new Parameters() {
 		@Override
@@ -56,7 +57,6 @@ public class CrudControllerTest {
 	@Before
 	public void init() throws Exception {
 		entityManager.getTransaction().begin();
-		final Connection connection = entityManager.unwrap(Connection.class);
 		final String sql = "DELETE FROM recursos;DELETE FROM aplicacoes;";
 		connection.createStatement().execute(sql);
 		entityManager.getTransaction().commit();
@@ -123,8 +123,7 @@ public class CrudControllerTest {
 				request.addParameter(Param.field(), id);
 				request.addParameter(Param.operation(id), ">=");
 				request.addParameter(Param.value(id),
-						Long.valueOf(CrudControllerTest.this.id + 2)
-								.toString());
+						Long.valueOf(CrudControllerTest.this.id + 2).toString());
 			}
 		};
 		json = "{}";

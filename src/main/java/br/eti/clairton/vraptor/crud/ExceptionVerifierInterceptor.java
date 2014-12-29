@@ -11,6 +11,7 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.persistence.NoResultException;
+import javax.persistence.OptimisticLockException;
 import javax.validation.ConstraintViolationException;
 
 import org.apache.logging.log4j.Logger;
@@ -85,6 +86,10 @@ public class ExceptionVerifierInterceptor {
 			logger.debug(format("Violation: %s", e.getMessage()));
 			errors = adapter.to(e.getConstraintViolations());
 			status = 422;
+		} catch (final OptimisticLockException e) {
+			logger.debug(format("OptimisticLock: %s", e.getMessage()));
+			status = 409;
+			errors = e.getMessage();
 		} catch (final InvocationTargetException e) {
 			logger.error("InvocationTarget", e.getTargetException());
 			throw e.getTargetException();

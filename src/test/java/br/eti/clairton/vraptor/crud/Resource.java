@@ -1,5 +1,7 @@
 package br.eti.clairton.vraptor.crud;
 
+import java.sql.Connection;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
@@ -142,5 +144,24 @@ public class Resource {
 	@Produces
 	public AttributeBuilder getAttributeBuilder() {
 		return attributeBuilder;
+	}
+
+	@Produces
+	@ApplicationScoped
+	public Connection getConnection(final @Default EntityManager em) {
+		// TODO pegar connexão indendepdente de implementação JPA
+		try {
+			/*
+			 * O hibernate não implementa o entityManager de forma a recuperar a
+			 * o connection
+			 */
+			final Class<?> klass = Class
+					.forName("org.hibernate.internal.SessionImpl");
+			final Object session = em.unwrap(klass);
+			return (Connection) klass.getDeclaredMethod("connection").invoke(
+					session);
+		} catch (final Exception e) {
+			return em.unwrap(Connection.class);
+		}
 	}
 }
