@@ -293,7 +293,7 @@
 					<includes>
 						<include>**/*</include>
 					</includes>
-					<repositoryName>${project.artifactId}</repositoryName>      <!-- github repo name -->
+					<repositoryName>mvn-repo</repositoryName>      <!-- github repo name -->
 					<repositoryOwner>clairton</repositoryOwner>    <!-- github username -->
 				</configuration>
 				<executions>
@@ -389,24 +389,8 @@
 	</distributionManagement>
 	<repositories>
 		<repository>
-			<id>inflector-mvn-repo</id>
-			<url>https://raw.github.com/clairton/inflector/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>repository-mvn-repo</id>
-			<url>https://raw.github.com/clairton/repository/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>identificator-mvn-repo</id>
-			<url>https://raw.github.com/clairton/identificator/mvn-repo/</url>
+			<id>mvn-repo</id>
+			<url>https://raw.github.com/clairton/mvn-repo/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
