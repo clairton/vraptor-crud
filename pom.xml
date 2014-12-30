@@ -155,89 +155,10 @@
 			<version>1.10.8</version>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- Apache DS dependencies -->
 		<dependency>
-			<groupId>org.apache.directory.server</groupId>
-			<artifactId>apacheds-all</artifactId>
-			<version>${apache.ds.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<!-- exclude additional LDIF schema files to avoid conflicts through 
-					multiple copies -->
-				<exclusion>
-					<groupId>org.apache.directory.shared</groupId>
-					<artifactId>shared-ldap-schema</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.directory.api</groupId>
-					<artifactId>api-ldap-schema-data</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.directory.server</groupId>
-			<artifactId>apacheds-server-integ</artifactId>
-			<version>${apache.ds.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<!-- exclude additional LDIF schema files to avoid conflicts through 
-					multiple copies -->
-				<exclusion>
-					<groupId>org.apache.directory.shared</groupId>
-					<artifactId>shared-ldap-schema</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.directory.api</groupId>
-					<artifactId>api-ldap-schema-data</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.directory.jdbm</groupId>
-					<artifactId>apacheds-jdbm1</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.directory.server</groupId>
-			<artifactId>apacheds-core-integ</artifactId>
-			<version>${apache.ds.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<!-- exclude additional LDIF schema files to avoid conflicts through 
-					multiple copies -->
-				<exclusion>
-					<groupId>org.apache.directory.shared</groupId>
-					<artifactId>shared-ldap-schema</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.directory.api</groupId>
-					<artifactId>api-ldap-schema-data</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.directory.server</groupId>
-			<artifactId>apacheds-server-jndi</artifactId>
-			<version>${apache.ds.version}</version>
-			<scope>test</scope>
-			<exclusions>
-				<!-- exclude additional LDIF schema files to avoid conflicts through 
-					multiple copies -->
-				<exclusion>
-					<groupId>org.apache.directory.shared</groupId>
-					<artifactId>shared-ldap-schema</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.directory.api</groupId>
-					<artifactId>api-ldap-schema-data</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.directory.jdbm</groupId>
-			<artifactId>apacheds-jdbm1</artifactId>
-			<version>2.0.0-M3</version>
+			<groupId>com.github.trevershick</groupId>
+			<artifactId>ldap-test-utils</artifactId>
+			<version>1.0.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -246,20 +167,6 @@
 			<version>1.4</version>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.0</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- End Apache DS dependencies -->
 	</dependencies>
 
 	<build>
