@@ -274,41 +274,55 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8.2</version>
-				<configuration>
-					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-				<version>0.10</version>
-				<configuration>
-					<message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
-					<noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
-					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
-					<branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
-					<includes>
-						<include>**/*</include>
-					</includes>
-					<repositoryName>mvn-repo</repositoryName>      <!-- github repo name -->
-					<repositoryOwner>clairton</repositoryOwner>    <!-- github username -->
-				</configuration>
-				<executions>
-					<!-- run site-maven-plugin's 'site' target as part of the build's normal 
-						'deploy' phase -->
-					<execution>
-						<goals>
-							<goal>site</goal>
-						</goals>
-						<phase>deploy</phase>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>ar.com.synergian</groupId>
+				<artifactId>wagon-git</artifactId>
+				<version>0.2.2</version>
+			</extension>
+		</extensions>
 	</build>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>synergian-repo</id>
+			<url>https://raw.github.com/synergian/wagon-git/releases</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<distributionManagement>
+		<repository>
+			<id>mvn-repo-releases</id>
+			<name>Release Repo</name>
+			<url>git:releases://git@github.com:clairton/mvn-repo.git</url>
+		</repository>
+		<snapshotRepository>
+			<id>mvn-repo-snapshots</id>
+			<name>Snapshot Repo</name>
+			<url>git:snapshots://git@github.com:clairton/mvn-repo.git</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<repositories>
+		<repository>
+			<id>mvn-repo-releases</id>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<url>https://raw.github.com/clairton/mvn-repo.git/releases</url>
+		</repository>
+		<repository>
+			<id>mvn-repo-snapshots</id>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<url>https://raw.github.com/clairton/mvn-repo.git/snapshots</url>
+		</repository>
+	</repositories>
 	<profiles>
 		<profile>
 			<id>batoo</id>
@@ -377,24 +391,4 @@
 			</dependencies>
 		</profile>
 	</profiles>
-	<distributionManagement>
-		<!-- Necessita adicionar em ~/.m2/settings.xml <servers> <server> <id>github</id> 
-			<username>clairton</username> <password>av.ar.823&amp;</password> </server> 
-			</servers> -->
-		<repository>
-			<id>internal.repo</id>
-			<name>Temporary Staging Repository</name>
-			<url>file://${project.build.directory}/mvn-repo</url>
-		</repository>
-	</distributionManagement>
-	<repositories>
-		<repository>
-			<id>mvn-repo</id>
-			<url>https://raw.github.com/clairton/mvn-repo/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
 </project>
