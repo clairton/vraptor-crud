@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.util.test.MockHttpServletResponse;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
@@ -35,7 +34,6 @@ public class SessionControllerTest extends AbstractLdapTest {
 	private TokenManager tokenManager;
 	private @Inject Repository repository;
 	private @Inject Logger logger;
-	private @Inject GsonBuilderWrapper builder;
 	private @Inject Mirror mirror;
 
 	private HttpServletResponse response;
@@ -62,8 +60,7 @@ public class SessionControllerTest extends AbstractLdapTest {
 		final String json = String.format("{'user': '%s', 'password': '%s'}",
 				user, password);
 		mirror.on(request).set().field("content").withValue(json.getBytes());
-		controller = new SessionController(tokenManager, request, response,
-				builder);
+		controller = new SessionController(tokenManager, request, response);
 	}
 
 	@Test(expected = CredentialNotFoundException.class)

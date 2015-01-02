@@ -11,15 +11,14 @@ import javax.security.auth.login.CredentialNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Post;
-import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.eti.clairton.vraptor.crud.ExceptionVerifier;
 
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 public class SessionController implements Serializable {
@@ -27,14 +26,14 @@ public class SessionController implements Serializable {
 	private final TokenManager tokenManager;
 	private final HttpServletResponse response;
 	private final HttpServletRequest request;
-	private final Gson gson;
+	private final Gson gson = new GsonBuilder().create();
 
 	/**
 	 * CDI eye only.
 	 */
 	@Deprecated
 	protected SessionController() {
-		this(null, null, null, null);
+		this(null, null, null);
 	}
 
 	/**
@@ -47,16 +46,13 @@ public class SessionController implements Serializable {
 	 */
 	@Inject
 	public SessionController(final TokenManager tokenManager,
-			HttpServletRequest request, final HttpServletResponse response,
-			GsonBuilderWrapper builder) {
+			HttpServletRequest request, final HttpServletResponse response) {
 		this.tokenManager = tokenManager;
 		this.request = request;
 		this.response = response;
-		this.gson = builder.create();
 	}
 
 	@Post
-	@Consumes("application/json")
 	@ExceptionVerifier
 	public void create() throws CredentialNotFoundException {
 		try {
