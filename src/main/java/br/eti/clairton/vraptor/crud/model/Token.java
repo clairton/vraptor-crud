@@ -46,8 +46,8 @@ public class Token extends Model {
 	@Identificator
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "create_at")
-	private final Date createAt;
+	@Column(name = "created_at")
+	private final Date createdAt;
 
 	@Identificator
 	@NotNull
@@ -82,7 +82,7 @@ public class Token extends Model {
 		this.hash = hash;
 		this.validAt = validAt;
 		this.user = user;
-		createAt = new Date();
+		createdAt = new Date();
 	}
 
 	public String getHash() {

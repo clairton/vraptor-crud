@@ -14,6 +14,7 @@ public abstract class Token_ extends Model_ {
 	public static volatile SingularAttribute<Token, String> hash;
 	public static volatile SingularAttribute<Token, String> user;
 	public static volatile SingularAttribute<Token, Date> validAt;
+	public static volatile SingularAttribute<Token, Date> createdAt;
 	public static volatile SingularAttribute<Token, Status> status;
 
 }
