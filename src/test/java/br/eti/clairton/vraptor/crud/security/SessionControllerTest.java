@@ -8,15 +8,19 @@ import java.nio.file.Files;
 
 import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.vidageek.mirror.dsl.Mirror;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.mock.web.MockHttpServletRequest;
 
+import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.util.test.MockHttpServletResponse;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
@@ -31,11 +35,14 @@ public class SessionControllerTest extends AbstractLdapTest {
 	private TokenManager tokenManager;
 	private @Inject Repository repository;
 	private @Inject Logger logger;
+	private @Inject GsonBuilderWrapper builder;
+	private @Inject Mirror mirror;
 
 	private HttpServletResponse response;
+	private HttpServletRequest request = new MockHttpServletRequest();
 
-	@Before
-	public void setUp() throws IOException {
+	public void setUp(final String user, final String password)
+			throws IOException {
 		authenticator = new AuthenticatorLdap(
 				LogManager.getLogger(AuthenticatorLdap.class),
 				"ldap://localhost:9389", "com.sun.jndi.ldap.LdapCtxFactory",
@@ -52,27 +59,39 @@ public class SessionControllerTest extends AbstractLdapTest {
 				return printWriter;
 			};
 		};
-		controller = new SessionController(tokenManager, response);
+		final String json = String.format("{'user': '%s', 'password': '%s'}",
+				user, password);
+		mirror.on(request).set().field("content").withValue(json.getBytes());
+		controller = new SessionController(tokenManager, request, response,
+				builder);
 	}
 
 	@Test(expected = CredentialNotFoundException.class)
-	public void testCreateInValidPassword() throws CredentialNotFoundException {
-		controller.create(user, "abcdef");
+	public void testCreateInValidPassword() throws CredentialNotFoundException,
+			IOException {
+		setUp(user, "abcdef");
+		controller.create();
 	}
 
 	@Test(expected = CredentialNotFoundException.class)
-	public void testCreateInValidUser() throws CredentialNotFoundException {
-		controller.create("outrouser", password);
+	public void testCreateInValidUser() throws CredentialNotFoundException,
+			IOException {
+		setUp("outrouser", password);
+		controller.create();
 	}
 
 	@Test
-	public void testCreateValid() throws CredentialNotFoundException {
-		controller.create(user, password);
+	public void testCreateValid() throws CredentialNotFoundException,
+			IOException {
+		setUp(user, password);
+		controller.create();
 	}
 
 	@Test
-	public void testDestroy() throws CredentialNotFoundException, IOException {
-		controller.create(user, password);
+	public void testDestroy() throws CredentialNotFoundException, IOException,
+			IOException {
+		setUp(user, password);
+		controller.create();
 		final String token = FileUtils.readFileToString(file);
 		controller.destroy(token);
 	}
