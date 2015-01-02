@@ -60,14 +60,13 @@ public class TokenManagerPersistent implements TokenManager {
 			@NotNull final String password) throws CredentialNotFoundException {
 		if (authenticator.isValid(user, password)) {
 			try {
-				final Predicate f1 = new Predicate(OR, user, Token_.user);
-				final Predicate f2 = new Predicate(Token.valids(), IN, status);
-				final Token token = repository.from(Token.class).where(f1)
-						.and(f2).single();
+				final Predicate p1 = new Predicate(OR, user, Token_.user);
+				final Predicate p2 = new Predicate(Token.valids(), IN, status);
+				final Token token = repository.from(Token.class).where(p1)
+						.and(p2).single();
 				invalidate(token);
 			} catch (final NoResultException e) {
 			}
-
 			final String info = (user + password + new Random().nextLong());
 			final byte[] bytes = info.getBytes(charset);
 			crypt.update(bytes);

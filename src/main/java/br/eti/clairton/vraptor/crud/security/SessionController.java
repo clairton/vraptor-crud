@@ -16,6 +16,7 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
+import br.eti.clairton.vraptor.crud.ExceptionVerifier;
 
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
@@ -56,6 +57,7 @@ public class SessionController implements Serializable {
 
 	@Post
 	@Consumes("application/json")
+	@ExceptionVerifier
 	public void create() throws CredentialNotFoundException {
 		try {
 			final BufferedReader reader = request.getReader();

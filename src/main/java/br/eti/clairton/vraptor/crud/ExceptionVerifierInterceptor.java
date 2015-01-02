@@ -12,6 +12,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
+import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.ConstraintViolationException;
 
 import org.apache.logging.log4j.Logger;
@@ -89,6 +90,10 @@ public class ExceptionVerifierInterceptor {
 		} catch (final OptimisticLockException e) {
 			logger.debug(format("OptimisticLock: %s", e.getMessage()));
 			status = 409;
+			errors = e.getMessage();
+		} catch (final CredentialNotFoundException e) {
+			logger.error("CredentialNotFound", e.getMessage());
+			status = 401;
 			errors = e.getMessage();
 		} catch (final InvocationTargetException e) {
 			logger.error("InvocationTarget", e.getTargetException());
