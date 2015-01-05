@@ -11,6 +11,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.interceptor.InvocationContext;
@@ -60,7 +62,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(413);
-		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
 	@Test
@@ -70,7 +72,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(401);
-		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
 	@Test
@@ -79,7 +81,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(409);
-		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
 	@Test
@@ -88,7 +90,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(404);
-		verify(jsonResult).from(eq(exception.getMessage()), eq("errors"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
 	@Test
@@ -110,5 +112,11 @@ public class ExceptionVerifierInterceptorTest {
 	public void testVerifyThrowable() throws Throwable {
 		when(context.proceed()).thenThrow(new Exception());
 		interceptor.invoke(context);
+	}
+
+	private Map<String, String> wrap(final String message) {
+		final Map<String, String> m = new HashMap<>();
+		m.put("error", message);
+		return m;
 	}
 }

@@ -5,6 +5,8 @@ import static br.com.caelum.vraptor.view.Results.json;
 import static java.lang.String.format;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -68,21 +70,25 @@ public class ExceptionVerifierInterceptor {
 	public Object invoke(final InvocationContext invocationContext)
 			throws Throwable {
 		Object errors;
+		final Map<String, String> message = new HashMap<>();
 		Integer status;
 		try {
 			return invocationContext.proceed();
 		} catch (final NoResultException e) {
 			logger.debug(format("NoResult: %s", e.getMessage()));
 			status = 404;
-			errors = e.getMessage();
+			message.put("error", e.getMessage());
+			errors = message;
 		} catch (final UnauthorizedException e) {
 			logger.debug(format("Unauthorized: %s", e.getMessage()));
 			status = 413;
-			errors = e.getMessage();
+			message.put("error", e.getMessage());
+			errors = message;
 		} catch (final UnauthenticatedException e) {
 			logger.debug(format("Unauthenticated: %s", e.getMessage()));
 			status = 401;
-			errors = e.getMessage();
+			message.put("error", e.getMessage());
+			errors = message;
 		} catch (final ConstraintViolationException e) {
 			logger.debug(format("Violation: %s", e.getMessage()));
 			errors = adapter.to(e.getConstraintViolations());
@@ -90,12 +96,19 @@ public class ExceptionVerifierInterceptor {
 		} catch (final OptimisticLockException e) {
 			logger.debug(format("OptimisticLock: %s", e.getMessage()));
 			status = 409;
-			errors = e.getMessage();
+			message.put("error", e.getMessage());
+			errors = message;
 		} catch (final CredentialNotFoundException e) {
 			logger.error("CredentialNotFound", e.getMessage());
 			status = 401;
-			final String messageDefault = "Usuário/Senha não existe(m)!";
-			errors = e.getMessage() == null ? messageDefault : e.getMessage();
+			final String m;
+			if (e.getMessage() == null) {
+				m = "Usuário/Senha não existe(m)!";
+			} else {
+				m = e.getMessage();
+			}
+			message.put("error", m);
+			errors = message;
 		} catch (final InvocationTargetException e) {
 			logger.error("InvocationTarget", e.getTargetException());
 			throw e.getTargetException();

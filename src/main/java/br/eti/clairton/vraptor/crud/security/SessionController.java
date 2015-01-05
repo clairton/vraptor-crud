@@ -7,7 +7,6 @@ import java.io.Serializable;
 import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import br.com.caelum.vraptor.Consumes;
@@ -48,13 +47,14 @@ public class SessionController implements Serializable {
 	@Post
 	@ExceptionVerifier
 	@Consumes("application/json")
-	public void create(@Valid @NotNull final String user,
-			@Valid @NotNull final String password)
-			throws CredentialNotFoundException {
+	public void create(@NotNull final String user,
+			@NotNull final String password) throws CredentialNotFoundException {
 		try {
 			final String token = tokenManager.create(user, password);
 			final PrintWriter writer = response.getWriter();
-			writer.print(token);
+			response.setStatus(201);
+			final String json = String.format("{\"token\": \"%s\"}", token);
+			writer.print(json);
 			writer.flush();
 			writer.close();
 		} catch (final IOException e) {
