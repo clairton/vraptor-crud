@@ -1,39 +1,33 @@
 package br.eti.clairton.vraptor.crud.security;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
+import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Post;
 import br.eti.clairton.vraptor.crud.ExceptionVerifier;
-
-import com.google.common.io.CharStreams;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @Controller
 public class SessionController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final TokenManager tokenManager;
 	private final HttpServletResponse response;
-	private final HttpServletRequest request;
-	private final Gson gson = new GsonBuilder().create();
 
 	/**
 	 * CDI eye only.
 	 */
 	@Deprecated
 	protected SessionController() {
-		this(null, null, null);
+		this(null, null);
 	}
 
 	/**
@@ -46,21 +40,18 @@ public class SessionController implements Serializable {
 	 */
 	@Inject
 	public SessionController(final TokenManager tokenManager,
-			HttpServletRequest request, final HttpServletResponse response) {
+			final HttpServletResponse response) {
 		this.tokenManager = tokenManager;
-		this.request = request;
 		this.response = response;
 	}
 
 	@Post
 	@ExceptionVerifier
-	public void create() throws CredentialNotFoundException {
+	@Consumes("application/json")
+	public void create(@Valid @NotNull final String user,
+			@Valid @NotNull final String password)
+			throws CredentialNotFoundException {
 		try {
-			final BufferedReader reader = request.getReader();
-			final String json = CharStreams.toString(reader);
-			final Map<?, ?> hash = gson.fromJson(json, Map.class);
-			final String user = hash.get("user").toString();
-			final String password = hash.get("password").toString();
 			final String token = tokenManager.create(user, password);
 			final PrintWriter writer = response.getWriter();
 			writer.print(token);
@@ -72,8 +63,10 @@ public class SessionController implements Serializable {
 	}
 
 	@Delete
-	public void destroy(final String user) {
-		tokenManager.destroy(user);
+	@ExceptionVerifier
+	@Consumes("application/json")
+	public void destroy(final String key) {
+		tokenManager.destroy(key);
 	}
 
 }

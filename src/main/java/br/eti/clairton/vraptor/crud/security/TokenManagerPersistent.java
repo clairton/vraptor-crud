@@ -2,10 +2,10 @@ package br.eti.clairton.vraptor.crud.security;
 
 import static br.eti.clairton.repository.Comparators.IN;
 import static br.eti.clairton.repository.Operators.OR;
+import static br.eti.clairton.vraptor.crud.model.Token.valids;
 import static br.eti.clairton.vraptor.crud.model.Token_.hash;
 import static br.eti.clairton.vraptor.crud.model.Token_.status;
 import static br.eti.clairton.vraptor.crud.model.Token_.user;
-import static br.eti.clairton.vraptor.crud.model.Token.valids;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -101,8 +101,8 @@ public class TokenManagerPersistent implements TokenManager {
 
 	@Override
 	public Boolean isValid(@NotNull final String key) {
-		logger.debug("Validando key: {} em {}", key);
-		final Predicate f1 = new Predicate(OR, key, user);
+		logger.debug("Validando key: {}", key);
+		final Predicate f1 = new Predicate(key, user);
 		final Predicate f2 = new Predicate(key, hash);
 		final Predicate f3 = new Predicate(valids(), IN, status);
 		return repository.from(Token.class).where(f1).or(f2).and(f3).exist();

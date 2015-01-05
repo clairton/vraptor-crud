@@ -1,6 +1,5 @@
 package br.eti.clairton.vraptor.crud.security;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import com.github.trevershick.test.ldap.LdapServerResource;
@@ -13,11 +12,8 @@ public class AbstractLdapTest {
 
 	@BeforeClass
 	public static void startup() throws Exception {
-		server = new LdapServerResource(new AbstractLdapTest()).start();
-	}
-
-	@AfterClass
-	public static void shutdown() {
-		server.stop();
+		if (server == null) {
+			server = new LdapServerResource(new AbstractLdapTest()).start();
+		}
 	}
 }

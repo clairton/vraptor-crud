@@ -94,7 +94,8 @@ public class ExceptionVerifierInterceptor {
 		} catch (final CredentialNotFoundException e) {
 			logger.error("CredentialNotFound", e.getMessage());
 			status = 401;
-			errors = e.getMessage();
+			final String messageDefault = "Usuário/Senha não existe(m)!";
+			errors = e.getMessage() == null ? messageDefault : e.getMessage();
 		} catch (final InvocationTargetException e) {
 			logger.error("InvocationTarget", e.getTargetException());
 			throw e.getTargetException();
