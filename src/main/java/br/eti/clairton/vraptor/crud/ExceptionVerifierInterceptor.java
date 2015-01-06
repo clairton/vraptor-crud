@@ -5,7 +5,9 @@ import static br.com.caelum.vraptor.view.Results.json;
 import static java.lang.String.format;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -70,24 +72,24 @@ public class ExceptionVerifierInterceptor {
 	public Object invoke(final InvocationContext invocationContext)
 			throws Throwable {
 		Object errors;
-		final Map<String, String> message = new HashMap<>();
+		final List<Map<String, String>> message = new ArrayList<>();
 		Integer status;
 		try {
 			return invocationContext.proceed();
 		} catch (final NoResultException e) {
 			logger.debug(format("NoResult: %s", e.getMessage()));
 			status = 404;
-			message.put("error", e.getMessage());
+			message.add(asMessage(e.getMessage()));
 			errors = message;
 		} catch (final UnauthorizedException e) {
 			logger.debug(format("Unauthorized: %s", e.getMessage()));
 			status = 413;
-			message.put("error", e.getMessage());
+			message.add(asMessage(e.getMessage()));
 			errors = message;
 		} catch (final UnauthenticatedException e) {
 			logger.debug(format("Unauthenticated: %s", e.getMessage()));
 			status = 401;
-			message.put("error", e.getMessage());
+			message.add(asMessage(e.getMessage()));
 			errors = message;
 		} catch (final ConstraintViolationException e) {
 			logger.debug(format("Violation: %s", e.getMessage()));
@@ -96,7 +98,7 @@ public class ExceptionVerifierInterceptor {
 		} catch (final OptimisticLockException e) {
 			logger.debug(format("OptimisticLock: %s", e.getMessage()));
 			status = 409;
-			message.put("error", e.getMessage());
+			message.add(asMessage(e.getMessage()));
 			errors = message;
 		} catch (final CredentialNotFoundException e) {
 			logger.error("CredentialNotFound", e.getMessage());
@@ -107,7 +109,7 @@ public class ExceptionVerifierInterceptor {
 			} else {
 				m = e.getMessage();
 			}
-			message.put("error", m);
+			message.add(asMessage(m));
 			errors = message;
 		} catch (final InvocationTargetException e) {
 			logger.error("InvocationTarget", e.getTargetException());
@@ -117,7 +119,13 @@ public class ExceptionVerifierInterceptor {
 			throw e;
 		}
 		result.use(http()).setStatusCode(status);
-		result.use(json()).from(errors, "errors").serialize();
+		result.use(json()).from(errors, "error").serialize();
 		return null;
+	}
+
+	private Map<String, String> asMessage(final String message) {
+		final Map<String, String> messages = new HashMap<>();
+		messages.put("message", message);
+		return messages;
 	}
 }

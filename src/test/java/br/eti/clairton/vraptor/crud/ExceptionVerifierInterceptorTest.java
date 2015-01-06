@@ -11,7 +11,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -62,7 +64,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(413);
-		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("error"));
 	}
 
 	@Test
@@ -72,7 +74,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(401);
-		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("error"));
 	}
 
 	@Test
@@ -81,7 +83,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(409);
-		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("error"));
 	}
 
 	@Test
@@ -90,7 +92,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(404);
-		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("error"));
 	}
 
 	@Test
@@ -105,7 +107,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(jsonResult.from(anyObject(), anyString())).thenReturn(serializer);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(422);
-		verify(jsonResult).from(any(Set.class), eq("errors"));
+		verify(jsonResult).from(any(Set.class), eq("error"));
 	}
 
 	@Test(expected = Exception.class)
@@ -114,9 +116,9 @@ public class ExceptionVerifierInterceptorTest {
 		interceptor.invoke(context);
 	}
 
-	private Map<String, String> wrap(final String message) {
+	private List<Map<String, String>> wrap(final String message) {
 		final Map<String, String> m = new HashMap<>();
-		m.put("error", message);
-		return m;
+		m.put("message", message);
+		return Arrays.asList(m);
 	}
 }
