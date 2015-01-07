@@ -118,8 +118,13 @@ public class ExceptionVerifierInterceptor {
 			logger.error("Throwable", e);
 			throw e;
 		}
-		result.use(http()).setStatusCode(status);
-		result.use(json()).from(errors, "error").serialize();
+		/*
+		 * Para adicionar a mensagem somente uma vez.
+		 */
+		if(result.used()){
+			result.use(http()).setStatusCode(status);
+			result.use(json()).from(errors, "error").serialize();
+		}
 		return null;
 	}
 
