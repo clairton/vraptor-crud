@@ -120,8 +120,8 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 			page = Integer.valueOf(params.get(Param.PAGE)[0]);
 			perPage = Integer.valueOf(params.get(Param.PER_PAGE)[0]);
 		} else {
-			page = -1;
-			perPage = -1;
+			page = 0;
+			perPage = 0;
 		}
 		final Collection<Predicate> predicates = queryParser.parse(request,
 				modelType);

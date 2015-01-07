@@ -105,7 +105,10 @@ public class TokenManagerPersistent implements TokenManager {
 		final Predicate f1 = new Predicate(OR, key, user);
 		final Predicate f2 = new Predicate(key, hash);
 		final Predicate f3 = new Predicate(valids(), IN, status);
-		return repository.from(Token.class).where(f1).or(f2).and(f3).exist();
+		final Boolean isValid = repository.from(Token.class).where(f1).or(f2)
+				.and(f3).exist();
+		logger.debug("key {} está {}", key, isValid ? "valida" : "invalida");
+		return isValid;
 	}
 
 	@Override
