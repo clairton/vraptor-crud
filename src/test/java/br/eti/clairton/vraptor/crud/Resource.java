@@ -21,9 +21,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mockito.Mockito;
 
-import br.com.caelum.vraptor.cache.CacheStore;
-import br.com.caelum.vraptor.cache.LRU;
-import br.com.caelum.vraptor.cache.LRUCacheStore;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
@@ -116,17 +113,6 @@ public class Resource {
 	@Produces
 	public String getApp() {
 		return "test";
-	}
-
-	/**
-	 * dependencia que o weld reclamava nos testes.
-	 */
-	@LRU
-	@Produces
-	public CacheStore<String, String> getCache(final InjectionPoint ip) {
-		final LRU annotation = ip.getAnnotated().getAnnotation(LRU.class);
-		final int capacity = annotation.capacity();
-		return new LRUCacheStore<>(capacity);
 	}
 
 	@Produces
