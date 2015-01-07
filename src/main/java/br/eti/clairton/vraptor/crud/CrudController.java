@@ -160,7 +160,7 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	@Authorized
 	@Authenticated
 	@ExceptionVerifier
-	public void delete(final Long id) {
+	public void remove(final Long id) {
 		repository.remove(modelType, id);
 		result.use(http()).setStatusCode(200);
 	}

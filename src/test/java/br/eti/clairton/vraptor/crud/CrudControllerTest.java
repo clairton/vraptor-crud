@@ -178,7 +178,7 @@ public class CrudControllerTest {
 	}
 
 	@Test
-	public void testDelete() {
+	public void testRemove() {
 		entityManager.clear();
 		final Long count = repository.from(Recurso.class).count() - 1;
 		final HttpMethod method = HttpMethod.DELETE;
