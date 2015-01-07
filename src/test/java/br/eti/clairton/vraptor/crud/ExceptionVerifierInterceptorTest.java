@@ -63,7 +63,7 @@ public class ExceptionVerifierInterceptorTest {
 		final Throwable exception = new UnauthorizedException("lskhdflksdhg");
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
-		verify(httpResult).setStatusCode(413);
+		verify(httpResult).setStatusCode(403);
 		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 

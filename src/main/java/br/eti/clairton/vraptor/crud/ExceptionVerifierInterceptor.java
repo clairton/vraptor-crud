@@ -81,7 +81,7 @@ public class ExceptionVerifierInterceptor {
 			errors = asMessage(e.getMessage());
 		} catch (final UnauthorizedException e) {
 			logger.debug(format("Unauthorized: %s", e.getMessage()));
-			status = 413;
+			status = 403;
 			errors = asMessage(e.getMessage());
 		} catch (final UnauthenticatedException e) {
 			logger.debug(format("Unauthenticated: %s", e.getMessage()));
