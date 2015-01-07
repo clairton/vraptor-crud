@@ -64,7 +64,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(413);
-		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("error"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(401);
-		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("error"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(409);
-		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("error"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(context.proceed()).thenThrow(exception);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(404);
-		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("error"));
+		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
 	@Test
@@ -107,7 +107,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(jsonResult.from(anyObject(), anyString())).thenReturn(serializer);
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(422);
-		verify(jsonResult).from(any(Set.class), eq("error"));
+		verify(jsonResult).from(any(Set.class), eq("errors"));
 	}
 
 	@Test(expected = Exception.class)
@@ -116,9 +116,13 @@ public class ExceptionVerifierInterceptorTest {
 		interceptor.invoke(context);
 	}
 
-	private List<Map<String, String>> wrap(final String message) {
-		final Map<String, String> m = new HashMap<>();
-		m.put("message", message);
-		return Arrays.asList(m);
+	private Map<String, List<String>> wrap(final String message) {
+		return new HashMap<String, List<String>>() {
+			private static final long serialVersionUID = 1L;
+
+			{
+				put("error", Arrays.asList(message));
+			}
+		};
 	}
 }
