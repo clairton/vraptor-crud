@@ -25,6 +25,7 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
+import br.eti.clairton.tenant.TenantValue;
 import br.eti.clairton.vraptor.crud.security.App;
 import br.eti.clairton.vraptor.crud.security.Token;
 import br.eti.clairton.vraptor.crud.security.TokenManager;
@@ -96,6 +97,12 @@ public class Resource {
 	@Produces
 	public String getUser(@Token final String token) {
 		return tokenManager.getUserByToken(token);
+	}
+
+	@TenantValue
+	@Produces
+	public String getTenantValue() {
+		return "";
 	}
 
 	@Token
