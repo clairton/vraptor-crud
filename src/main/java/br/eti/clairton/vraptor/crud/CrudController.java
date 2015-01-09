@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
+import javax.validation.constraints.NotNull;
 
 import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Consumes;
@@ -74,10 +75,12 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 * @param queryParser
 	 *            instancia de quey parser
 	 */
-	public CrudController(final Class<T> modelType,
-			final Repository repository, final Result result,
-			@Language final Inflector inflector, final Mirror mirror,
-			final ServletRequest request, final QueryParamParser queryParser) {
+	public CrudController(final @NotNull Class<T> modelType,
+			final @NotNull Repository repository, final @NotNull Result result,
+			@Language final @NotNull Inflector inflector,
+			final @NotNull Mirror mirror,
+			final @NotNull ServletRequest request,
+			final @NotNull QueryParamParser queryParser) {
 		super(modelType);
 		this.repository = repository;
 		this.result = result;
