@@ -2,7 +2,6 @@ package br.eti.clairton.vraptor.crud;
 
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
-import static java.lang.String.format;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -76,27 +75,27 @@ public class ExceptionVerifierInterceptor {
 		try {
 			return invocationContext.proceed();
 		} catch (final NoResultException e) {
-			logger.debug(format("NoResult: %s", e.getMessage()));
+			logger.debug("NoResult: {}", e.getMessage());
 			status = 404;
 			errors = asMessage(e.getMessage());
 		} catch (final UnauthorizedException e) {
-			logger.debug(format("Unauthorized: %s", e.getMessage()));
+			logger.debug("Unauthorized: {}", e.getMessage());
 			status = 403;
 			errors = asMessage(e.getMessage());
 		} catch (final UnauthenticatedException e) {
-			logger.debug(format("Unauthenticated: %s", e.getMessage()));
+			logger.debug("Unauthenticated: {}", e.getMessage());
 			status = 401;
 			errors = asMessage(e.getMessage());
 		} catch (final ConstraintViolationException e) {
-			logger.debug(format("Violation: %s", e.getMessage()));
+			logger.debug("ConstraintViolation: {}", e.getMessage());
 			errors = adapter.to(e.getConstraintViolations());
 			status = 422;
 		} catch (final OptimisticLockException e) {
-			logger.debug(format("OptimisticLock: %s", e.getMessage()));
+			logger.debug("OptimisticLock: {}", e.getMessage());
 			status = 409;
 			errors = asMessage(e.getMessage());
 		} catch (final CredentialNotFoundException e) {
-			logger.error("CredentialNotFound", e.getMessage());
+			logger.debug("CredentialNotFound: {}", e.getMessage());
 			status = 401;
 			final String m;
 			if (e.getMessage() == null) {
@@ -106,7 +105,7 @@ public class ExceptionVerifierInterceptor {
 			}
 			errors = asMessage(m);
 		} catch (final InvocationTargetException e) {
-			logger.error("InvocationTarget", e.getTargetException());
+			logger.debug("InvocationTarget: {}", e.getTargetException());
 			throw e.getTargetException();
 		} catch (final Throwable e) {
 			logger.error("Throwable", e);

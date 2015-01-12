@@ -38,11 +38,11 @@ public class TokenManagerPersistent implements TokenManager {
 
 	@Inject
 	public TokenManagerPersistent(
-			final Logger logger,
-			final Authenticator authenticator,
-			final Repository repository,
-			final @Property(value = "token.lifetime", defaultValue = "18000") String lifeTime,
-			final @Property(value = "token.algorithm", defaultValue = "SHA-1") String algorithm) {
+			@NotNull final Logger logger,
+			@NotNull final Authenticator authenticator,
+			@NotNull final Repository repository,
+			@NotNull final @Property(value = "token.lifetime", defaultValue = "18000") String lifeTime,
+			@NotNull final @Property(value = "token.algorithm", defaultValue = "SHA-1") String algorithm) {
 		try {
 			crypt = MessageDigest.getInstance(algorithm);
 			this.authenticator = authenticator;

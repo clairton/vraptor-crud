@@ -165,6 +165,20 @@ public class CrudControllerTest {
 	}
 
 	@Test
+	public void testShowWithTenant() {
+		/*
+		 * Criado uma aplicação com o nome filtrado no tenant
+		 * como não pode encontrar deve retornar 404
+		 */
+		final Aplicacao aplicacao = new Aplicacao(Resource.TENANT);
+		repository.save(aplicacao);
+		Long id = aplicacao.getId();
+		final UserFlow flow = navigate().get("/aplicacoes/" + id);
+		final VRaptorTestResult result = flow.execute();
+		assertEquals(404, result.getResponse().getStatus());
+	}
+
+	@Test
 	public void testShowRecursive() {
 		final UserFlow flow = navigate().get("/recursos/" + recursoId);
 		final VRaptorTestResult result = flow.execute();
