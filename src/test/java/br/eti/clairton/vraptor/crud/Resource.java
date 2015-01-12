@@ -39,6 +39,7 @@ import br.eti.clairton.vraptor.crud.security.User;
  */
 @ApplicationScoped
 public class Resource {
+	public static final String TENANT = "valorQueNãoPodeAparecer";
 	public static final String UNIT_NAME = "default";
 
 	public static final String ENVIROMENT_PARAM = "br.com.caelum.vraptor.environment";
@@ -102,7 +103,7 @@ public class Resource {
 	@TenantValue
 	@Produces
 	public String getTenantValue() {
-		return "";
+		return TENANT;
 	}
 
 	@Token

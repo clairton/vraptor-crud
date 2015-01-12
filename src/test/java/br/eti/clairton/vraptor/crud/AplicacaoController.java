@@ -11,16 +11,19 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Repository;
 
 @Controller
+@TenantController
 public class AplicacaoController extends CrudController<Aplicacao> {
-    @Deprecated
-    protected AplicacaoController() {
-        this(null, null, null, null, null, null);
-    }
-    
-    @Inject
-    public AplicacaoController(final Repository repository, final Result result,
-            @Language final Inflector inflector, final Mirror mirror, final ServletRequest request,
-            final QueryParamParser queryParser) {
-        super(Aplicacao.class, repository, result, inflector, mirror, request, queryParser);
-    }
+	@Deprecated
+	protected AplicacaoController() {
+		this(null, null, null, null, null, null);
+	}
+
+	@Inject
+	public AplicacaoController(final Repository repository,
+			final Result result, @Language final Inflector inflector,
+			final Mirror mirror, final ServletRequest request,
+			final QueryParamParser queryParser) {
+		super(Aplicacao.class, repository, result, inflector, mirror, request,
+				queryParser);
+	}
 }
