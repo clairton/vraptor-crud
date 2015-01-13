@@ -7,12 +7,17 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import net.vidageek.mirror.dsl.AccessorsController;
 import net.vidageek.mirror.dsl.Mirror;
+
+import org.apache.logging.log4j.Logger;
+
 import br.eti.clairton.repository.Model;
 
 import com.google.gson.JsonElement;
@@ -28,7 +33,8 @@ import com.google.gson.JsonSerializer;
  */
 @Dependent
 public class ModelSerializer implements JsonSerializer<Model> {
-	private final Mirror mirror = new Mirror();
+	private final Mirror mirror;
+	private final Logger logger;
 
 	private final List<String> ignored = new ArrayList<String>() {
 		private static final long serialVersionUID = 1L;
@@ -38,6 +44,14 @@ public class ModelSerializer implements JsonSerializer<Model> {
 			add("MIRROR");
 		}
 	};
+
+	@Inject
+	public ModelSerializer(@NotNull final Mirror mirror,
+			@NotNull final Logger logger) {
+		super();
+		this.mirror = mirror;
+		this.logger = logger;
+	}
 
 	public void addIgnoredField(final String field) {
 		ignored.add(field);
@@ -75,12 +89,17 @@ public class ModelSerializer implements JsonSerializer<Model> {
 				} else {
 					value = mirror.on(src).get().field(tag);
 				}
-				final JsonElement element = context.serialize(value,
-						value.getClass());
+				final JsonElement element;
+				if (value == null) {
+					element = context.serialize(value);
+				} else {
+					element = context.serialize(value, value.getClass());
+				}
 				json.add(tag, element);
 			}
 			return json;
 		} catch (final Exception e) {
+			logger.error("Erro ao serializar " + src, e);
 			throw new JsonParseException(e);
 		}
 	}

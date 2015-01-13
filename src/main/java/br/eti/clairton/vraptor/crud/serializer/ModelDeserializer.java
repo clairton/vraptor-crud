@@ -8,15 +8,20 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import net.vidageek.mirror.dsl.AccessorsController;
 import net.vidageek.mirror.dsl.ClassController;
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.set.dsl.FieldSetter;
 import net.vidageek.mirror.set.dsl.SetterHandler;
+
+import org.apache.logging.log4j.Logger;
+
 import br.eti.clairton.repository.Model;
 
 import com.google.gson.JsonArray;
@@ -34,7 +39,16 @@ import com.google.gson.JsonParseException;
  */
 @Dependent
 public class ModelDeserializer implements JsonDeserializer<Model> {
-	private final Mirror mirror = new Mirror();
+	private final Mirror mirror;
+	private final Logger logger;
+
+	@Inject
+	public ModelDeserializer(@NotNull final Mirror mirror,
+			@NotNull final Logger logger) {
+		super();
+		this.mirror = mirror;
+		this.logger = logger;
+	}
 
 	/**
 	 * {@inheritDoc}.
@@ -84,6 +98,7 @@ public class ModelDeserializer implements JsonDeserializer<Model> {
 			}
 			return model;
 		} catch (final Exception e) {
+			logger.error("Erro ao deserializar " + json, e);
 			throw new JsonParseException(e);
 		}
 	}
