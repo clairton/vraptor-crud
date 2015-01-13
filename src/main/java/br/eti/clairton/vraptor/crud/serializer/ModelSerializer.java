@@ -30,6 +30,19 @@ import com.google.gson.JsonSerializer;
 public class ModelSerializer implements JsonSerializer<Model> {
 	private final Mirror mirror = new Mirror();
 
+	private final List<String> ignored = new ArrayList<String>() {
+		private static final long serialVersionUID = 1L;
+
+		{
+			add("serialVersionUID");
+			add("MIRROR");
+		}
+	};
+
+	public void addIgnoredField(final String field) {
+		ignored.add(field);
+	}
+
 	/**
 	 * {@inheritDoc}.
 	 */
@@ -43,7 +56,7 @@ public class ModelSerializer implements JsonSerializer<Model> {
 			final AccessorsController controller = mirror.on(src);
 			for (final Field field : fields) {
 				final String tag = field.getName();
-				if ("serialVersionUID".equals(tag) || "MIRROR".equals(tag)) {
+				if (ignored.contains(tag)) {
 					continue;
 				}
 				final Object value;

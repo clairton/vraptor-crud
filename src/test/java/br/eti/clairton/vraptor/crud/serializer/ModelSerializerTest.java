@@ -1,7 +1,9 @@
 package br.eti.clairton.vraptor.crud.serializer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -23,6 +26,9 @@ import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
 import br.eti.clairton.vraptor.crud.Recurso;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 @RunWith(CdiJUnit4Runner.class)
 public class ModelSerializerTest {
@@ -61,11 +67,23 @@ public class ModelSerializerTest {
 	}
 
 	@Test
+	public void testAddIgnoreFlied() {
+		final Long idAplicacao = 1000l;
+		final OutroModel outroModel = new OutroModel("teste");
+		mirror.on(outroModel).set().field("id").withValue(idAplicacao);
+		mirror.on(outroModel).set().field("nome").withValue(null);
+		final String json = gson.toJson(outroModel, OutroModel.class);
+		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
+		assertEquals("PSADGKSADGLDSLÇ", resultado.get("outroValor"));
+		assertEquals(1000.0, resultado.get("id"));
+		assertFalse(resultado.containsKey("nome"));
+	}
+
+	@Test
 	public void testManyToOne() {
 		final Long idAplicacao = 1000l;
 		final Aplicacao aplicacao = new Aplicacao("Teste");
 		mirror.on(aplicacao).set().field("id").withValue(idAplicacao);
-		mirror.on(aplicacao).set().field("nome").withValue(null);
 		final Recurso object = new Recurso(aplicacao, "teste");
 		final Long idRecurso = 2000l;
 		mirror.on(object).set().field("id").withValue(idRecurso);
@@ -74,6 +92,37 @@ public class ModelSerializerTest {
 		assertEquals("teste", resultado.get("nome"));
 		assertEquals(2000.0, resultado.get("id"));
 		assertEquals(1000.0, resultado.get("aplicacao"));
+	}
+}
+
+class OutroModel extends Aplicacao {
+	private static final long serialVersionUID = 6016230217349046379L;
+	private String outroValor = "PSADGKSADGLDSLÇ";
+
+	public OutroModel(final String nome) {
+		super(nome);
+	}
+
+	public String getOutroValor() {
+		return outroValor;
+	}
+}
+
+@Dependent
+class OutroModelSerialiazer implements JsonSerializer<OutroModel> {
+	private final ModelSerializer modelSerializer;
+
+	@Inject
+	public OutroModelSerialiazer(ModelSerializer modelSerializer) {
+		super();
+		this.modelSerializer = modelSerializer;
+		modelSerializer.addIgnoredField("nome");
+	}
+
+	@Override
+	public JsonElement serialize(OutroModel src, Type type,
+			JsonSerializationContext context) {
+		return modelSerializer.serialize(src, type, context);
 	}
 
 }
