@@ -75,7 +75,8 @@ public class ModelSerializer implements JsonSerializer<Model> {
 				} else {
 					value = mirror.on(src).get().field(tag);
 				}
-				final JsonElement element = context.serialize(value);
+				final JsonElement element = context.serialize(value,
+						value.getClass());
 				json.add(tag, element);
 			}
 			return json;
