@@ -63,7 +63,7 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 		final String controllerName = extractControllerNameFrom(type);
 		for (final String uri : uris) {
 			// adiciona o nome do controller para ficar /aplicacoes/{id}
-			collection.add(controllerName + uri);
+			collection.add((controllerName + uri).replace("//", "/"));
 		}
 		collection.toArray(uris);
 	}
