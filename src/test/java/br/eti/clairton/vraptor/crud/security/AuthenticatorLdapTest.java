@@ -15,7 +15,7 @@ public class AuthenticatorLdapTest extends AbstractLdapTest {
 	public void setUp() {
 		authenticator = new AuthenticatorLdap(
 				LogManager.getLogger(AuthenticatorLdap.class),
-				"ldap://localhost:9389", "com.sun.jndi.ldap.LdapCtxFactory",
+				"ldap://localhost:19389", "com.sun.jndi.ldap.LdapCtxFactory",
 				"simple",
 				"cn=Admin Istrator+sn=Istrator+uid=admin,dc=child,dc=root",
 				"123456", "cn,sn,uid,dc", "dc=root", "uid");
