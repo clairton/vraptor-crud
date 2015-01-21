@@ -218,7 +218,7 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-			<url>https://raw.github.com/clairton/mvn-repo.git/releases</url>
+			<url>https://raw.github.com/clairton/mvn-repo/releases</url>
 		</repository>
 		<repository>
 			<id>mvn-repo-snapshots</id>
@@ -228,7 +228,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-			<url>https://raw.github.com/clairton/mvn-repo.git/snapshots</url>
+			<url>https://raw.github.com/clairton/mvn-repo/snapshots</url>
 		</repository>
 	</repositories>
 	<profiles>
