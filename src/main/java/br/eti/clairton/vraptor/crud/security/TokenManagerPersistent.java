@@ -120,8 +120,8 @@ public class TokenManagerPersistent implements TokenManager {
 	private Token getToken(@NotNull final String hash) {
 		logger.debug("Buscando Token para hash {}", hash);
 		final Predicate predicate = new Predicate(hash, Token_.hash);
-		final Token token = repository.from(Token.class).where(predicate)
-				.first();
+		final Token token = repository.tenant(Boolean.FALSE).from(Token.class)
+				.where(predicate).first();
 		return token;
 	}
 

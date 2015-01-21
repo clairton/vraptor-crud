@@ -74,7 +74,7 @@ public class CrudControllerTest {
 	@Test
 	public void testCreate() {
 		final Long count = repository.from(Aplicacao.class).count() + 1;
-		json = "{'model':{'nome':'teste'}}";
+		json = "{'aplicacao':{'nome':'teste'}}";
 		final UserFlow userFlow = navigate().post("/aplicacoes", parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
@@ -167,8 +167,8 @@ public class CrudControllerTest {
 	@Test
 	public void testShowWithTenant() {
 		/*
-		 * Criado uma aplicação com o nome filtrado no tenant
-		 * como não pode encontrar deve retornar 404
+		 * Criado uma aplicação com o nome filtrado no tenant como não pode
+		 * encontrar deve retornar 404
 		 */
 		final Aplicacao aplicacao = new Aplicacao(Resource.TENANT);
 		repository.save(aplicacao);
@@ -210,7 +210,7 @@ public class CrudControllerTest {
 		final Aplicacao atualizar = repository.byId(type, id);
 		final String nome = "abc" + new Date().getTime();
 		mirror.on(atualizar).set().field("nome").withValue(nome);
-		json = "{'model':{'nome':'" + nome + "', 'id':'" + id
+		json = "{'aplicacao':{'nome':'" + nome + "', 'id':'" + id
 				+ "'},recursos:[{'nome':'outroRecurso'}]}";
 		final String url = "/aplicacoes/" + id;
 		final HttpMethod method = HttpMethod.PUT;
