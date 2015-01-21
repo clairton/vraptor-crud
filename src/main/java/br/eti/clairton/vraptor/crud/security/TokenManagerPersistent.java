@@ -62,8 +62,8 @@ public class TokenManagerPersistent implements TokenManager {
 			try {
 				final Predicate p1 = new Predicate(OR, user, Token_.user);
 				final Predicate p2 = new Predicate(Token.valids(), IN, status);
-				final Token token = repository.from(Token.class).where(p1)
-						.and(p2).single();
+				final Token token = repository.tenant(Boolean.FALSE)
+						.from(Token.class).where(p1).and(p2).single();
 				invalidate(token);
 			} catch (final NoResultException e) {
 			}
@@ -79,7 +79,7 @@ public class TokenManagerPersistent implements TokenManager {
 			final Long now = new Date().getTime();
 			final Date validAt = new Date(now + (lifeTime * 1000l));
 			final Token token = new Token(hash, validAt, user);
-			repository.save(token);
+			repository.tenant(Boolean.FALSE).save(token);
 			return hash;
 		} else {
 			throw new CredentialNotFoundException();
@@ -92,8 +92,8 @@ public class TokenManagerPersistent implements TokenManager {
 		final Predicate f2 = new Predicate(key, Token_.user);
 		final Predicate f3 = new Predicate(valids(), IN, status);
 		try {
-			final Token token = repository.from(Token.class).where(f1).or(f2)
-					.and(f3).single();
+			final Token token = repository.tenant(Boolean.FALSE)
+					.from(Token.class).where(f1).or(f2).and(f3).single();
 			invalidate(token);
 		} catch (final NoResultException e) {
 		}
@@ -105,8 +105,8 @@ public class TokenManagerPersistent implements TokenManager {
 		final Predicate f1 = new Predicate(OR, key, user);
 		final Predicate f2 = new Predicate(key, hash);
 		final Predicate f3 = new Predicate(valids(), IN, status);
-		final Boolean isValid = repository.from(Token.class).where(f1).or(f2)
-				.and(f3).exist();
+		final Boolean isValid = repository.tenant(Boolean.FALSE)
+				.from(Token.class).where(f1).or(f2).and(f3).exist();
 		logger.debug("key {} está {}", key, isValid ? "valida" : "invalida");
 		return isValid;
 	}
@@ -127,6 +127,6 @@ public class TokenManagerPersistent implements TokenManager {
 
 	private void invalidate(final Token token) {
 		token.setStatus(Status.INVALIDATED);
-		repository.save(token);
+		repository.tenant(Boolean.FALSE).save(token);
 	}
 }
