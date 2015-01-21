@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static java.util.Arrays.asList;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,8 +14,6 @@ import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 
 import net.vidageek.mirror.dsl.Mirror;
 
@@ -25,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
-import br.eti.clairton.repository.Model;
 import br.eti.clairton.vraptor.crud.Aplicacao;
 import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
 import br.eti.clairton.vraptor.crud.Recurso;
@@ -128,34 +124,6 @@ class OutroModel extends Aplicacao {
 
 	public String getOutroValor() {
 		return outroValor;
-	}
-}
-
-class ModelManyToMany extends Model {
-	private static final long serialVersionUID = 6016230217349046379L;
-
-	@ManyToMany
-	private final List<Aplicacao> aplicacoes = new ArrayList<>();
-
-	public ModelManyToMany() {
-		final Aplicacao aplicacao = new Aplicacao("Teste");
-		new Mirror().on(aplicacao).set().field("id").withValue(100l);
-		aplicacoes.add(aplicacao);
-		final Aplicacao aplicacao2 = new Aplicacao("OutroTeste");
-		new Mirror().on(aplicacao2).set().field("id").withValue(200l);
-		aplicacoes.add(aplicacao2);
-	}
-}
-
-class ModelOneToOne extends Model {
-	private static final long serialVersionUID = 6016230217349046379L;
-
-	@OneToOne
-	private final Aplicacao aplicacao;
-
-	public ModelOneToOne() {
-		aplicacao = new Aplicacao("Teste");
-		new Mirror().on(aplicacao).set().field("id").withValue(100l);
 	}
 }
 

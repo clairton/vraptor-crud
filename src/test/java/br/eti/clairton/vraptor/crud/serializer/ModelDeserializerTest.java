@@ -73,4 +73,23 @@ public class ModelDeserializerTest {
 		assertNull(result.getAplicacao());
 	}
 
+	@Test
+	public void testOneToOneWithNull() {
+		final String json = "{'id': '1111', 'aplicacao': [444]}";
+		final ModelOneToOne result = gson.fromJson(json, ModelOneToOne.class);
+		assertEquals(Long.valueOf(1111l), result.getId());
+		assertEquals(Long.valueOf(444l), result.getAplicacao().getId());
+	}
+
+	@Test
+	public void testManyToMany() {
+		final ModelManyToMany object = new ModelManyToMany();
+		final String json = "{'id': '1111', 'aplicacoes': [444,555]}";
+		mirror.on(object).set().field("id").withValue(0l);
+		final ModelManyToMany result = gson.fromJson(json,
+				ModelManyToMany.class);
+		assertEquals(Long.valueOf(444l), result.getAplicacoes().get(0).getId());
+		assertEquals(Long.valueOf(555l), result.getAplicacoes().get(1).getId());
+	}
+
 }
