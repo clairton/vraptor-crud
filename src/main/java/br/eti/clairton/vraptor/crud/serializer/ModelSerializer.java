@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import net.vidageek.mirror.dsl.AccessorsController;
@@ -83,7 +84,8 @@ public class ModelSerializer implements JsonSerializer<Model> {
 						ids.add(((Model) model).getId());
 					}
 					value = ids;
-				} else if (field.isAnnotationPresent(ManyToOne.class)) {
+				} else if (field.isAnnotationPresent(ManyToOne.class)
+						|| field.isAnnotationPresent(OneToOne.class)) {
 					final Model v = (Model) controller.get().field(tag);
 					value = v.getId();
 				} else {

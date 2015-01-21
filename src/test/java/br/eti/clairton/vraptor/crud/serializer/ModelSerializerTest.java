@@ -2,8 +2,10 @@ package br.eti.clairton.vraptor.crud.serializer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static java.util.Arrays.asList;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,6 +15,8 @@ import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import net.vidageek.mirror.dsl.Mirror;
 
@@ -21,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
+import br.eti.clairton.repository.Model;
 import br.eti.clairton.vraptor.crud.Aplicacao;
 import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
 import br.eti.clairton.vraptor.crud.Recurso;
@@ -93,6 +98,24 @@ public class ModelSerializerTest {
 		assertEquals(2000.0, resultado.get("id"));
 		assertEquals(1000.0, resultado.get("aplicacao"));
 	}
+
+	@Test
+	public void testOneToOne() {
+		final ModelOneToOne model = new ModelOneToOne();
+		mirror.on(model).set().field("id").withValue(1l);
+		final String json = gson.toJson(model, ModelOneToOne.class);
+		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
+		assertEquals(100.0, resultado.get("aplicacao"));
+	}
+
+	@Test
+	public void testManyToMany() {
+		final ModelManyToMany model = new ModelManyToMany();
+		mirror.on(model).set().field("id").withValue(1l);
+		final String json = gson.toJson(model, ModelManyToMany.class);
+		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
+		assertEquals(asList(100.0, 200.0), resultado.get("aplicacoes"));
+	}
 }
 
 class OutroModel extends Aplicacao {
@@ -105,6 +128,34 @@ class OutroModel extends Aplicacao {
 
 	public String getOutroValor() {
 		return outroValor;
+	}
+}
+
+class ModelManyToMany extends Model {
+	private static final long serialVersionUID = 6016230217349046379L;
+
+	@ManyToMany
+	private final List<Aplicacao> aplicacoes = new ArrayList<>();
+
+	public ModelManyToMany() {
+		final Aplicacao aplicacao = new Aplicacao("Teste");
+		new Mirror().on(aplicacao).set().field("id").withValue(100l);
+		aplicacoes.add(aplicacao);
+		final Aplicacao aplicacao2 = new Aplicacao("OutroTeste");
+		new Mirror().on(aplicacao2).set().field("id").withValue(200l);
+		aplicacoes.add(aplicacao2);
+	}
+}
+
+class ModelOneToOne extends Model {
+	private static final long serialVersionUID = 6016230217349046379L;
+
+	@OneToOne
+	private final Aplicacao aplicacao;
+
+	public ModelOneToOne() {
+		aplicacao = new Aplicacao("Teste");
+		new Mirror().on(aplicacao).set().field("id").withValue(100l);
 	}
 }
 

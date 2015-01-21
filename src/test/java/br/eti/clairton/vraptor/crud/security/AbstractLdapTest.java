@@ -6,7 +6,7 @@ import com.github.trevershick.test.ldap.LdapServerResource;
 import com.github.trevershick.test.ldap.annotations.LdapConfiguration;
 import com.github.trevershick.test.ldap.annotations.Ldif;
 
-@LdapConfiguration(ldifs = @Ldif("/data.ldif"), port = 9389)
+@LdapConfiguration(ldifs = @Ldif("/data.ldif"), port = 19389)
 public class AbstractLdapTest {
 	private static LdapServerResource server;
 
