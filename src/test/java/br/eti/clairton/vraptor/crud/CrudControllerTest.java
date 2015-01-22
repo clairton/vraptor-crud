@@ -1,9 +1,10 @@
 package br.eti.clairton.vraptor.crud;
 
-import static br.eti.clairton.vraptor.crud.CdiJUnit4Runner.navigate;
+import static br.eti.clairton.vraptor.crud.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,15 +25,12 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
-import br.eti.clairton.repository.Repository;
 
 import com.google.gson.Gson;
 
-@RunWith(CdiJUnit4Runner.class)
+@RunWith(VRaptorRunner.class)
 public class CrudControllerTest {
 	private final Gson gson = new Gson();
-
-	private @Inject Repository repository;
 
 	private @Inject Mirror mirror;
 	private @Inject EntityManager entityManager;
@@ -60,26 +58,30 @@ public class CrudControllerTest {
 		final String sql = "DELETE FROM recursos;DELETE FROM aplicacoes;";
 		connection.createStatement().execute(sql);
 		entityManager.getTransaction().commit();
+		entityManager.getTransaction().begin();
 		Aplicacao aplicacao = new Aplicacao("Teste");
 		final Recurso recurso = new Recurso(aplicacao, "Teste");
-		repository.save(recurso);
+		entityManager.persist(recurso);
 		recursoId = recurso.getId();
 		id = aplicacao.getId();
 		aplicacao = new Aplicacao("TesteOutro");
-		repository.save(aplicacao);
+		entityManager.persist(aplicacao);
 		aplicacao = new Aplicacao("Testezinho");
-		repository.save(aplicacao);
+		entityManager.persist(aplicacao);
+		entityManager.flush();
+		entityManager.getTransaction().commit();
 	}
 
 	@Test
 	public void testCreate() {
-		final Long count = repository.from(Aplicacao.class).count() + 1;
 		json = "{'aplicacao':{'nome':'teste'}}";
 		final UserFlow userFlow = navigate().post("/aplicacoes", parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
-		assertAplicacao(new Aplicacao("teste"), result.getResponseBody());
-		assertEquals(count, repository.from(Aplicacao.class).count());
+		Long id = assertAplicacao(new Aplicacao("teste"),
+				result.getResponseBody());
+		assertEquals(200, navigate().get("/aplicacoes/" + id).execute()
+				.getResponse().getStatus());
 	}
 
 	@Test
@@ -170,8 +172,11 @@ public class CrudControllerTest {
 		 * Criado uma aplicação com o nome filtrado no tenant como não pode
 		 * encontrar deve retornar 404
 		 */
+		entityManager.getTransaction().begin();
 		final Aplicacao aplicacao = new Aplicacao(Resource.TENANT);
-		repository.save(aplicacao);
+		entityManager.persist(aplicacao);
+		entityManager.flush();
+		entityManager.getTransaction().commit();
 		Long id = aplicacao.getId();
 		final UserFlow flow = navigate().get("/aplicacoes/" + id);
 		final VRaptorTestResult result = flow.execute();
@@ -194,20 +199,20 @@ public class CrudControllerTest {
 	@Test
 	public void testRemove() {
 		entityManager.clear();
-		final Long count = repository.from(Recurso.class).count() - 1;
 		final HttpMethod method = HttpMethod.DELETE;
 		final String url = "/recursos/" + recursoId;
 		final UserFlow userFlow = navigate().to(url, method, new Parameters());
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 		assertEquals("", result.getResponseBody());
-		assertEquals(count, repository.from(Recurso.class).count());
+		assertEquals(404, navigate().get(url).execute().getResponse()
+				.getStatus());
 	}
 
 	@Test
 	public void testUpdate() {
 		final Class<Aplicacao> type = Aplicacao.class;
-		final Aplicacao atualizar = repository.byId(type, id);
+		final Aplicacao atualizar = entityManager.find(type, id);
 		final String nome = "abc" + new Date().getTime();
 		mirror.on(atualizar).set().field("nome").withValue(nome);
 		json = "{'aplicacao':{'nome':'" + nome + "', 'id':'" + id
@@ -218,14 +223,15 @@ public class CrudControllerTest {
 		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 		assertAplicacao(atualizar, result.getResponseBody());
-		final Aplicacao resultado = repository.byId(type, id);
+		final Aplicacao resultado = entityManager.find(type, id);
 		assertEquals(nome, resultado.getNome());
 	}
 
-	private void assertAplicacao(final Aplicacao aplicacao, final String json) {
+	private Long assertAplicacao(final Aplicacao aplicacao, final String json) {
 		final Map<?, ?> o = gson.fromJson(json, HashMap.class);
 		final Map<?, ?> model = (Map<?, ?>) o.get("aplicacao");
 		assertEquals(aplicacao.getNome(), model.get("nome"));
 		assertNotNull(model.get("id"));
+		return new BigDecimal(model.get("id").toString()).longValue();
 	}
 }

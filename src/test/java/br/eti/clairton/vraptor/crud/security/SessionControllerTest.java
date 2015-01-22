@@ -2,19 +2,17 @@ package br.eti.clairton.vraptor.crud.security;
 
 import static br.com.caelum.vraptor.controller.HttpMethod.DELETE;
 import static br.com.caelum.vraptor.controller.HttpMethod.POST;
-import static br.eti.clairton.vraptor.crud.CdiJUnit4Runner.navigate;
+import static br.eti.clairton.vraptor.crud.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
 
 import net.vidageek.mirror.dsl.Mirror;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -22,13 +20,14 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
-import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
+import br.eti.clairton.vraptor.crud.VRaptorRunner;
 
-@RunWith(CdiJUnit4Runner.class)
+import com.google.gson.GsonBuilder;
+
+@RunWith(VRaptorRunner.class)
 public class SessionControllerTest extends AbstractLdapTest {
 	private String user = "admin";
 	private String password = "123456";
-	private @Inject TokenManager tokenManager;
 	private @Inject Mirror mirror;
 	private final String url = "/sessions";
 
@@ -43,10 +42,6 @@ public class SessionControllerTest extends AbstractLdapTest {
 					.withValue("application/json");
 		}
 	};
-
-	@Before
-	public void setUp() throws IOException {
-	}
 
 	@Test
 	public void testCreateInValidPassword() {
@@ -82,8 +77,11 @@ public class SessionControllerTest extends AbstractLdapTest {
 	@Test
 	public void testDestroyWithToken() throws CredentialNotFoundException,
 			IOException, IOException {
-		final String token = tokenManager.create(user, password);
-		assertTrue(tokenManager.isValid(token));
+		UserFlow userFlow = navigate().to(url, POST, parameters);
+		VRaptorTestResult result = userFlow.execute();
+		final String token = new GsonBuilder().create()
+				.fromJson(result.getResponseBody(), Map.class).get("token")
+				.toString();
 		final Parameters parameters = new Parameters() {
 			@Override
 			public void fill(final MockHttpServletRequest request) {
@@ -94,17 +92,16 @@ public class SessionControllerTest extends AbstractLdapTest {
 						.withValue("application/json");
 			}
 		};
-		final UserFlow userFlow = navigate().to(url, DELETE, parameters);
-		final VRaptorTestResult result = userFlow.execute();
+		userFlow = navigate().to(url, DELETE, parameters);
+		result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
-		assertFalse(tokenManager.isValid(token));
 	}
 
 	@Test
 	public void testDestroyWithUser() throws CredentialNotFoundException,
 			IOException, IOException {
-		final String token = tokenManager.create(user, password);
-		assertTrue(tokenManager.isValid(token));
+		UserFlow userFlow = navigate().to(url, POST, parameters);
+		VRaptorTestResult result = userFlow.execute();
 		final Parameters parameters = new Parameters() {
 			@Override
 			public void fill(final MockHttpServletRequest request) {
@@ -115,9 +112,9 @@ public class SessionControllerTest extends AbstractLdapTest {
 						.withValue("application/json");
 			}
 		};
-		final UserFlow userFlow = navigate().to(url, DELETE, parameters);
-		final VRaptorTestResult result = userFlow.execute();
+		userFlow = navigate().to(url, DELETE, parameters);
+		result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
-		assertFalse(tokenManager.isValid(token));
 	}
+
 }

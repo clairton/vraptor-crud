@@ -18,7 +18,7 @@ import br.eti.clairton.vraptor.crud.ExceptionVerifier;
 @Controller
 public class SessionController implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private final TokenManager tokenManager;
+	private final Locksmith locksmith;
 	private final HttpServletResponse response;
 
 	/**
@@ -32,15 +32,15 @@ public class SessionController implements Serializable {
 	/**
 	 * Construtor com parâmetros com parametros.
 	 * 
-	 * @param tokenManager
+	 * @param locksmith
 	 *            manager de tokens
 	 * @param response
 	 *            resposta servlet
 	 */
 	@Inject
-	public SessionController(final TokenManager tokenManager,
+	public SessionController(final Locksmith locksmith,
 			final HttpServletResponse response) {
-		this.tokenManager = tokenManager;
+		this.locksmith = locksmith;
 		this.response = response;
 	}
 
@@ -50,7 +50,7 @@ public class SessionController implements Serializable {
 	public void create(@NotNull final String user,
 			@NotNull final String password) throws CredentialNotFoundException {
 		try {
-			final String token = tokenManager.create(user, password);
+			final String token = locksmith.create(user, password);
 			final PrintWriter writer = response.getWriter();
 			response.setStatus(201);
 			final String json = String.format("{\"token\": \"%s\"}", token);
@@ -66,7 +66,7 @@ public class SessionController implements Serializable {
 	@ExceptionVerifier
 	@Consumes("application/json")
 	public void destroy(final String key) {
-		tokenManager.destroy(key);
+		locksmith.invalidate(key);
 	}
 
 }

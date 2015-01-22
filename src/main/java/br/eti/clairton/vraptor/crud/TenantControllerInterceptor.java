@@ -48,6 +48,7 @@ public class TenantControllerInterceptor {
 	public Object invoke(final InvocationContext context) throws Throwable {
 		logger.debug("Setando tenant com valor \"{}\"", tenantValue);
 		final Repository repository = (Repository) context.getParameters()[0];
+		//seta o valor do tenant
 		repository.tenantValue(tenantValue);
 		return context.proceed();
 	}

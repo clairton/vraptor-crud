@@ -28,7 +28,7 @@ import br.eti.clairton.repository.AttributeBuilder;
 import br.eti.clairton.tenant.TenantValue;
 import br.eti.clairton.vraptor.crud.security.App;
 import br.eti.clairton.vraptor.crud.security.Token;
-import br.eti.clairton.vraptor.crud.security.TokenManager;
+import br.eti.clairton.vraptor.crud.security.Locksmith;
 import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
 import br.eti.clairton.vraptor.crud.security.User;
 
@@ -52,10 +52,10 @@ public class Resource {
 
 	private AttributeBuilder attributeBuilder;
 
-	private final TokenManager tokenManager;
+	private final Locksmith tokenManager;
 
 	@Inject
-	public Resource(final TokenManager tokenManager) {
+	public Resource(final Locksmith tokenManager) {
 		super();
 		this.tokenManager = tokenManager;
 	}

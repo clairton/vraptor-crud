@@ -20,17 +20,17 @@ import org.mockito.Mockito;
 
 import br.eti.clairton.vraptor.crud.Aplicacao;
 
-public class AuthorizationInterceptorTest {
-	private AuthorizationInterceptor interceptor;
+public class LockInterceptorTest {
+	private GateInterceptor interceptor;
 	private InvocationContext context;
-	private Authorizator authorizator;
+	private Gate authorizator;
 	private final String usuario = "jose";
 	private final String app = "test";
 
 	@Before
 	public void setUp() throws Exception {
-		authorizator = mock(Authorizator.class);
-		interceptor = new AuthorizationInterceptor(app, usuario, authorizator,
+		authorizator = mock(Gate.class);
+		interceptor = new GateInterceptor(app, usuario, authorizator,
 				LogManager.getLogger());
 		final Object[] parameters = {};
 		final Resourceable target = new TestResourceable();
@@ -46,7 +46,7 @@ public class AuthorizationInterceptorTest {
 	@Test
 	public void testInvokeAuthorized() throws Throwable {
 		when(
-				authorizator.isAble(anyObject(), anyObject(), anyString(),
+				authorizator.isOpen(anyObject(), anyObject(), anyString(),
 						anyString())).thenReturn(Boolean.TRUE);
 		final Object expected = "çegjweargihjjhjsfkhgsdlçgjusdayjicodtaiotiow";
 		final InvocationContext spy = spy(context);
@@ -57,7 +57,7 @@ public class AuthorizationInterceptorTest {
 	@Test(expected = TestException.class)
 	public void testOriginalException() throws Throwable {
 		when(
-				authorizator.isAble(anyObject(), anyObject(), anyString(),
+				authorizator.isOpen(anyObject(), anyObject(), anyString(),
 						anyString())).thenThrow(new TestException());
 		interceptor.invoke(context);
 	}

@@ -16,14 +16,14 @@ import javax.validation.constraints.NotNull;
  */
 @Interceptor
 @Authenticated
-public class AuthenticationInterceptor {
-	private final TokenManager tokenManager;
+public class LockInterceptor {
+	private final Locksmith locksmith;
 	private final String token;
 
 	@Inject
-	public AuthenticationInterceptor(@NotNull final TokenManager tokenManager,
+	public LockInterceptor(@NotNull final Locksmith locksmith,
 			@Token final String token) {
-		this.tokenManager = tokenManager;
+		this.locksmith = locksmith;
 		this.token = token;
 	}
 
@@ -40,7 +40,7 @@ public class AuthenticationInterceptor {
 	@AroundInvoke
 	public Object invoke(final InvocationContext context) throws Throwable {
 		try {
-			if (tokenManager.isValid(token)) {
+			if (locksmith.isValid(token)) {
 				return context.proceed();
 			} else {
 				throw new UnauthenticatedException("Token " + token

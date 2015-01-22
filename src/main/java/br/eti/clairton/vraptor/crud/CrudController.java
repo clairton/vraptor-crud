@@ -27,7 +27,7 @@ import br.eti.clairton.vraptor.crud.security.Authorized;
 import br.eti.clairton.vraptor.crud.security.Resourceable;
 
 /**
- * Controller abstrato para servir como base para um crud.
+ * Controller abstrato para servir como base para um CRUD.
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  *

@@ -23,7 +23,7 @@ import br.com.caelum.vraptor.environment.Property;
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
 @Dependent
-public class AuthenticatorLdap implements Authenticator {
+public class LockLdap implements Lock {
 	private final Hashtable<String, String> config = new Hashtable<>();
 	private final String[] ldapAttributes;
 	private final String base;
@@ -53,7 +53,7 @@ public class AuthenticatorLdap implements Authenticator {
 	 * 
 	 */
 	@Inject
-	public AuthenticatorLdap(final Logger logger,
+	public LockLdap(final Logger logger,
 			final @Property(value = "ldap.url") String url,
 			@Property(value = "ldap.factory") final String factory,
 			@Property(value = "ldap.security") final String security,

@@ -11,40 +11,40 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import br.eti.clairton.cdi.test.CdiJUnit4Runner;
 import br.eti.clairton.repository.Repository;
-import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
 
 @RunWith(CdiJUnit4Runner.class)
-public class AuthenticationInterceptorTest extends AbstractLdapTest {
-	private AuthenticationInterceptor interceptor;
+public class GateInterceptorTest extends AbstractLdapTest {
+	private LockInterceptor interceptor;
 	private InvocationContext context = mock(InvocationContext.class);
-	private Authenticator authenticator;
-	private TokenManager tokenManager;
+	private Lock authenticator;
+	private Locksmith tokenManager;
 	private @Inject Repository repository;
 	private @Inject Logger logger;
 
 	@Before
 	public void setUp() {
-		authenticator = new AuthenticatorLdap(
-				LogManager.getLogger(AuthenticatorLdap.class),
+		authenticator = new LockLdap(
+				LogManager.getLogger(LockLdap.class),
 				"ldap://localhost:19389", "com.sun.jndi.ldap.LdapCtxFactory",
 				"simple",
 				"cn=Admin Istrator+sn=Istrator+uid=admin,dc=child,dc=root",
 				"123456", "cn,sn,uid,dc", "dc=root", "uid");
-		tokenManager = new TokenManagerPersistent(logger, authenticator,
+		tokenManager = new LocksmithPersistent(logger, authenticator,
 				repository, "18000", "MD5");
 	}
 
 	@Test
 	public void testInvoke() throws Throwable {
 		final String token = tokenManager.create("admin", "123456");
-		interceptor = new AuthenticationInterceptor(tokenManager, token);
+		interceptor = new LockInterceptor(tokenManager, token);
 		interceptor.invoke(context);
 	}
 
 	@Test(expected = UnauthenticatedException.class)
 	public void testInvokeWithSession() throws Throwable {
-		interceptor = new AuthenticationInterceptor(tokenManager,
+		interceptor = new LockInterceptor(tokenManager,
 				"hash_nao_valido");
 		interceptor.invoke(context);
 	}

@@ -12,7 +12,7 @@ import java.security.MessageDigest;
 import java.util.Date;
 import java.util.Random;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.security.auth.login.CredentialNotFoundException;
@@ -27,19 +27,19 @@ import br.eti.clairton.vraptor.crud.model.Token;
 import br.eti.clairton.vraptor.crud.model.Token.Status;
 import br.eti.clairton.vraptor.crud.model.Token_;
 
-@ApplicationScoped
-public class TokenManagerPersistent implements TokenManager {
+@RequestScoped
+public class LocksmithPersistent implements Locksmith {
 	private final MessageDigest crypt;
-	private final Authenticator authenticator;
+	private final Lock authenticator;
 	private final Repository repository;
 	private final Charset charset;
 	private final Logger logger;
 	private final Long lifeTime;
 
 	@Inject
-	public TokenManagerPersistent(
+	public LocksmithPersistent(
 			@NotNull final Logger logger,
-			@NotNull final Authenticator authenticator,
+			@NotNull final Lock authenticator,
 			@NotNull final Repository repository,
 			@NotNull final @Property(value = "token.lifetime", defaultValue = "18000") String lifeTime,
 			@NotNull final @Property(value = "token.algorithm", defaultValue = "SHA-1") String algorithm) {
@@ -87,7 +87,7 @@ public class TokenManagerPersistent implements TokenManager {
 	}
 
 	@Override
-	public void destroy(@NotNull final String key) {
+	public void invalidate(@NotNull final String key) {
 		final Predicate f1 = new Predicate(key, Token_.hash);
 		final Predicate f2 = new Predicate(key, Token_.user);
 		final Predicate f3 = new Predicate(valids(), IN, status);

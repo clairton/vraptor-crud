@@ -1,6 +1,6 @@
 package br.eti.clairton.vraptor.crud;
 
-import static br.eti.clairton.vraptor.crud.CdiJUnit4Runner.navigate;
+import static br.eti.clairton.vraptor.crud.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -18,14 +18,12 @@ import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
-import br.eti.clairton.repository.Repository;
 
 import com.google.gson.Gson;
 
-@RunWith(CdiJUnit4Runner.class)
+@RunWith(VRaptorRunner.class)
 public class TenantControllerInterceptorTest {
 	private final Gson gson = new Gson();
-	private @Inject Repository repository;
 	private @Inject EntityManager entityManager;
 	private @Inject Connection connection;
 
@@ -35,13 +33,15 @@ public class TenantControllerInterceptorTest {
 		final String sql = "DELETE FROM recursos;DELETE FROM aplicacoes;";
 		connection.createStatement().execute(sql);
 		entityManager.getTransaction().commit();
-		//este registro não aparece
+		entityManager.getTransaction().begin();
+		// este registro não aparece
 		Aplicacao aplicacao = new Aplicacao(Resource.TENANT);
-		repository.save(aplicacao);
+		entityManager.persist(aplicacao);
 		aplicacao = new Aplicacao("TesteOutro");
-		repository.save(aplicacao);
+		entityManager.persist(aplicacao);
 		aplicacao = new Aplicacao("Testezinho");
-		repository.save(aplicacao);
+		entityManager.persist(aplicacao);
+		entityManager.getTransaction().commit();
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class TenantControllerInterceptorTest {
 		assertNotNull(o);
 		final List<?> aplicacoes = (List<?>) o.get("aplicacoes");
 		assertNotNull(aplicacoes);
-		//se mostra 3 é pq não aplicou o tenant
+		// se mostra 3 é pq não aplicou o tenant
 		assertEquals(2, aplicacoes.size());
 	}
 }

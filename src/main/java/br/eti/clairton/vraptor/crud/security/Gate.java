@@ -7,14 +7,13 @@ import javax.validation.constraints.NotNull;
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
-public interface Authorizator {
+public interface Gate {
 
 	/**
-	 * Verifica se o usuario esta habilitado a acessar o recurso discriminado.
+	 * Verifica se o usuario esta habilitado a acessar o recurso especificao.
 	 * 
 	 * @param app
 	 *            aplicacão
-	 * 
 	 * @param user
 	 *            usuario
 	 * @param resource
@@ -23,7 +22,7 @@ public interface Authorizator {
 	 *            operation
 	 * @return true/false
 	 */
-	public Boolean isAble(@NotNull final String user,
+	public Boolean isOpen(@NotNull final String user,
 			@NotNull final String app, @NotNull final String resource,
 			@NotNull final String operation);
 }

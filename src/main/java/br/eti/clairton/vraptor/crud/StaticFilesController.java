@@ -4,9 +4,15 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 
+/***
+ * Serve para conseguir recuperar os arquivos estaticos.
+ * 
+ * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ *
+ */
 @Controller
 @Path(value = "", priority = 1)
-public class IndexController {
+public class StaticFilesController {
 
 	@Get("/")
 	public void index() {

@@ -4,15 +4,15 @@ import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.constraints.NotNull;
 
 /**
- * Controla a sessões de usuários.
+ * Controla a chaves de acesso dos usuários.
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  *
  */
-public interface TokenManager {
+public interface Locksmith {
 
 	/**
-	 * Cria um nova sessão se os dados recebidos por padrão forem validos.
+	 * Cria um nova chave se os dados recebidos forem validos.
 	 * 
 	 * @param user
 	 *            usuário
@@ -28,15 +28,15 @@ public interface TokenManager {
 			throws CredentialNotFoundException;
 
 	/**
-	 * Destroy a sessão com o token/usuario recebido como parametro.
+	 * Destroy a chave com o token/usuario recebido como parametro.
 	 * 
 	 * @param key
 	 *            usuario ou token que terá a sessão encerrada
 	 */
-	void destroy(@NotNull final String key);
+	void invalidate(@NotNull final String key);
 
 	/**
-	 * Valida se o token esta valido
+	 * Valida se a chave esta valido
 	 * 
 	 * @param token
 	 *            token a ser validado
@@ -45,11 +45,11 @@ public interface TokenManager {
 	Boolean isValid(@NotNull final String token);
 
 	/**
-	 * Retorna o nome do usuario através do token.
+	 * Retorna o nome do usuario ao qual a chave pertence.
 	 * 
 	 * @param token
-	 *            token do usuario
-	 * @return usuario do token
+	 *            chave do usuario
+	 * @return usuario dono da chave
 	 */
 	String getUserByToken(@NotNull final String token);
 }

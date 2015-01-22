@@ -10,27 +10,27 @@ import javax.interceptor.InvocationContext;
 import org.apache.logging.log4j.Logger;
 
 /**
- * INterceptor para metodos anotados com {@link Authorized}.
+ * Interceptor para metodos anotados com {@link Authorized}.
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  *
  */
 @Interceptor
 @Authorized
-public class AuthorizationInterceptor {
+public class GateInterceptor {
 	private final String user;
 	private final String app;
-	private final Authorizator authorizator;
+	private final Gate gate;
 	private final Logger logger;
 
 	@Inject
-	public AuthorizationInterceptor(@App final String app,
-			@User final String user, final Authorizator authorizator,
+	public GateInterceptor(@App final String app,
+			@User final String user, final Gate gate,
 			final Logger logger) {
 		super();
 		this.app = app;
 		this.user = user;
-		this.authorizator = authorizator;
+		this.gate = gate;
 		this.logger = logger;
 	}
 
@@ -52,7 +52,7 @@ public class AuthorizationInterceptor {
 		final String operation = context.getMethod().getName();
 		logger.debug("Interceptando {}#{}", new Object[] {
 				target.getClass().getSimpleName(), operation });
-		if (authorizator.isAble(user, app, resource, operation)) {
+		if (gate.isOpen(user, app, resource, operation)) {
 			try {
 				return context.proceed();
 			} catch (InvocationTargetException e) {

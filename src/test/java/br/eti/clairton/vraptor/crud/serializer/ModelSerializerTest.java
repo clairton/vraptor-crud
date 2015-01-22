@@ -23,7 +23,7 @@ import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.eti.clairton.vraptor.crud.Aplicacao;
-import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
+import br.eti.clairton.vraptor.crud.VRaptorRunner;
 import br.eti.clairton.vraptor.crud.Recurso;
 
 import com.google.gson.Gson;
@@ -31,7 +31,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-@RunWith(CdiJUnit4Runner.class)
+@RunWith(VRaptorRunner.class)
 public class ModelSerializerTest {
 	private @Inject Mirror mirror;
 	private @Inject GsonBuilderWrapper builder;

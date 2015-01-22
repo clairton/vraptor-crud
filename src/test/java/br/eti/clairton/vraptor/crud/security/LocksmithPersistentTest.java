@@ -13,12 +13,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import br.eti.clairton.vraptor.crud.CdiJUnit4Runner;
+import br.eti.clairton.cdi.test.CdiJUnit4Runner;
 
 @RunWith(CdiJUnit4Runner.class)
-public class TokenManagerPersistentTest extends AbstractLdapTest {
+public class LocksmithPersistentTest extends AbstractLdapTest {
 
-	private @Inject TokenManager tokenManager;
+	private @Inject Locksmith tokenManager;
 	private @Inject Connection connection;
 	private String token;
 
@@ -31,13 +31,13 @@ public class TokenManagerPersistentTest extends AbstractLdapTest {
 
 	@Test
 	public void testDestroyByToken() throws CredentialNotFoundException {
-		tokenManager.destroy(token);
+		tokenManager.invalidate(token);
 		assertFalse(tokenManager.isValid(token));
 	}
 
 	@Test
 	public void testDestroyByUser() throws CredentialNotFoundException {
-		tokenManager.destroy(token);
+		tokenManager.invalidate(token);
 		assertFalse(tokenManager.isValid(token));
 	}
 

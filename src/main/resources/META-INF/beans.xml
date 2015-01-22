@@ -6,5 +6,7 @@
 	<interceptors>
 		<class>br.eti.clairton.vraptor.crud.ExceptionVerifierInterceptor</class>
 		<class>br.eti.clairton.vraptor.crud.TenantControllerInterceptor</class>
+		<class>br.eti.clairton.vraptor.crud.security.GateInterceptor</class>
+		<class>br.eti.clairton.vraptor.crud.security.LockInterceptor</class>
 	</interceptors>
 </beans>
