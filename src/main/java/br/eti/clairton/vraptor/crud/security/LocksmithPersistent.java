@@ -36,6 +36,11 @@ public class LocksmithPersistent implements Locksmith {
 	private final Logger logger;
 	private final Long lifeTime;
 
+	@Deprecated
+	protected LocksmithPersistent() {
+		this(null, null, null, "18000", "SHA-1");
+	}
+
 	@Inject
 	public LocksmithPersistent(
 			@NotNull final Logger logger,
