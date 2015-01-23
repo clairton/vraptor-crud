@@ -22,7 +22,7 @@ public class GateInMemory implements Gate {
 			});
 		}
 	};
-	public static final Map<String, Map<String, Map<String, List<String>>>> AUTHORIZATIONS = new HashMap<>();
+	public static final Map<String, Map<String, Map<String, List<String>>>> AUTHORIZATIONS = new HashMap<String, Map<String, Map<String, List<String>>>>();
 	static {
 		AUTHORIZATIONS.put("admin", ROLES);
 	}

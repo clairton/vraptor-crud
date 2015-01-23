@@ -72,7 +72,7 @@ public class ModelDeserializer implements JsonDeserializer<Model> {
 					final ParameterizedType pType = (ParameterizedType) fielType;
 					final Type[] arr = pType.getActualTypeArguments();
 					final Class<?> elementType = (Class<?>) arr[0];
-					final List<Object> list = new ArrayList<>();
+					final List<Object> list = new ArrayList<Object>();
 					final JsonArray array = entry.getValue().getAsJsonArray();
 					for (final JsonElement element : array) {
 						final Model object = (Model) elementType.newInstance();

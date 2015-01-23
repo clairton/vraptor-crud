@@ -35,7 +35,7 @@ public class QueryParamParser {
     }
     
     public Collection<Predicate> parse(final ServletRequest request, final Class<? extends Model> modelType) {
-        final Collection<Predicate> predicates = new ArrayList<>();
+        final Collection<Predicate> predicates = new ArrayList<Predicate>();
         final String[] fields;
         if(request.getParameterValues(Param.field()) != null){
         	fields = request.getParameterValues(Param.field());

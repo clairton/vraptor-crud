@@ -77,7 +77,7 @@ public class ModelSerializer implements JsonSerializer<Model> {
 				final Object value;
 				if (field.isAnnotationPresent(OneToMany.class)
 						|| field.isAnnotationPresent(ManyToMany.class)) {
-					final Collection<Long> ids = new ArrayList<>();
+					final Collection<Long> ids = new ArrayList<Long>();
 					final Object v = controller.get().field(tag);
 					final Collection<?> models = Collection.class.cast(v);
 					for (Object model : models) {

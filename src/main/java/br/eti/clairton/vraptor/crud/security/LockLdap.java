@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.environment.Property;
  */
 @Dependent
 public class LockLdap implements Lock {
-	private final Hashtable<String, String> config = new Hashtable<>();
+	private final Hashtable<String, String> config = new Hashtable<String, String>();
 	private final String[] ldapAttributes;
 	private final String base;
 	private final String filter;

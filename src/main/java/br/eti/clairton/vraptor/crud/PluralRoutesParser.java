@@ -59,7 +59,7 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 	@Override
 	protected void fixURIs(final Class<?> type, final String[] uris) {
 		super.fixURIs(type, uris);
-		final Collection<String> collection = new ArrayList<>();
+		final Collection<String> collection = new ArrayList<String>();
 		final String controllerName = extractControllerNameFrom(type);
 		for (final String uri : uris) {
 			// adiciona o nome do controller para ficar /aplicacoes/{id}

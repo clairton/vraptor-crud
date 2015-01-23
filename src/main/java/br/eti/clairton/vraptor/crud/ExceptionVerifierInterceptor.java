@@ -122,7 +122,7 @@ public class ExceptionVerifierInterceptor {
 	}
 
 	private Map<String, List<String>> asMessage(final String message) {
-		final Map<String, List<String>> messages = new HashMap<>();
+		final Map<String, List<String>> messages = new HashMap<String, List<String>>();
 		messages.put("error", Arrays.asList(message));
 		return messages;
 	}

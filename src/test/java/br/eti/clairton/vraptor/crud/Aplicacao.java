@@ -24,7 +24,7 @@ public class Aplicacao extends br.eti.clairton.repository.Model {
 
 	@NotNull
 	@OneToMany(mappedBy = "aplicacao", cascade = CascadeType.ALL)
-	private Collection<Recurso> recursos = new HashSet<>();
+	private Collection<Recurso> recursos = new HashSet<Recurso>();
 
 	@NotNull
 	@Size(min = 1, max = 250)

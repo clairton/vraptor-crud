@@ -13,7 +13,7 @@ class ModelManyToMany extends Model {
 	private static final long serialVersionUID = 6016230217349046379L;
 
 	@ManyToMany
-	private final List<Aplicacao> aplicacoes = new ArrayList<>();
+	private final List<Aplicacao> aplicacoes = new ArrayList<Aplicacao>();
 
 	public ModelManyToMany() {
 		final Aplicacao aplicacao = new Aplicacao("Teste");

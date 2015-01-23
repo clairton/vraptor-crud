@@ -1,7 +1,6 @@
 package br.eti.clairton.vraptor.crud.security;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -46,7 +45,7 @@ public class LockInterceptorTest {
 	@Test
 	public void testInvokeAuthorized() throws Throwable {
 		when(
-				authorizator.isOpen(anyObject(), anyObject(), anyString(),
+				authorizator.isOpen(anyString(), anyString(), anyString(),
 						anyString())).thenReturn(Boolean.TRUE);
 		final Object expected = "çegjweargihjjhjsfkhgsdlçgjusdayjicodtaiotiow";
 		final InvocationContext spy = spy(context);
@@ -57,7 +56,7 @@ public class LockInterceptorTest {
 	@Test(expected = TestException.class)
 	public void testOriginalException() throws Throwable {
 		when(
-				authorizator.isOpen(anyObject(), anyObject(), anyString(),
+				authorizator.isOpen(anyString(), anyString(), anyString(),
 						anyString())).thenThrow(new TestException());
 		interceptor.invoke(context);
 	}
