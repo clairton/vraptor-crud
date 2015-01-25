@@ -1,8 +1,8 @@
 package br.eti.clairton.vraptor.crud.serializer;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static java.util.Arrays.asList;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -22,8 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
+import br.eti.clairton.cdi.test.CdiJUnit4Runner;
 import br.eti.clairton.vraptor.crud.Aplicacao;
-import br.eti.clairton.vraptor.crud.VRaptorRunner;
 import br.eti.clairton.vraptor.crud.Recurso;
 
 import com.google.gson.Gson;
@@ -31,7 +31,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-@RunWith(VRaptorRunner.class)
+@RunWith(CdiJUnit4Runner.class)
 public class ModelSerializerTest {
 	private @Inject Mirror mirror;
 	private @Inject GsonBuilderWrapper builder;

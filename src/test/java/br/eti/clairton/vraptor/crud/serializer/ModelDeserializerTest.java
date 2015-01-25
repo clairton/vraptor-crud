@@ -14,13 +14,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
+import br.eti.clairton.cdi.test.CdiJUnit4Runner;
 import br.eti.clairton.vraptor.crud.Aplicacao;
-import br.eti.clairton.vraptor.crud.VRaptorRunner;
 import br.eti.clairton.vraptor.crud.Recurso;
 
 import com.google.gson.Gson;
 
-@RunWith(VRaptorRunner.class)
+@RunWith(CdiJUnit4Runner.class)
 public class ModelDeserializerTest {
 	private @Inject Mirror mirror;
 	private @Inject GsonBuilderWrapper builder;
