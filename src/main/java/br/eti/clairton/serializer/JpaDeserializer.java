@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
 
 import net.vidageek.mirror.dsl.AccessorsController;
 import net.vidageek.mirror.dsl.ClassController;
@@ -31,11 +34,13 @@ import com.google.gson.JsonParseException;
 public abstract class JpaDeserializer<T> implements JsonDeserializer<T> {
 	private final Mirror mirror;
 	private final Logger logger;
+	private final EntityManager entityManager;
 
-	public JpaDeserializer(final Mirror mirror, final Logger logger) {
+	public JpaDeserializer(EntityManager entityManager, final Mirror mirror, final Logger logger) {
 		super();
 		this.mirror = mirror;
 		this.logger = logger;
+		this.entityManager = entityManager;
 	}
 
 	/**
@@ -65,7 +70,11 @@ public abstract class JpaDeserializer<T> implements JsonDeserializer<T> {
 					for (final JsonElement element : array) {
 						final Object object = elementType.newInstance();
 						final SetterHandler handler = mirror.on(object).set();
-						final FieldSetter fieldSetter = handler.field("id");
+						EntityType<?> entity = entityManager.getMetamodel().entity(elementType);
+						javax.persistence.metamodel.Type<?> idType = entity.getIdType();
+						Attribute<?, ?> attribute = entity.getId(idType.getJavaType());
+						final String fieldIdName = attribute.getName();
+						final FieldSetter fieldSetter = handler.field(fieldIdName);
 						fieldSetter.withValue(element.getAsLong());
 						list.add(object);
 					}
@@ -76,8 +85,12 @@ public abstract class JpaDeserializer<T> implements JsonDeserializer<T> {
 						value = null;
 					} else {
 						value = field.getType().newInstance();
+						EntityType<?> entity = entityManager.getMetamodel().entity(value.getClass());
+						javax.persistence.metamodel.Type<?> idType = entity.getIdType();
+						Attribute<?, ?> attribute = entity.getId(idType.getJavaType());
+						final String fieldIdName = attribute.getName();
 						final SetterHandler handler = mirror.on(value).set();
-						final FieldSetter fieldSetter = handler.field("id");
+						final FieldSetter fieldSetter = handler.field(fieldIdName);
 						fieldSetter.withValue(entry.getValue().getAsLong());
 					}
 				} else {

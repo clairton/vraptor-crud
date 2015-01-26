@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -28,9 +29,9 @@ public class ModelDeserializer extends JpaDeserializer<Model> implements
 		JsonDeserializer<Model> {
 
 	@Inject
-	public ModelDeserializer(@NotNull final Mirror mirror,
-			@NotNull final Logger logger) {
-		super(mirror, logger);
+	public ModelDeserializer(@NotNull EntityManager entityManager,
+			@NotNull final Mirror mirror, @NotNull final Logger logger) {
+		super(entityManager, mirror, logger);
 	}
 
 	@Override
