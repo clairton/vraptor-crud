@@ -23,11 +23,11 @@ public class Param {
     private static final String OPERATION = "o";
     
     public static String value(final String name) {
-        return String.format("%s[%s][]", Param.VALUE, name);
+        return String.format("%s[][%s]", Param.VALUE, name);
     }
     
     public static String operation(final String name) {
-        return String.format("%s[%s][]", Param.OPERATION, name);
+        return String.format("%s[][%s]", Param.OPERATION, name);
     }
     
     public static String field() {
