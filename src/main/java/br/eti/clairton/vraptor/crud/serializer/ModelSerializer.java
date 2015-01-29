@@ -10,8 +10,8 @@ import net.vidageek.mirror.dsl.Mirror;
 
 import org.apache.logging.log4j.Logger;
 
+import br.eti.clairton.jpa.serializer.JpaSerializer;
 import br.eti.clairton.repository.Model;
-import br.eti.clairton.serializer.JpaSerializer;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;

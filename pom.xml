@@ -26,6 +26,12 @@
 		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
+			<artifactId>jpa-serializer</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.eti.clairton</groupId>
 			<artifactId>repository</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 			<scope>compile</scope>

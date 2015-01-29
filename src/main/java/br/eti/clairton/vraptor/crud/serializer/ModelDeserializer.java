@@ -11,8 +11,8 @@ import net.vidageek.mirror.dsl.Mirror;
 
 import org.apache.logging.log4j.Logger;
 
+import br.eti.clairton.jpa.serializer.JpaDeserializer;
 import br.eti.clairton.repository.Model;
-import br.eti.clairton.serializer.JpaDeserializer;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
