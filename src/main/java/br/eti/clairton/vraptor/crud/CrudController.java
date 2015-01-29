@@ -132,10 +132,8 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 		if (!predicates.isEmpty()) {
 			repository.where(predicates);
 		}
-		final Collection<?> collection = repository.collection(page, perPage);
-		final String plural = inflector.pluralize(modelType.getSimpleName());
-		final String tag = inflector.uncapitalize(plural);
-		serialize(result.use(json()).from(collection, tag));
+		final Collection<T> collection = repository.collection(page, perPage);
+		serialize(collection);
 	}
 
 	/**
@@ -188,7 +186,7 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * serialize {@inheritDoc}
 	 */
 	@Override
 	@Ignore
@@ -207,7 +205,13 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 		serialize(serializer);
 	}
 
-	private void serialize(final Serializer serializer) {
+	protected void serialize(final Serializer serializer) {
 		serializer.serialize();
+	}
+
+	protected void serialize(final Collection<T> collection) {
+		final String plural = inflector.pluralize(modelType.getSimpleName());
+		final String tag = inflector.uncapitalize(plural);
+		serialize(result.use(json()).from(collection, tag));
 	}
 }
