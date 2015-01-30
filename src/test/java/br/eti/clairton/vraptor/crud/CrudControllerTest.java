@@ -119,7 +119,7 @@ public class CrudControllerTest {
 				// f[]=nome&o[nome]=*=&v[nome][]=Pass&f[]=id&o[id]=>=&v[id][]=0
 				final String nome = "nome";
 				request.addParameter(Param.field(), nome);
-				request.addParameter(Param.operation(nome), "*=");
+				request.addParameter(Param.operation(nome), "*");
 				request.addParameter(Param.value(nome), "Teste");
 				final String id = "id";
 				request.addParameter(Param.field(), id);

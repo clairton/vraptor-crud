@@ -1,7 +1,13 @@
 package br.eti.clairton.vraptor.crud;
 
+import static br.eti.clairton.vraptor.crud.Param.field;
+import static br.eti.clairton.vraptor.crud.Param.operation;
+import static br.eti.clairton.vraptor.crud.Param.value;
+import static java.util.Arrays.asList;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -18,7 +24,7 @@ import br.eti.clairton.repository.Predicate;
 
 @Dependent
 public class QueryParamParser {
-	private final AttributeBuilder attributeBuilder;
+	private final AttributeBuilder builder;
 
 	private final Converters converters;
 
@@ -31,7 +37,7 @@ public class QueryParamParser {
 	public QueryParamParser(final AttributeBuilder attributeBuilder,
 			final Converters converters) {
 		super();
-		this.attributeBuilder = attributeBuilder;
+		this.builder = attributeBuilder;
 		this.converters = converters;
 	}
 
@@ -39,37 +45,52 @@ public class QueryParamParser {
 			final Class<? extends Model> modelType) {
 		final Collection<Predicate> predicates = new ArrayList<Predicate>();
 		final String[] fields;
-		if (request.getParameterValues(Param.field()) != null) {
-			fields = request.getParameterValues(Param.field());
+		if (request.getParameterValues(field()) != null) {
+			fields = request.getParameterValues(field());
 		} else {
 			fields = new String[] {};
 		}
+		final Map<String, String[]> params = request.getParameterMap();
 		for (final String field : fields) {
-			final String value = request.getParameter(Param.value(field));
-			final String operation;
-			if (request.getParameter(Param.operation(field)) != null) {
-				operation = request.getParameter(Param.operation(field));
+			final Predicate predicate;
+			final String aField = value(field) + "[]";
+			final Attribute<?, ?>[] attrs = builder.with(modelType, field);
+			if (params.containsKey(value(field))) {
+				final String value = request.getParameter(value(field));
+				final String operation;
+				if (request.getParameter(operation(field)) != null) {
+					operation = request.getParameter(operation(field));
+				} else {
+					operation = "==";
+				}
+				predicate = to(attrs, value, operation);
+			} else if (params.containsKey(aField)) {
+				final String[] values = request.getParameterValues(aField);
+				final String operation;
+				if (request.getParameter(operation(field)) != null) {
+					operation = request.getParameter(operation(field));
+				} else {
+					operation = "[]";
+				}
+				final Comparator comparator = Comparators.bySymbol(operation);
+				predicate = new Predicate(asList(values), comparator, attrs);
 			} else {
-				operation = "==";
+				predicate = new Predicate("", Comparators.NULL, attrs);
 			}
-			final Predicate predicate = to(field, value, operation, modelType);
 			predicates.add(predicate);
 		}
 		return predicates;
 	}
 
-	private <T> Predicate to(final String field, final String value,
-			final String symbol, final Class<? extends Model> modelType) {
-		final Attribute<?, ?>[] attributes = attributeBuilder.with(modelType,
-				field);
+	private <T> Predicate to(final Attribute<?, ?>[] attrs, final String value,
+			final String symbol) {
+		final Attribute<?, ?> lastAttr = attrs[attrs.length - 1];
 		@SuppressWarnings("unchecked")
-		final Class<T> type = (Class<T>) attributes[attributes.length - 1]
-				.getJavaType();
+		final Class<T> type = (Class<T>) lastAttr.getJavaType();
 		final Converter<T> converter = converters.to(type);
 		final T object = converter.convert(value, type);
 		final Comparator comparator = Comparators.bySymbol(symbol);
-		final Predicate predicate = new Predicate(object, comparator,
-				attributes);
+		final Predicate predicate = new Predicate(object, comparator, attrs);
 		return predicate;
 	}
 }

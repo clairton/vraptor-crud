@@ -1,5 +1,6 @@
 package br.eti.clairton.vraptor.crud;
 
+import static java.util.Arrays.asList;
 import static br.eti.clairton.vraptor.crud.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -29,12 +30,29 @@ public class QueryParamParserTest {
 	}
 
 	@Test
+	public void testParseArray() {
+		// f[]=nome&o[nome][]=remove=o[nome][]=update
+		final String nome = "nome";
+		request.addParameter(Param.field(), nome );
+		final String[] values = new String[]{"remove", "update"};
+		request.addParameter(Param.value(nome)+ "[]", values);
+		final Collection<Predicate> predicates = queryParser.parse(request, Recurso.class);
+		assertEquals(1, predicates.size());
+		final Iterator<Predicate> interator = predicates.iterator();
+		final Predicate predicateNome = interator.next();
+		assertEquals(asList(values), predicateNome.getValue());
+		assertEquals("[]", predicateNome.getComparator().toString());
+		assertEquals("nome", predicateNome.getAttribute().getName());
+	}
+
+	@Test
 	public void testParseComplex() {
-		//{f[]=aplicacao[nome], o[][aplicacao[nome]]=*=, v[][aplicacao[nome]]=Auth}
-		//{f[]=aplicacao.nome, o[aplicacao.nome]=*=, v[aplicacao.nome]=Auth}
+		// {f[]=aplicacao[nome], o[][aplicacao[nome]]=*=,
+		// v[][aplicacao[nome]]=Auth}
+		// {f[]=aplicacao.nome, o[aplicacao.nome]=*=, v[aplicacao.nome]=Auth}
 		final String nome = "aplicacao.nome";
 		request.addParameter(Param.field(), nome);
-		request.addParameter(Param.operation(nome), "*=");
+		request.addParameter(Param.operation(nome), "*");
 		request.addParameter(Param.value(nome), "Pass");
 		final String id = "aplicacao[id]";
 		request.addParameter(Param.field(), id);
@@ -46,7 +64,7 @@ public class QueryParamParserTest {
 		final Iterator<Predicate> interator = predicates.iterator();
 		final Predicate predicateNome = interator.next();
 		assertEquals("Pass", predicateNome.getValue());
-		assertEquals("*=", predicateNome.getComparator().toString());
+		assertEquals("*", predicateNome.getComparator().toString());
 		assertTrue(Recurso_.aplicacao.equals(predicateNome.getAttributes()[0]));
 		assertTrue(Aplicacao_.nome.equals(predicateNome.getAttributes()[1]));
 		final Predicate predicateId = interator.next();
@@ -61,7 +79,7 @@ public class QueryParamParserTest {
 		// f[]=nome&o[nome]=*=&v[nome][]=Pass&f[]=id&o[id]=>=&v[id][]=0
 		final String nome = "nome";
 		request.addParameter(Param.field(), nome);
-		request.addParameter(Param.operation(nome), "*=");
+		request.addParameter(Param.operation(nome), "*");
 		request.addParameter(Param.value(nome), "Pass");
 		final String id = "id";
 		request.addParameter(Param.field(), id);
@@ -73,7 +91,7 @@ public class QueryParamParserTest {
 		final Iterator<Predicate> interator = predicates.iterator();
 		final Predicate predicateNome = interator.next();
 		assertEquals("Pass", predicateNome.getValue());
-		assertEquals("*=", predicateNome.getComparator().toString());
+		assertEquals("*", predicateNome.getComparator().toString());
 		assertTrue(Aplicacao_.nome.equals(predicateNome.getAttribute()));
 		final Predicate predicateId = interator.next();
 		assertEquals(Long.valueOf(0), predicateId.getValue());
