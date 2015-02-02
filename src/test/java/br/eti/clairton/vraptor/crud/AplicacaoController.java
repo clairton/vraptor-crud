@@ -9,9 +9,9 @@ import br.com.caelum.vraptor.Result;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Repository;
+import br.eti.clairton.repository.Tenant;
 
 @Controller
-@TenantController
 public class AplicacaoController extends CrudController<Aplicacao> {
 	@Deprecated
 	protected AplicacaoController() {
@@ -19,7 +19,7 @@ public class AplicacaoController extends CrudController<Aplicacao> {
 	}
 
 	@Inject
-	public AplicacaoController(final Repository repository,
+	public AplicacaoController(@Tenant final Repository repository,
 			final Result result, @Language final Inflector inflector,
 			final Mirror mirror, final ServletRequest request,
 			final QueryParamParser queryParser) {

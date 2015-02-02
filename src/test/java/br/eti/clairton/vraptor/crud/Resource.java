@@ -25,10 +25,9 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
-import br.eti.clairton.tenant.TenantValue;
 import br.eti.clairton.vraptor.crud.security.App;
-import br.eti.clairton.vraptor.crud.security.Token;
 import br.eti.clairton.vraptor.crud.security.Locksmith;
+import br.eti.clairton.vraptor.crud.security.Token;
 import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
 import br.eti.clairton.vraptor.crud.security.User;
 
@@ -100,12 +99,6 @@ public class Resource {
 		return tokenManager.getUserByToken(token);
 	}
 
-	@TenantValue
-	@Produces
-	public String getTenantValue() {
-		return TENANT;
-	}
-
 	@Token
 	@Produces
 	public String getToken(@Default final HttpServletRequest request) {
@@ -143,7 +136,6 @@ public class Resource {
 	@Produces
 	@ApplicationScoped
 	public Connection getConnection(final @Default EntityManager em) {
-		// TODO pegar connexão indendepdente de implementação JPA
 		try {
 			/*
 			 * O hibernate não implementa o entityManager de forma a recuperar a

@@ -6,6 +6,5 @@
 	<interceptors>
 		<class>br.eti.clairton.repository.TransactionalInterceptor</class>
 		<class>br.eti.clairton.vraptor.crud.ExceptionVerifierInterceptor</class>
-		<class>br.eti.clairton.vraptor.crud.TenantControllerInterceptor</class>
 	</interceptors>
 </beans>
