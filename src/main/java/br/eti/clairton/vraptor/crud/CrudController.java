@@ -129,6 +129,7 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 		final Collection<Predicate> predicates = queryParser.parse(request,
 				modelType);
 		repository.from(modelType);
+		repository.distinct();
 		if (!predicates.isEmpty()) {
 			repository.where(predicates);
 		}
