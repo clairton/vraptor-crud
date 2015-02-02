@@ -114,10 +114,10 @@ public class ExceptionVerifierInterceptor {
 		/*
 		 * Para adicionar a mensagem somente uma vez.
 		 */
-		if (!result.used()) {
+		//if (!result.used()) {
 			result.use(http()).setStatusCode(status);
 			result.use(json()).from(errors, "errors").serialize();
-		}
+		//}
 		return null;
 	}
 
