@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.environment.Property;
+import br.eti.clairton.security.Lock;
 
 /**
  * Autentica pelo LDAP.

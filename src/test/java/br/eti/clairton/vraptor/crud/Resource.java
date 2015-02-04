@@ -25,11 +25,11 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
-import br.eti.clairton.vraptor.crud.security.App;
-import br.eti.clairton.vraptor.crud.security.Locksmith;
-import br.eti.clairton.vraptor.crud.security.Token;
-import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
-import br.eti.clairton.vraptor.crud.security.User;
+import br.eti.clairton.security.App;
+import br.eti.clairton.security.Locksmith;
+import br.eti.clairton.security.Token;
+import br.eti.clairton.security.UnauthenticatedException;
+import br.eti.clairton.security.User;
 
 /**
  * Produz os recursos.
@@ -51,12 +51,12 @@ public class Resource {
 
 	private AttributeBuilder attributeBuilder;
 
-	private final Locksmith tokenManager;
+	private final Locksmith locksmith;
 
 	@Inject
-	public Resource(final Locksmith tokenManager) {
+	public Resource(final Locksmith locksmith) {
 		super();
-		this.tokenManager = tokenManager;
+		this.locksmith = locksmith;
 	}
 
 	@PostConstruct
@@ -96,7 +96,7 @@ public class Resource {
 	@User
 	@Produces
 	public String getUser(@Token final String token) {
-		return tokenManager.getUserByToken(token);
+		return locksmith.getUserByToken(token);
 	}
 
 	@Token

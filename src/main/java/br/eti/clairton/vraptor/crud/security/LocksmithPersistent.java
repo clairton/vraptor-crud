@@ -23,6 +23,8 @@ import org.apache.logging.log4j.Logger;
 import br.com.caelum.vraptor.environment.Property;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
+import br.eti.clairton.security.Lock;
+import br.eti.clairton.security.Locksmith;
 import br.eti.clairton.vraptor.crud.model.Token;
 import br.eti.clairton.vraptor.crud.model.Token.Status;
 import br.eti.clairton.vraptor.crud.model.Token_;

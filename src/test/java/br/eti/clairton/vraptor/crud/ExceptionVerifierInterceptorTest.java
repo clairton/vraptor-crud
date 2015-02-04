@@ -32,8 +32,8 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.serialization.JSONSerialization;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.view.HttpResult;
-import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
-import br.eti.clairton.vraptor.crud.security.UnauthorizedException;
+import br.eti.clairton.security.UnauthenticatedException;
+import br.eti.clairton.security.UnauthorizedException;
 
 public class ExceptionVerifierInterceptorTest {
 	private ExceptionVerifierInterceptor interceptor;

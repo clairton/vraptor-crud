@@ -22,9 +22,9 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Model;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
-import br.eti.clairton.vraptor.crud.security.Authenticated;
-import br.eti.clairton.vraptor.crud.security.Authorized;
-import br.eti.clairton.vraptor.crud.security.Resourceable;
+import br.eti.clairton.security.Authenticated;
+import br.eti.clairton.security.Protected;
+import br.eti.clairton.security.Resource;
 
 /**
  * Controller abstrato para servir como base para um CRUD.
@@ -34,7 +34,7 @@ import br.eti.clairton.vraptor.crud.security.Resourceable;
  * @param <T>
  *            tipo do modelo
  */
-public abstract class CrudController<T extends Model> extends Resourceable {
+public abstract class CrudController<T extends Model> {
 	private final Repository repository;
 
 	private final Class<T> modelType;
@@ -48,6 +48,8 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	private final ServletRequest request;
 
 	private final QueryParamParser queryParser;
+
+	private final String resourceName;
 
 	/**
 	 * CDI only.
@@ -81,7 +83,6 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 			final @NotNull Mirror mirror,
 			final @NotNull ServletRequest request,
 			final @NotNull QueryParamParser queryParser) {
-		super(modelType);
 		this.repository = repository;
 		this.result = result;
 		this.modelType = modelType;
@@ -89,6 +90,15 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 		this.mirror = mirror;
 		this.request = request;
 		this.queryParser = queryParser;
+		if (modelType != null) {
+			final StringBuilder builder = new StringBuilder();
+			final String simpleName = modelType.getSimpleName();
+			builder.append(simpleName.substring(0, 1).toLowerCase());
+			builder.append(simpleName.substring(1));
+			this.resourceName = builder.toString();
+		} else {
+			resourceName = null;
+		}
 	}
 
 	/**
@@ -99,7 +109,7 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 */
 	@Consumes(value = "application/json")
 	@Post
-	@Authorized
+	@Protected
 	@Authenticated
 	@ExceptionVerifier
 	public void create(final T model) {
@@ -111,7 +121,7 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 * Mostra os recursos. Parametros para filtagem são mandados na URL.
 	 */
 	@Get
-	@Authorized
+	@Protected
 	@Authenticated
 	@ExceptionVerifier
 	public void index() {
@@ -144,7 +154,7 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 *            id do recurso
 	 */
 	@Get("{id}")
-	@Authorized
+	@Protected
 	@Authenticated
 	@ExceptionVerifier
 	public void show(final Long id) {
@@ -159,7 +169,7 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 *            id do recurso
 	 */
 	@Delete("{id}")
-	@Authorized
+	@Protected
 	@Authenticated
 	@ExceptionVerifier
 	public void remove(final Long id) {
@@ -177,7 +187,7 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	 */
 	@Consumes(value = "application/json")
 	@Put("{id}")
-	@Authorized
+	@Protected
 	@Authenticated
 	@ExceptionVerifier
 	public void update(final Long id, final T model) {
@@ -189,10 +199,10 @@ public abstract class CrudController<T extends Model> extends Resourceable {
 	/**
 	 * serialize {@inheritDoc}
 	 */
-	@Override
+	@Resource
 	@Ignore
 	public String getResourceName() {
-		return super.getResourceName();
+		return resourceName;
 	}
 
 	/**

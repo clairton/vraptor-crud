@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.constraints.NotNull;
 
+import br.eti.clairton.security.Gate;
+
 @ApplicationScoped
 public class GateInMemory implements Gate {
 	public static final Map<String, Map<String, List<String>>> ROLES = new HashMap<String, Map<String, List<String>>>() {

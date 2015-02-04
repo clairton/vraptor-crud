@@ -21,8 +21,8 @@ import javax.validation.ConstraintViolationException;
 import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Result;
-import br.eti.clairton.vraptor.crud.security.UnauthenticatedException;
-import br.eti.clairton.vraptor.crud.security.UnauthorizedException;
+import br.eti.clairton.security.UnauthenticatedException;
+import br.eti.clairton.security.UnauthorizedException;
 
 /**
  * Verifica o encaminhando diante das exceções lançadas para os metodos

@@ -234,4 +234,13 @@ public class CrudControllerTest {
 		assertNotNull(model.get("id"));
 		return new BigDecimal(model.get("id").toString()).longValue();
 	}
+
+	@Test
+	public void testGetResourceName() {
+		final String resourceName = "aplicacao";
+		final CrudController<Aplicacao> resourceable = new CrudController<Aplicacao>(
+				Aplicacao.class, null, null, null, null, null, null) {
+		};
+		assertEquals(resourceName, resourceable.getResourceName());
+	}
 }

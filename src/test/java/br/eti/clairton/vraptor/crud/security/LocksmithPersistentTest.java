@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.eti.clairton.cdi.test.CdiJUnit4Runner;
+import br.eti.clairton.security.Locksmith;
 
 @RunWith(CdiJUnit4Runner.class)
 public class LocksmithPersistentTest extends AbstractLdapTest {

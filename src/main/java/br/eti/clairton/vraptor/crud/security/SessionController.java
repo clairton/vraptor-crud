@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Post;
+import br.eti.clairton.security.Locksmith;
 import br.eti.clairton.vraptor.crud.ExceptionVerifier;
 
 @Controller

@@ -7,6 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.eti.clairton.security.Lock;
+
 public class LockLdapTest extends AbstractLdapTest {
 
 	private Lock lock;
