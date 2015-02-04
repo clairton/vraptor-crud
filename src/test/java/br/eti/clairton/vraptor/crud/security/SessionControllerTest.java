@@ -25,7 +25,7 @@ import br.eti.clairton.vraptor.crud.VRaptorRunner;
 import com.google.gson.GsonBuilder;
 
 @RunWith(VRaptorRunner.class)
-public class SessionControllerTest extends AbstractLdapTest {
+public class SessionControllerTest {
 	private String user = "admin";
 	private String password = "123456";
 	private @Inject Mirror mirror;

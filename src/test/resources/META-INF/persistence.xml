@@ -6,7 +6,6 @@
 	<persistence-unit name="default">
 		<class>br.eti.clairton.vraptor.crud.Aplicacao</class>
 		<class>br.eti.clairton.vraptor.crud.Recurso</class>
-		<class>br.eti.clairton.vraptor.crud.model.Token</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />

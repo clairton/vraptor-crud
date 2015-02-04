@@ -7,7 +7,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Inject;
 import javax.persistence.Cache;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,7 +25,10 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
 import br.eti.clairton.security.App;
+import br.eti.clairton.security.Lock;
+import br.eti.clairton.security.LockInMemory;
 import br.eti.clairton.security.Locksmith;
+import br.eti.clairton.security.LocksmithInMemory;
 import br.eti.clairton.security.Token;
 import br.eti.clairton.security.UnauthenticatedException;
 import br.eti.clairton.security.User;
@@ -50,14 +52,6 @@ public class Resource {
 	private EntityManager em;
 
 	private AttributeBuilder attributeBuilder;
-
-	private final Locksmith locksmith;
-
-	@Inject
-	public Resource(final Locksmith locksmith) {
-		super();
-		this.locksmith = locksmith;
-	}
 
 	@PostConstruct
 	public void init() {
@@ -95,7 +89,8 @@ public class Resource {
 
 	@User
 	@Produces
-	public String getUser(@Token final String token) {
+	public String getUser(@Token final String token,
+			@Default final Locksmith locksmith) {
 		return locksmith.getUserByToken(token);
 	}
 
@@ -149,5 +144,15 @@ public class Resource {
 		} catch (final Exception e) {
 			return em.unwrap(Connection.class);
 		}
+	}
+
+	@Produces
+	public Lock getLock() {
+		return new LockInMemory();
+	}
+
+	@Produces
+	public Locksmith getLocksmith(@Default Lock lock) {
+		return new LocksmithInMemory(lock);
 	}
 }
