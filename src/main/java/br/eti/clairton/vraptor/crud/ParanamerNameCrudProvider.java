@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.eti.clairton.repository.Model;
 
 /**
- * Adequa os parametros dos metodos heradados do {@link CrudController}.
+ * Adequa os parametros dos metodos herdados do {@link CrudController}.
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */

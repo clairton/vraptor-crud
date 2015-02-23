@@ -26,6 +26,11 @@ import com.google.gson.JsonSerializer;
 public class ModelSerializer extends JpaSerializer<Model> implements
 		JsonSerializer<Model> {
 
+	@Deprecated
+	protected ModelSerializer() {
+		this(null, null);
+	}
+
 	@Inject
 	public ModelSerializer(@NotNull final Mirror mirror,
 			@NotNull final Logger logger) {

@@ -28,15 +28,20 @@ import com.google.gson.JsonParseException;
 public class ModelDeserializer extends JpaDeserializer<Model> implements
 		JsonDeserializer<Model> {
 
+	@Deprecated
+	protected ModelDeserializer() {
+		this(null, null, null);
+	}
+
 	@Inject
-	public ModelDeserializer(@NotNull EntityManager entityManager,
+	public ModelDeserializer(@NotNull final EntityManager entityManager,
 			@NotNull final Mirror mirror, @NotNull final Logger logger) {
 		super(entityManager, mirror, logger);
 	}
 
 	@Override
-	public Model deserialize(JsonElement arg0, Type arg1,
-			JsonDeserializationContext arg2) throws JsonParseException {
-		return super.deserialize(arg0, arg1, arg2);
+	public Model deserialize(final JsonElement element, final Type type,
+			final JsonDeserializationContext context) throws JsonParseException {
+		return super.deserialize(element, type, context);
 	}
 }
