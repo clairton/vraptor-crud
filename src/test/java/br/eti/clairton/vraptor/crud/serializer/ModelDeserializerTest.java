@@ -53,15 +53,13 @@ public class ModelDeserializerTest {
 		final Aplicacao object = new Aplicacao("Teste");
 		final String json = "{\"recursos\":[1,2],\"nome\":\"Teste\",\"id\":0}";
 		final Recurso recurso = new Recurso(object, "Teste");
-		final Recurso recurso2 = new Recurso(object, "Outro");
 		mirror.on(object).set().field("id").withValue(0l);
 		mirror.on(recurso).set().field("id").withValue(1l);
-		mirror.on(recurso2).set().field("id").withValue(2l);
-		object.adicionar(Arrays.asList(recurso, recurso2));
+		object.adicionar(Arrays.asList(recurso));
 		final Aplicacao result = gson.fromJson(json, Aplicacao.class);
 		assertEquals("Teste", result.getNome());
 		assertEquals("0", result.getId().toString());
-		assertEquals(2, result.getRecursos().size());
+		assertEquals(1, result.getRecursos().size());
 	}
 
 	@Test
