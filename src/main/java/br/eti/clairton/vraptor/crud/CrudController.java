@@ -17,6 +17,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.serialization.Serializer;
+import br.com.caelum.vraptor.serialization.gson.WithRoot;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Model;
@@ -107,7 +108,7 @@ public abstract class CrudController<T extends Model> {
 	 * @param model
 	 *            novo registro
 	 */
-	@Consumes(value = "application/json")
+	@Consumes(value = "application/json", options=WithRoot.class)
 	@Post
 	@Protected
 	@Authenticated
@@ -185,7 +186,7 @@ public abstract class CrudController<T extends Model> {
 	 * @param model
 	 *            recurso a ser atualizado
 	 */
-	@Consumes(value = "application/json")
+	@Consumes(value = "application/json", options=WithRoot.class)
 	@Put("{id}")
 	@Protected
 	@Authenticated
