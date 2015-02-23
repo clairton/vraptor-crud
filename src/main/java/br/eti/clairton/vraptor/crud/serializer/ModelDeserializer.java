@@ -2,7 +2,7 @@ package br.eti.clairton.vraptor.crud.serializer;
 
 import java.lang.reflect.Type;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
@@ -24,9 +24,9 @@ import com.google.gson.JsonParseException;
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
-@Dependent
-public class ModelDeserializer extends JpaDeserializer<Model> implements
-		JsonDeserializer<Model> {
+@Vetoed
+public class ModelDeserializer implements JsonDeserializer<Model> {
+	private final JpaDeserializer<Model> delegate;
 
 	@Deprecated
 	protected ModelDeserializer() {
@@ -36,12 +36,13 @@ public class ModelDeserializer extends JpaDeserializer<Model> implements
 	@Inject
 	public ModelDeserializer(@NotNull final EntityManager entityManager,
 			@NotNull final Mirror mirror, @NotNull final Logger logger) {
-		super(entityManager, mirror, logger);
+		delegate = new JpaDeserializer<Model>(entityManager, mirror, logger) {
+		};
 	}
 
 	@Override
 	public Model deserialize(final JsonElement element, final Type type,
 			final JsonDeserializationContext context) throws JsonParseException {
-		return super.deserialize(element, type, context);
+		return delegate.deserialize(element, type, context);
 	}
 }

@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
 
+import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -132,9 +133,9 @@ class OutroModelSerialiazer implements JsonSerializer<OutroModel> {
 	private final ModelSerializer modelSerializer;
 
 	@Inject
-	public OutroModelSerialiazer(ModelSerializer modelSerializer) {
+	public OutroModelSerialiazer(Mirror mirror, Logger logger) {
 		super();
-		this.modelSerializer = modelSerializer;
+		this.modelSerializer = new ModelSerializer(mirror, logger);
 		modelSerializer.addIgnoredField("nome");
 	}
 

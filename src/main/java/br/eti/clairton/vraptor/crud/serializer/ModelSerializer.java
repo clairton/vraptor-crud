@@ -2,7 +2,7 @@ package br.eti.clairton.vraptor.crud.serializer;
 
 import java.lang.reflect.Type;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
@@ -22,9 +22,9 @@ import com.google.gson.JsonSerializer;
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
-@Dependent
-public class ModelSerializer extends JpaSerializer<Model> implements
-		JsonSerializer<Model> {
+@Vetoed
+public class ModelSerializer implements JsonSerializer<Model> {
+	private final JpaSerializer<Model> delegate;
 
 	@Deprecated
 	protected ModelSerializer() {
@@ -34,7 +34,12 @@ public class ModelSerializer extends JpaSerializer<Model> implements
 	@Inject
 	public ModelSerializer(@NotNull final Mirror mirror,
 			@NotNull final Logger logger) {
-		super(mirror, logger);
+		delegate = new JpaSerializer<Model>(mirror, logger) {
+		};
+	}
+
+	public void addIgnoredField(@NotNull final String field) {
+		delegate.addIgnoredField(field);
 	}
 
 	/**
@@ -43,6 +48,6 @@ public class ModelSerializer extends JpaSerializer<Model> implements
 	@Override
 	public JsonElement serialize(final Model src, final Type type,
 			final JsonSerializationContext context) {
-		return super.serialize(src, type, context);
+		return delegate.serialize(src, type, context);
 	}
 }
