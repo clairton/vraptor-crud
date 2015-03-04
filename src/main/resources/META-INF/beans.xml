@@ -9,8 +9,5 @@
 		<!-- Interceptors para segurança -->
 		<class>br.eti.clairton.security.LockInterceptor</class>
 		<class>br.eti.clairton.security.GateInterceptor</class>
-		
-		<!-- Adiciona uma transação nos metodo anotados com @Transactional -->
-		<class>br.eti.clairton.repository.TransactionalInterceptor</class>
 	</interceptors>
 </beans>

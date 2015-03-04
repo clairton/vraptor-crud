@@ -9,18 +9,18 @@ import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
 
+import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
-import br.eti.clairton.cdi.test.CdiJUnit4Runner;
 import br.eti.clairton.vraptor.crud.Aplicacao;
 import br.eti.clairton.vraptor.crud.Recurso;
 
 import com.google.gson.Gson;
 
-@RunWith(CdiJUnit4Runner.class)
+@RunWith(CdiTestRunner.class)
 public class ModelDeserializerTest {
 	private @Inject Mirror mirror;
 	private @Inject GsonBuilderWrapper builder;

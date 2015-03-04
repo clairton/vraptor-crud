@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
+import javax.transaction.TransactionManager;
 
 import net.vidageek.mirror.dsl.Mirror;
 
@@ -51,25 +53,30 @@ public class CrudControllerTest {
 	private Long id;
 
 	private Long recursoId;
+	private TransactionManager tm; 
 
 	@Before
 	public void init() throws Exception {
-		entityManager.getTransaction().begin();
+		final InitialContext context = new InitialContext();
+		final Class<TransactionManager> t = TransactionManager.class;
+		final String jndi = "java:/TransactionManager";
+		tm = t.cast(context.lookup(jndi));
+		tm.begin();
 		final String sql = "DELETE FROM recursos;DELETE FROM aplicacoes;";
 		connection.createStatement().execute(sql);
-		entityManager.getTransaction().commit();
-		entityManager.getTransaction().begin();
 		Aplicacao aplicacao = new Aplicacao("Teste");
 		final Recurso recurso = new Recurso(aplicacao, "Teste");
 		entityManager.persist(recurso);
-		recursoId = recurso.getId();
-		id = aplicacao.getId();
 		aplicacao = new Aplicacao("TesteOutro");
 		entityManager.persist(aplicacao);
 		aplicacao = new Aplicacao("Testezinho");
 		entityManager.persist(aplicacao);
+		entityManager.joinTransaction();
 		entityManager.flush();
-		entityManager.getTransaction().commit();
+		entityManager.clear();
+		tm.commit();
+		recursoId = recurso.getId();
+		id = aplicacao.getId();
 	}
 
 	@Test
@@ -125,7 +132,7 @@ public class CrudControllerTest {
 				request.addParameter(Param.field(), id);
 				request.addParameter(Param.operation(id), ">=");
 				request.addParameter(Param.value(id),
-						Long.valueOf(CrudControllerTest.this.id + 2).toString());
+						Long.valueOf(CrudControllerTest.this.id).toString());
 			}
 		};
 		json = "{}";
@@ -162,21 +169,22 @@ public class CrudControllerTest {
 		final String response = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		final Map<?, ?> aplicacao = (Map<?, ?>) o.get("aplicacao");
-		assertEquals("Teste", aplicacao.get("nome"));
+		assertEquals("Testezinho", aplicacao.get("nome"));
 		assertEquals(Double.valueOf(id), aplicacao.get("id"));
 	}
 
 	@Test
-	public void testShowWithTenant() {
+	public void testShowWithTenant() throws Exception{
 		/*
 		 * Criado uma aplicação com o nome filtrado no tenant como não pode
 		 * encontrar deve retornar 404
 		 */
-		entityManager.getTransaction().begin();
+		tm.begin();
 		final Aplicacao aplicacao = new Aplicacao(Resource.TENANT);
 		entityManager.persist(aplicacao);
+		entityManager.joinTransaction();
 		entityManager.flush();
-		entityManager.getTransaction().commit();
+		tm.commit();
 		Long id = aplicacao.getId();
 		final UserFlow flow = navigate().get("/aplicacoes/" + id);
 		final VRaptorTestResult result = flow.execute();

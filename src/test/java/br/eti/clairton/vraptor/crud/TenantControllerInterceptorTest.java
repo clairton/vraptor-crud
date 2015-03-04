@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
+import javax.transaction.TransactionManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,14 +28,17 @@ public class TenantControllerInterceptorTest {
 	private final Gson gson = new Gson();
 	private @Inject EntityManager entityManager;
 	private @Inject Connection connection;
+	private TransactionManager tm; 
 
 	@Before
 	public void init() throws Exception {
-		entityManager.getTransaction().begin();
+		final InitialContext context = new InitialContext();
+		final Class<TransactionManager> t = TransactionManager.class;
+		final String jndi = "java:/TransactionManager";
+		tm = t.cast(context.lookup(jndi));
+		tm.begin();
 		final String sql = "DELETE FROM recursos;DELETE FROM aplicacoes;";
 		connection.createStatement().execute(sql);
-		entityManager.getTransaction().commit();
-		entityManager.getTransaction().begin();
 		// este registro não aparece
 		Aplicacao aplicacao = new Aplicacao(Resource.TENANT);
 		entityManager.persist(aplicacao);
@@ -41,7 +46,10 @@ public class TenantControllerInterceptorTest {
 		entityManager.persist(aplicacao);
 		aplicacao = new Aplicacao("Testezinho");
 		entityManager.persist(aplicacao);
-		entityManager.getTransaction().commit();
+		entityManager.joinTransaction();
+		entityManager.flush();
+		entityManager.clear();
+		tm.commit();
 	}
 
 	@Test
