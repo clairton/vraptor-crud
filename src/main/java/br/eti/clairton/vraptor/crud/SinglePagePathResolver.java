@@ -15,8 +15,15 @@ import br.com.caelum.vraptor.view.DefaultPathResolver;
  */
 @Specializes
 public class SinglePagePathResolver extends DefaultPathResolver {
+	/**
+	 * @deprecated CDI eyes only
+	 */
+	protected SinglePagePathResolver() {
+		this(null);
+	}
+
 	@Inject
-	public SinglePagePathResolver(final FormatResolver resolver) {
+	public SinglePagePathResolver(FormatResolver resolver) {
 		super(resolver);
 	}
 
