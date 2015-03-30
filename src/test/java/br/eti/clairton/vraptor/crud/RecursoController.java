@@ -20,7 +20,7 @@ public class RecursoController extends CrudController<Recurso> {
 	@Inject
 	public RecursoController(final Repository repository, final Result result,
 			@Language final Inflector inflector, final Mirror mirror,
-			final ServletRequest request, final QueryParamParser queryParser) {
+			final ServletRequest request, final QueryParser queryParser) {
 		super(Recurso.class, repository, result, inflector, mirror, request,
 				queryParser);
 	}

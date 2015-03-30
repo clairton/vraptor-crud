@@ -53,7 +53,7 @@ public class CrudControllerTest {
 	private Long id;
 
 	private Long recursoId;
-	private TransactionManager tm; 
+	private TransactionManager tm;
 
 	@Before
 	public void init() throws Exception {
@@ -123,16 +123,9 @@ public class CrudControllerTest {
 			@Override
 			public void fill(final MockHttpServletRequest request) {
 				decorator.fill(request);
-				// f[]=nome&o[nome]=*=&v[nome][]=Pass&f[]=id&o[id]=>=&v[id][]=0
-				final String nome = "nome";
-				request.addParameter(Param.field(), nome);
-				request.addParameter(Param.operation(nome), "*");
-				request.addParameter(Param.value(nome), "Teste");
-				final String id = "id";
-				request.addParameter(Param.field(), id);
-				request.addParameter(Param.operation(id), ">=");
-				request.addParameter(Param.value(id),
-						Long.valueOf(CrudControllerTest.this.id).toString());
+				// nome=*Teste&id]=>=0
+				request.addParameter("nome", "*Teste");
+				request.addParameter("id", ">=" + CrudControllerTest.this.id);
 			}
 		};
 		json = "{}";
@@ -174,7 +167,7 @@ public class CrudControllerTest {
 	}
 
 	@Test
-	public void testShowWithTenant() throws Exception{
+	public void testShowWithTenant() throws Exception {
 		/*
 		 * Criado uma aplicação com o nome filtrado no tenant como não pode
 		 * encontrar deve retornar 404

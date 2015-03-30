@@ -48,7 +48,7 @@ public abstract class CrudController<T extends Model> {
 
 	private final ServletRequest request;
 
-	private final QueryParamParser queryParser;
+	private final QueryParser queryParser;
 
 	private final String resourceName;
 
@@ -83,7 +83,7 @@ public abstract class CrudController<T extends Model> {
 			@Language final @NotNull Inflector inflector,
 			final @NotNull Mirror mirror,
 			final @NotNull ServletRequest request,
-			final @NotNull QueryParamParser queryParser) {
+			final @NotNull QueryParser queryParser) {
 		this.repository = repository;
 		this.result = result;
 		this.modelType = modelType;

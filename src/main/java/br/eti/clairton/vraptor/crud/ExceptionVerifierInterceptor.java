@@ -108,7 +108,7 @@ public class ExceptionVerifierInterceptor {
 			logger.debug("InvocationTarget: {}", e.getTargetException());
 			throw e.getTargetException();
 		} catch (final Throwable e) {
-			logger.error("Throwable", e);
+			//logger.error("Throwable", e);
 			throw e;
 		}
 		/*

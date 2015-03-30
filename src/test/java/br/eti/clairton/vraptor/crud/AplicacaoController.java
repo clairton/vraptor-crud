@@ -22,7 +22,7 @@ public class AplicacaoController extends CrudController<Aplicacao> {
 	public AplicacaoController(@Tenant final Repository repository,
 			final Result result, @Language final Inflector inflector,
 			final Mirror mirror, final ServletRequest request,
-			final QueryParamParser queryParser) {
+			final QueryParser queryParser) {
 		super(Aplicacao.class, repository, result, inflector, mirror, request,
 				queryParser);
 	}

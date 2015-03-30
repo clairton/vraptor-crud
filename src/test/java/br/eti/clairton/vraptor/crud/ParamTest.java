@@ -24,5 +24,4 @@ public class ParamTest {
 	public void testOperationComplex() {
 		assertEquals("v[][aplication[name]]", Param.value("aplication[name]"));
 	}
-
 }
