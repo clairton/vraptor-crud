@@ -43,9 +43,9 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 	 * raiz do JSON com o nome do recurso "{'aplicacao':{'nome':'teste'}}"
 	 */
 	@Override
-	public Parameter[] parametersFor(AccessibleObject executable) {
-		java.lang.reflect.Parameter[] parameters = getMethodParameters(executable);
-		Parameter[] out = new Parameter[parameters.length];
+	public Parameter[] parametersFor(final AccessibleObject executable) {
+		final java.lang.reflect.Parameter[] parameters = getMethodParameters(executable);
+		final Parameter[] out = new Parameter[parameters.length];
 
 		for (int i = 0; i < out.length; i++) {
 			checkIfNameIsPresent(parameters[i]);
@@ -53,16 +53,14 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("parameter names for {}: {}", executable,
-					Arrays.toString(out));
+			logger.debug("parameter names for {}: {}", executable, Arrays.toString(out));
 		}
 		if (isActive() && executable instanceof Method) {
 			final Method method = (Method) executable;
 			final Class<?> klass = method.getDeclaringClass();
 			if (CrudController.class.equals(klass)) {
 				for (final Parameter p : out) {
-					if ("model".equals(p.getName())
-							&& Model.class.equals(p.getType())) {
+					if ("model".equals(p.getName()) && Model.class.equals(p.getType())) {
 						final ControllerMethod controllerMethod = getControllerMethod();
 						if (controllerMethod == null) {
 							continue;
@@ -87,10 +85,8 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 
 	}
 
-	private java.lang.reflect.Parameter[] getMethodParameters(
-			AccessibleObject executable) {
-		checkState(executable instanceof Executable,
-				"Only methods or constructors are available");
+	private java.lang.reflect.Parameter[] getMethodParameters(AccessibleObject executable) {
+		checkState(executable instanceof Executable, "Only methods or constructors are available");
 		return ((Executable) executable).getParameters();
 	}
 
@@ -117,8 +113,7 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 			final Constructor<?> constructor = type.getDeclaredConstructor();
 			final Boolean accessible = constructor.isAccessible();
 			constructor.setAccessible(Boolean.TRUE);
-			final CrudController<?> i = (CrudController<?>) constructor
-					.newInstance();
+			final CrudController<?> i = (CrudController<?>) constructor.newInstance();
 			constructor.setAccessible(accessible);
 			return i.getResourceName();
 		} catch (final Exception e) {
