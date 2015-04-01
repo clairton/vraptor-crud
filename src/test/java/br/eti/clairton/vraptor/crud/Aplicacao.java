@@ -85,6 +85,8 @@ public class Aplicacao extends br.eti.clairton.repository.Model {
 	}
 
 	public Collection<Recurso> getRecursos() {
+		//teste para verificar se lançara exceção para lambdas em ParanamerNameCrudProvider
+		recursos.forEach(r -> System.out.println(r));
 		return Collections.unmodifiableCollection(recursos);
 	}
 

@@ -1,16 +1,22 @@
 package br.eti.clairton.vraptor.crud;
 
 import static javax.enterprise.inject.spi.CDI.current;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Specializes;
 import javax.enterprise.inject.spi.BeanManager;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.set.dsl.SetterHandler;
@@ -28,6 +34,8 @@ import br.eti.clairton.repository.Model;
 public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 	private final Mirror mirror = new Mirror();
 
+	private final Logger logger = LogManager.getLogger();
+
 	/**
 	 * Altera o nome do parametro que pode ser recebido nos metodos do
 	 * {@link CrudController}. Sem isso todo JSON vindo teria que ser
@@ -35,13 +43,24 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 	 * raiz do JSON com o nome do recurso "{'aplicacao':{'nome':'teste'}}"
 	 */
 	@Override
-	public Parameter[] parametersFor(final AccessibleObject executable) {
-		final Parameter[] parameters = super.parametersFor(executable);
+	public Parameter[] parametersFor(AccessibleObject executable) {
+		java.lang.reflect.Parameter[] parameters = getMethodParameters(executable);
+		Parameter[] out = new Parameter[parameters.length];
+
+		for (int i = 0; i < out.length; i++) {
+			checkIfNameIsPresent(parameters[i]);
+			out[i] = new Parameter(i, parameters[i].getName(), executable);
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("parameter names for {}: {}", executable,
+					Arrays.toString(out));
+		}
 		if (isActive() && executable instanceof Method) {
 			final Method method = (Method) executable;
 			final Class<?> klass = method.getDeclaringClass();
 			if (CrudController.class.equals(klass)) {
-				for (final Parameter p : parameters) {
+				for (final Parameter p : out) {
 					if ("model".equals(p.getName())
 							&& Model.class.equals(p.getType())) {
 						final ControllerMethod controllerMethod = getControllerMethod();
@@ -55,7 +74,24 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 				}
 			}
 		}
-		return parameters;
+		return out;
+	}
+
+	private void checkIfNameIsPresent(java.lang.reflect.Parameter parameter) {
+		if (!parameter.isNamePresent()) {
+			final String msg = String
+					.format("Parameters aren't present for %s. You must compile your code with -parameters argument.",
+							parameter.getDeclaringExecutable().getName());
+			throw new AssertionError(msg);
+		}
+
+	}
+
+	private java.lang.reflect.Parameter[] getMethodParameters(
+			AccessibleObject executable) {
+		checkState(executable instanceof Executable,
+				"Only methods or constructors are available");
+		return ((Executable) executable).getParameters();
 	}
 
 	private boolean isActive() {
@@ -81,7 +117,8 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 			final Constructor<?> constructor = type.getDeclaredConstructor();
 			final Boolean accessible = constructor.isAccessible();
 			constructor.setAccessible(Boolean.TRUE);
-			final CrudController<?> i = (CrudController<?>) constructor.newInstance();
+			final CrudController<?> i = (CrudController<?>) constructor
+					.newInstance();
 			constructor.setAccessible(accessible);
 			return i.getResourceName();
 		} catch (final Exception e) {
