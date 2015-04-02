@@ -1,5 +1,5 @@
 # vraptor-crud
-Boostrap para construir uma aplicação REST com VRaptor para Single Page Application.
+Bootstrap para construir uma aplicação REST com VRaptor para Single Page Application.
 
 É necessário usar a versão do java 1.8+ e usar o parametro --parameters na compilação.
 No caso de usar maven, segue um exemplo:
