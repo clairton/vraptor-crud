@@ -1,7 +1,6 @@
 package br.eti.clairton.vraptor.crud;
 
 import static javax.enterprise.inject.spi.CDI.current;
-import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -15,11 +14,12 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Specializes;
 import javax.enterprise.inject.spi.BeanManager;
 
+import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.set.dsl.SetterHandler;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.set.dsl.SetterHandler;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
@@ -86,7 +86,9 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 	}
 
 	private java.lang.reflect.Parameter[] getMethodParameters(AccessibleObject executable) {
-		checkState(executable instanceof Executable, "Only methods or constructors are available");
+		if(!(executable instanceof Executable)){
+			throw new IllegalStateException("Only methods or constructors are available");
+		}
 		return ((Executable) executable).getParameters();
 	}
 

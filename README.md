@@ -26,6 +26,54 @@ No caso de usar maven, segue um exemplo:
 </build>
 ```
 
+O vraptor-crud possui um controller abstrato que pode ser extendido e com pouco esforço disponibiliza
+em REST as operações básicas do CRUD por exemplo:
+```java
+@Controller
+public class AplicacaoController extends CrudController<Aplicacao> {
+	@Deprecated
+	protected AplicacaoController() {
+		this(null, null, null, null, null, null);
+	}
+
+	@Inject
+	public AplicacaoController(@Default final Repository repository,
+			final Result result, @Language final Inflector inflector,
+			final Mirror mirror, final ServletRequest request,
+			final QueryParser queryParser) {
+		super(Aplicacao.class, repository, result, inflector, mirror, request,
+				queryParser);
+	}
+}
+```
+Se desejar que seu recurso seja multi-tenancy injete um Repository com o qualifier @Tenant, veja mais em
+https://github.com/clairton/tenant e https://github.com/clairton/repository.
+
+As operaçoes que sao direcionado a URL padrao do recurso(/path-da-aplicacao/recurso com o metodo HTTP GET),
+possui um mecanismo de query params, que aplicaca filtros na consultado do banco de dados, para tornar ela
+mais poderosa algumas opções podem ser usadas, segue exemplos:
+```java
+http://meudominio.com/app/recurso?nome=abc //retornara o recurso com o nome igual a "abc"
+
+http://meudominio.com/app/recurso?operacao.nome=abc //retornara o recurso com o nome da operacao igual a "abc"
+
+http://meudominio.com/app/recurso?id=>=1&id=<=11 //retornara o recurso com o id entre 1 e 11
+```
+Como pode notar a formato é o seguinte "nomeDoCampo=[operacaoLogica]valorDoFiltro", a operação lógica
+não é obrigatório, sendo que se não for informada é assumida como "igual".
+As operações lógicas disponíveis são:
+* == Igual
+* =* Igual ignorando maisculas e minusculas
+* <> Diferente
+* ∃  Existe
+* ∅  Nulo
+* !∅ Não Nulo
+* >  Maior
+* >= Maior ou Igual
+* <  Menor
+* <= Menor ou Igual
+
+
 ```xml
 <repository>
 	<id>mvn-repo-releases</id>

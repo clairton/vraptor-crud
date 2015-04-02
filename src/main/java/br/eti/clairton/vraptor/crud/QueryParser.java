@@ -63,7 +63,7 @@ public class QueryParser {
 		return predicates;
 	}
 
-	public Record to(final String[] values) {
+	protected Record to(final String[] values) {
 		if (values.length == 1) {
 			for (final Comparator c : Comparators.values()) {
 				final String string = values[0];
