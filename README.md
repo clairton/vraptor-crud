@@ -49,9 +49,9 @@ public class AplicacaoController extends CrudController<Aplicacao> {
 Se desejar que seu recurso seja multi-tenancy injete um Repository com o qualifier @Tenant, veja mais em
 https://github.com/clairton/tenant e https://github.com/clairton/repository.
 
-As operaçoes que sao direcionado a URL padrao do recurso(/path-da-aplicacao/recurso com o metodo HTTP GET),
-possui um mecanismo de query params, que aplicaca filtros na consultado do banco de dados, para tornar ela
-mais poderosa algumas opções podem ser usadas, segue exemplos:
+As URL padrao do recurso(/path-da-aplicacao/recurso com o metodo HTTP GET), possui um mecanismo de query params, 
+que aplicaca filtros na consultado do banco de dados, para tornar ela mais poderosa algumas opções podem ser usadas,
+segue exemplos:
 ```java
 http://meudominio.com/app/recurso?nome=abc //retornara o recurso com o nome igual a "abc"
 
@@ -73,6 +73,7 @@ As operações lógicas disponíveis são:
 * <  Menor
 * <= Menor ou Igual
 
+A implementação de segurança é opcional, para mais detalhes veja https://github.com/clairton/security.
 
 ```xml
 <repository>
