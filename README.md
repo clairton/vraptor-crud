@@ -75,6 +75,8 @@ As operações lógicas disponíveis são:
 
 A implementação de segurança é opcional, para mais detalhes veja https://github.com/clairton/security.
 
+
+Se usar o maven, será necessário adicionar os repositórios:
 ```xml
 <repository>
 	<id>mvn-repo-releases</id>
