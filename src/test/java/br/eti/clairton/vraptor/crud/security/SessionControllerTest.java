@@ -2,7 +2,7 @@ package br.eti.clairton.vraptor.crud.security;
 
 import static br.com.caelum.vraptor.controller.HttpMethod.DELETE;
 import static br.com.caelum.vraptor.controller.HttpMethod.POST;
-import static br.eti.clairton.vraptor.crud.VRaptorRunner.navigate;
+import static br.eti.clairton.vraptor.crud.controller.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
-import br.eti.clairton.vraptor.crud.VRaptorRunner;
+import br.eti.clairton.vraptor.crud.controller.VRaptorRunner;
 
 import com.google.gson.GsonBuilder;
 

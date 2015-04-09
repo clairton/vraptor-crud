@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Post;
 import br.eti.clairton.security.Locksmith;
-import br.eti.clairton.vraptor.crud.ExceptionVerifier;
+import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 
 @Controller
 public class SessionController implements Serializable {

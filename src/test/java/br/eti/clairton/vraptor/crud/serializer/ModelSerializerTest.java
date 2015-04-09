@@ -24,8 +24,8 @@ import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.eti.clairton.cdi.test.CdiJUnit4Runner;
-import br.eti.clairton.vraptor.crud.Aplicacao;
-import br.eti.clairton.vraptor.crud.Recurso;
+import br.eti.clairton.vraptor.crud.model.Aplicacao;
+import br.eti.clairton.vraptor.crud.model.Recurso;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

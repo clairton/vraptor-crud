@@ -25,6 +25,17 @@ No caso de usar maven, segue um exemplo:
 	</plugins>
 </build>
 ```
+O controle de erros e mensagens é efetuado através de um interceptor do CDI que avaliar as exceções lançadas,
+e promulgando-as caso não as conheça, para habilita-lo deve adicionar a classe no beans.xml da sua aplicação:
+
+```xml
+<beans>
+	<interceptors>
+		<class>br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifierInterceptor</class>
+	</interceptors>
+</beans>
+```
+
 
 O vraptor-crud possui um controller abstrato que pode ser extendido e com pouco esforço disponibiliza
 em REST as operações básicas do CRUD por exemplo:
