@@ -1,5 +1,5 @@
 # vraptor-crud
-Boostrap para construir uma aplicação REST com VRaptor para Single Page Application.
+Bootstrap para construir uma aplicação REST com VRaptor para Single Page Application.
 
 É necessário usar a versão do java 1.8+ e usar o parametro --parameters na compilação.
 No caso de usar maven, segue um exemplo:
@@ -60,13 +60,15 @@ public class AplicacaoController extends CrudController<Aplicacao> {
 Se desejar que seu recurso seja multi-tenancy injete um Repository com o qualifier @Tenant, veja mais em
 https://github.com/clairton/tenant e https://github.com/clairton/repository.
 
-As operaçoes que sao direcionado a URL padrao do recurso(/path-da-aplicacao/recurso com o metodo HTTP GET),
-possui um mecanismo de query params, que aplicaca filtros na consultado do banco de dados, para tornar ela
-mais poderosa algumas opções podem ser usadas, segue exemplos:
+As URL padrao do recurso(/path-da-aplicacao/recurso com o metodo HTTP GET), possui um mecanismo de query params, 
+que aplicaca filtros na consultado do banco de dados, para tornar ela mais poderosa algumas opções podem ser usadas,
+segue exemplos:
 ```java
 http://meudominio.com/app/recurso?nome=abc //retornara o recurso com o nome igual a "abc"
 
 http://meudominio.com/app/recurso?operacao.nome=abc //retornara o recurso com o nome da operacao igual a "abc"
+
+http://meudominio.com/app/recurso?operacao[nome]=abc //retornara o recurso com o nome da operacao igual a "abc"
 
 http://meudominio.com/app/recurso?id=>=1&id=<=11 //retornara o recurso com o id entre 1 e 11
 ```
@@ -84,7 +86,10 @@ As operações lógicas disponíveis são:
 * <  Menor
 * <= Menor ou Igual
 
+A implementação de segurança é opcional, para mais detalhes veja https://github.com/clairton/security.
 
+
+Se usar o maven, será necessário adicionar os repositórios:
 ```xml
 <repository>
 	<id>mvn-repo-releases</id>
