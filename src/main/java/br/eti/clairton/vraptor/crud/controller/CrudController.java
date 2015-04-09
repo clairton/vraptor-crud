@@ -1,7 +1,7 @@
 package br.eti.clairton.vraptor.crud.controller;
 
 import static br.com.caelum.vraptor.view.Results.http;
-import static br.eti.clairton.vraptor.hypermedia.HypermediaJsonSerialization.jsonHypermedia;
+import static br.com.caelum.vraptor.view.Results.json;
 
 import java.util.Collection;
 import java.util.Map;
@@ -101,7 +101,7 @@ public abstract class CrudController<T extends Model> {
 	 * @param model
 	 *            novo registro
 	 */
-	@Consumes(value = "application/json", options=WithRoot.class)
+	@Consumes(value = "application/json", options = WithRoot.class)
 	@Post
 	@Protected
 	@Authenticated
@@ -179,7 +179,7 @@ public abstract class CrudController<T extends Model> {
 	 * @param model
 	 *            recurso a ser atualizado
 	 */
-	@Consumes(value = "application/json", options=WithRoot.class)
+	@Consumes(value = "application/json", options = WithRoot.class)
 	@Put("{id}")
 	@Protected
 	@Authenticated
@@ -206,7 +206,7 @@ public abstract class CrudController<T extends Model> {
 	 *            model a ser serilizado
 	 */
 	protected void serialize(final T model) {
-		final Serializer serializer = result.use(jsonHypermedia()).from(model);
+		final Serializer serializer = result.use(json()).from(model);
 		serialize(serializer);
 	}
 
@@ -217,6 +217,6 @@ public abstract class CrudController<T extends Model> {
 	protected void serialize(final Collection<T> collection) {
 		final String plural = inflector.pluralize(modelType.getSimpleName());
 		final String tag = inflector.uncapitalize(plural);
-		serialize(result.use(jsonHypermedia()).from(collection, tag));
+		serialize(result.use(json()).from(collection, tag));
 	}
 }

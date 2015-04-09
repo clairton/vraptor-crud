@@ -154,6 +154,8 @@ public class CrudControllerTest {
 		final List<?> aplicacoes = (List<?>) o.get("aplicacoes");
 		assertNotNull(aplicacoes);
 		assertEquals(3, aplicacoes.size());
+		final List<?> links = (List<?>) o.get("links");
+		assertEquals(1, links.size());
 	}
 
 	@Test
