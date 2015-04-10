@@ -3,10 +3,10 @@ package br.eti.clairton.vraptor.crud.hypermedia;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.eti.clairton.vraptor.hypermedia.HypermediableRole;
+import br.eti.clairton.vraptor.hypermedia.HypermediableRule;
 import br.eti.clairton.vraptor.hypermedia.Link;
 
-public class HypermediableRoleStub implements HypermediableRole {
+public class HypermediableRuleStub implements HypermediableRule {
 
 	@Override
 	public Set<Link> from(String resource, String operation) {

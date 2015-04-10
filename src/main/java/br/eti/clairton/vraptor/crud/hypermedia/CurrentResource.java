@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
-import br.com.caelum.vraptor.http.UrlToControllerTranslator;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.security.Extractor;
 import br.eti.clairton.vraptor.crud.annotation.Current;
@@ -14,18 +13,18 @@ import br.eti.clairton.vraptor.hypermedia.Operation;
 import br.eti.clairton.vraptor.hypermedia.Resource;
 
 @Specializes
-public class CurrentMethodProducer extends
-		br.eti.clairton.vraptor.hypermedia.CurrentMethodProducer {
+public class CurrentResource extends
+		br.eti.clairton.vraptor.hypermedia.CurrentResource {
 	private final ControllerMethod method;
 	private final String resource;
 	private final String operation;
 
 	@Inject
-	public CurrentMethodProducer(final UrlToControllerTranslator translator,
-			final MutableRequest request, final Extractor extractor,
-			final Inflector inflector) {
-		super(translator, request);
-		this.method = translator.translate(request);
+	public CurrentResource(final MutableRequest request,
+			final Extractor extractor, final Inflector inflector,
+			final ControllerMethod method) {
+		super(request, method);
+		this.method = method;
 		this.resource = getResource(request.getRequestedUri(), inflector);
 		this.operation = getOperation(method, extractor);
 	}
