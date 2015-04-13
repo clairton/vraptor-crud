@@ -23,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 import br.com.caelum.vraptor.Result;
 import br.eti.clairton.security.UnauthenticatedException;
 import br.eti.clairton.security.UnauthorizedException;
+import br.eti.clairton.vraptor.crud.controller.NotNewableExeception;
 
 /**
  * Verifica o encaminhando diante das exceções lançadas para os metodos
@@ -104,20 +105,24 @@ public class ExceptionVerifierInterceptor {
 				m = e.getMessage();
 			}
 			errors = asMessage(m);
+		} catch (final NotNewableExeception e) {
+			logger.debug("NotNewableExeception: {}", e.getMessage());
+			errors = asMessage(e.getCause().getMessage());
+			status = 422;
 		} catch (final InvocationTargetException e) {
 			logger.debug("InvocationTarget: {}", e.getTargetException());
 			throw e.getTargetException();
 		} catch (final Throwable e) {
-			//logger.error("Throwable", e);
+			// logger.error("Throwable", e);
 			throw e;
 		}
 		/*
 		 * Para adicionar a mensagem somente uma vez.
 		 */
-		//if (!result.used()) {
-			result.use(http()).setStatusCode(status);
-			result.use(json()).from(errors, "errors").serialize();
-		//}
+		// if (!result.used()) {
+		result.use(http()).setStatusCode(status);
+		result.use(json()).from(errors, "errors").serialize();
+		// }
 		return null;
 	}
 

@@ -3,6 +3,7 @@ package br.eti.clairton.vraptor.crud.controller;
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import br.eti.clairton.repository.Model;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.security.Authenticated;
+import br.eti.clairton.security.Operation;
 import br.eti.clairton.security.Protected;
 import br.eti.clairton.security.Resource;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
@@ -140,6 +142,37 @@ public abstract class CrudController<T extends Model> {
 		final Collection<T> collection = repository.collection(page, perPage);
 		serialize(collection);
 	}
+	
+
+	/**
+	 * Cria um recurso novo.
+	 * 
+	 * @throws NotNewableExeception
+	 *             caso não consiga criar uma nova instancia
+	 */
+	@Get("new")
+	@Protected
+	@Authenticated
+	@ExceptionVerifier
+	@Operation("new")
+	public void new_() {
+		final T response;
+		try {
+			final Constructor<T> constructor = modelType.getConstructor();
+			response = constructor.newInstance();
+		} catch (final Exception e) {
+			throw new NotNewableExeception(e);
+		}
+		serialize(response);
+	}
+
+	@Get("{id}/edit")
+	@Protected
+	@Authenticated
+	@ExceptionVerifier
+	public void edit(final Long id) {
+		retrieve(id);
+	}
 
 	/**
 	 * Mostra um recurso.
@@ -152,8 +185,7 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void show(final Long id) {
-		final T response = repository.byId(modelType, id);
-		serialize(response);
+		retrieve(id);
 	}
 
 	/**
@@ -166,7 +198,7 @@ public abstract class CrudController<T extends Model> {
 	@Protected
 	@Authenticated
 	@ExceptionVerifier
-	public void remove(final Long id) {
+	public void destroy(final Long id) {
 		repository.remove(modelType, id);
 		result.use(http()).setStatusCode(200);
 	}
@@ -203,7 +235,7 @@ public abstract class CrudController<T extends Model> {
 	 * Serializa um model.
 	 * 
 	 * @param model
-	 *            model a ser serilizado
+	 *            model a ser seriliazado
 	 */
 	protected void serialize(final T model) {
 		final Serializer serializer = result.use(json()).from(model);
@@ -218,5 +250,10 @@ public abstract class CrudController<T extends Model> {
 		final String plural = inflector.pluralize(modelType.getSimpleName());
 		final String tag = inflector.uncapitalize(plural);
 		serialize(result.use(json()).from(collection, tag));
+	}
+	
+	private void retrieve(final Long id){
+		final T response = repository.byId(modelType, id);
+		serialize(response);
 	}
 }

@@ -57,6 +57,22 @@ public class AplicacaoController extends CrudController<Aplicacao> {
 	}
 }
 ```
+O nome do controller deve ser referente ao recurso no singular, a rota esta no plural, se em algum caso
+especificos a pluralização não der certo, verifique o manual do https://github.com/clairton/inflector
+que é a lib usada para fazer isso.
+De qualquer forma ao criar um controller extendendo de CrudController, terá as seguintes URL's:
+```http
+URL                    HTTP Method   Method Java
+/aplicacoes/new        [GET]         CrudController#new
+/aplicacoes/{id}/edit  [GET]         CrudController#edit
+/aplicacoes/{id}       [GET]         CrudController#show
+/aplicacoes            [GET]         CrudController#index
+/aplicacoes/{id}       [PUT]         CrudController#update
+/aplicacoes            [POST]        CrudController#create
+/aplicacoes/{id}       [DELETE]      CrudController#destroy
+
+``` 
+
 Se desejar que seu recurso seja multi-tenancy injete um Repository com o qualifier @Tenant, veja mais em
 https://github.com/clairton/tenant e https://github.com/clairton/repository.
 

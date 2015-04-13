@@ -2,7 +2,9 @@ package br.eti.clairton.vraptor.crud.controller;
 
 import static br.eti.clairton.vraptor.crud.controller.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -91,6 +93,36 @@ public class CrudControllerTest {
 				result.getResponseBody());
 		assertEquals(200, navigate().get("/aplicacoes/" + id).execute()
 				.getResponse().getStatus());
+	}
+
+	@Test
+	public void testNew() {
+		json = "";
+		final UserFlow userFlow = navigate().get("/aplicacoes/new", parameters);
+		final VRaptorTestResult result = userFlow.execute();
+		assertEquals(200, result.getResponse().getStatus());
+		final String json = result.getResponseBody();
+		final Map<?, ?> o = gson.fromJson(json, HashMap.class);
+		final Map<?, ?> aplicacao = (Map<?, ?>) o.get("aplicacao");
+		final List<?> recursos = (List<?>) aplicacao.get("recursos");
+		assertTrue(recursos.isEmpty());
+		assertFalse(aplicacao.containsKey("nome"));
+		assertFalse(aplicacao.containsKey("id"));
+	}
+
+	@Test
+	public void testEdit() {
+		json = "";
+		final UserFlow userFlow = navigate().get("/aplicacoes/"+id+"/edit", parameters);
+		final VRaptorTestResult result = userFlow.execute();
+		assertEquals(200, result.getResponse().getStatus());
+		final String json = result.getResponseBody();
+		final Map<?, ?> o = gson.fromJson(json, HashMap.class);
+		final Map<?, ?> aplicacao = (Map<?, ?>) o.get("aplicacao");
+		final List<?> recursos = (List<?>) aplicacao.get("recursos");
+		assertTrue(recursos.isEmpty());
+		assertEquals("Testezinho", aplicacao.get("nome"));
+		assertEquals(id, Long.valueOf(new BigDecimal(aplicacao.get("id").toString()).longValue()));
 	}
 
 	@Test
