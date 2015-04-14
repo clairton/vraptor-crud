@@ -1,11 +1,16 @@
 package br.eti.clairton.vraptor.crud.hypermedia;
 
+import java.lang.reflect.Method;
+
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.MutableRequest;
+import br.com.caelum.vraptor.proxy.MethodInvocation;
+import br.com.caelum.vraptor.proxy.Proxifier;
+import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.security.Extractor;
 import br.eti.clairton.vraptor.crud.annotation.Current;
@@ -18,14 +23,24 @@ public class CurrentResource extends
 	private final ControllerMethod method;
 	private final String resource;
 	private final String operation;
+	private final MethodInvocation<Object> interceptor = new MethodInvocation<Object>() {
+
+		@Override
+		public Object intercept(Object proxy, Method method, Object[] args,
+				SuperMethod superMethod) {
+			return null;
+		}
+	};
 
 	@Inject
 	public CurrentResource(final MutableRequest request,
 			final Extractor extractor, final Inflector inflector,
-			final ControllerMethod method) {
+			final ControllerMethod method, final Proxifier proxifier) {
 		super(request, method);
 		this.method = method;
-		this.resource = getResource(request.getRequestedUri(), inflector);
+		final Class<?> controller = method.getController().getType();
+		final Object proxy = proxifier.proxify(controller, interceptor);
+		this.resource = extractor.getResource(proxy);
 		this.operation = getOperation(method, extractor);
 	}
 
