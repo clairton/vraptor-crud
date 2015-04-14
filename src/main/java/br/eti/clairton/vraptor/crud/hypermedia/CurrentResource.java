@@ -13,14 +13,11 @@ import br.com.caelum.vraptor.proxy.Proxifier;
 import br.com.caelum.vraptor.proxy.SuperMethod;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.security.Extractor;
-import br.eti.clairton.vraptor.crud.annotation.Current;
 import br.eti.clairton.vraptor.hypermedia.Operation;
 import br.eti.clairton.vraptor.hypermedia.Resource;
 
 @Specializes
-public class CurrentResource extends
-		br.eti.clairton.vraptor.hypermedia.CurrentResource {
-	private final ControllerMethod method;
+public class CurrentResource extends br.eti.clairton.vraptor.hypermedia.CurrentResource {
 	private final String resource;
 	private final String operation;
 	private final MethodInvocation<Object> interceptor = new MethodInvocation<Object>() {
@@ -37,17 +34,10 @@ public class CurrentResource extends
 			final Extractor extractor, final Inflector inflector,
 			final ControllerMethod method, final Proxifier proxifier) {
 		super(request, method);
-		this.method = method;
 		final Class<?> controller = method.getController().getType();
 		final Object proxy = proxifier.proxify(controller, interceptor);
 		this.resource = extractor.getResource(proxy);
 		this.operation = getOperation(method, extractor);
-	}
-
-	@Produces
-	@Current
-	public ControllerMethod getControllerMethod() {
-		return method;
 	}
 
 	@Produces
