@@ -113,7 +113,8 @@ public class CrudControllerTest {
 	@Test
 	public void testEdit() {
 		json = "";
-		final UserFlow userFlow = navigate().get("/aplicacoes/"+id+"/edit", parameters);
+		final UserFlow userFlow = navigate().get("/aplicacoes/" + id + "/edit",
+				parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 		final String json = result.getResponseBody();
@@ -122,7 +123,8 @@ public class CrudControllerTest {
 		final List<?> recursos = (List<?>) aplicacao.get("recursos");
 		assertTrue(recursos.isEmpty());
 		assertEquals("Testezinho", aplicacao.get("nome"));
-		assertEquals(id, Long.valueOf(new BigDecimal(aplicacao.get("id").toString()).longValue()));
+		assertEquals(id, Long.valueOf(new BigDecimal(aplicacao.get("id")
+				.toString()).longValue()));
 	}
 
 	@Test
@@ -278,7 +280,7 @@ public class CrudControllerTest {
 	public void testGetResourceName() {
 		final String resourceName = "aplicacao";
 		final CrudController<Aplicacao> resourceable = new CrudController<Aplicacao>(
-				Aplicacao.class, null, null, null, null, null, null) {
+				Aplicacao.class, null, null, null, null, null) {
 		};
 		assertEquals(resourceName, resourceable.getResourceName());
 	}

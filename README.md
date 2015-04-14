@@ -44,15 +44,15 @@ em REST as operações básicas do CRUD por exemplo:
 public class AplicacaoController extends CrudController<Aplicacao> {
 	@Deprecated
 	protected AplicacaoController() {
-		this(null, null, null, null, null, null);
+		this(null, null, null, null, null);
 	}
 
 	@Inject
 	public AplicacaoController(@Default final Repository repository,
 			final Result result, @Language final Inflector inflector,
-			final Mirror mirror, final ServletRequest request,
+			final ServletRequest request,
 			final QueryParser queryParser) {
-		super(Aplicacao.class, repository, result, inflector, mirror, request,
+		super(Aplicacao.class, repository, result, inflector, request,
 				queryParser);
 	}
 }
@@ -64,12 +64,12 @@ De qualquer forma ao criar um controller extendendo de CrudController, terá as 
 ```http
 URL                    HTTP Method   Method Java
 /aplicacoes/new        [GET]         CrudController#new
-/aplicacoes/{id}/edit  [GET]         CrudController#edit
-/aplicacoes/{id}       [GET]         CrudController#show
+/aplicacoes/{id}/edit  [GET]         CrudController#edit(id)
+/aplicacoes/{id}       [GET]         CrudController#show(id)
 /aplicacoes            [GET]         CrudController#index
-/aplicacoes/{id}       [PUT]         CrudController#update
-/aplicacoes            [POST]        CrudController#create
-/aplicacoes/{id}       [DELETE]      CrudController#destroy
+/aplicacoes/{model.id} [PUT]         CrudController#update(model)
+/aplicacoes            [POST]        CrudController#create(model)
+/aplicacoes/{id}       [DELETE]      CrudController#destroy(id)
 
 ``` 
 

@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.servlet.ServletRequest;
 import javax.validation.constraints.NotNull;
 
-import net.vidageek.mirror.dsl.Mirror;
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
@@ -47,8 +46,6 @@ public abstract class CrudController<T extends Model> {
 
 	private final Inflector inflector;
 
-	private final Mirror mirror;
-
 	private final ServletRequest request;
 
 	private final QueryParser queryParser;
@@ -76,14 +73,12 @@ public abstract class CrudController<T extends Model> {
 	public CrudController(final @NotNull Class<T> modelType,
 			final @NotNull Repository repository, final @NotNull Result result,
 			@Language final @NotNull Inflector inflector,
-			final @NotNull Mirror mirror,
 			final @NotNull ServletRequest request,
 			final @NotNull QueryParser queryParser) {
 		this.repository = repository;
 		this.result = result;
 		this.modelType = modelType;
 		this.inflector = inflector;
-		this.mirror = mirror;
 		this.request = request;
 		this.queryParser = queryParser;
 		if (modelType != null) {
@@ -142,7 +137,6 @@ public abstract class CrudController<T extends Model> {
 		final Collection<T> collection = repository.collection(page, perPage);
 		serialize(collection);
 	}
-	
 
 	/**
 	 * Cria um recurso novo.
@@ -212,12 +206,11 @@ public abstract class CrudController<T extends Model> {
 	 *            recurso a ser atualizado
 	 */
 	@Consumes(value = "application/json", options = WithRoot.class)
-	@Put("{id}")
+	@Put("{model.id}")
 	@Protected
 	@Authenticated
 	@ExceptionVerifier
-	public void update(final Long id, final T model) {
-		mirror.on(model).set().field("id").withValue(id);
+	public void update(final T model) {
 		final T response = repository.save(model);
 		serialize(response);
 	}
@@ -251,8 +244,8 @@ public abstract class CrudController<T extends Model> {
 		final String tag = inflector.uncapitalize(plural);
 		serialize(result.use(json()).from(collection, tag));
 	}
-	
-	private void retrieve(final Long id){
+
+	private void retrieve(final Long id) {
 		final T response = repository.byId(modelType, id);
 		serialize(response);
 	}
