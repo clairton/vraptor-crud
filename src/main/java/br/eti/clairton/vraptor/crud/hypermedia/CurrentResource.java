@@ -17,7 +17,8 @@ import br.eti.clairton.vraptor.hypermedia.Operation;
 import br.eti.clairton.vraptor.hypermedia.Resource;
 
 @Specializes
-public class CurrentResource extends br.eti.clairton.vraptor.hypermedia.CurrentResource {
+public class CurrentResource extends
+		br.eti.clairton.vraptor.hypermedia.CurrentResource {
 	private final String resource;
 	private final String operation;
 	private final MethodInvocation<Object> interceptor = new MethodInvocation<Object>() {
@@ -34,10 +35,15 @@ public class CurrentResource extends br.eti.clairton.vraptor.hypermedia.CurrentR
 			final Extractor extractor, final Inflector inflector,
 			final ControllerMethod method, final Proxifier proxifier) {
 		super(request, method);
-		final Class<?> controller = method.getController().getType();
-		final Object proxy = proxifier.proxify(controller, interceptor);
-		this.resource = extractor.getResource(proxy);
-		this.operation = getOperation(method, extractor);
+		if (method != null) {
+			final Class<?> controller = method.getController().getType();
+			final Object proxy = proxifier.proxify(controller, interceptor);
+			this.resource = extractor.getResource(proxy);
+			this.operation = extractor.getOperation(method.getMethod());
+		} else {
+			this.resource = null;
+			this.operation = null;
+		}
 	}
 
 	@Produces
@@ -50,11 +56,6 @@ public class CurrentResource extends br.eti.clairton.vraptor.hypermedia.CurrentR
 	@Operation
 	public String getOperation() {
 		return operation;
-	}
-
-	private String getOperation(ControllerMethod method,
-			final Extractor extractor) {
-		return extractor.getOperation(method.getMethod());
 	}
 
 	public static String getResource(final String uri, final Inflector inflector) {
