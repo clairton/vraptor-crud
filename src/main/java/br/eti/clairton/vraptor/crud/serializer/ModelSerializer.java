@@ -27,13 +27,18 @@ import com.google.gson.JsonSerializer;
 @Vetoed
 public class ModelSerializer implements JsonSerializer<Model> {
 	private final JpaSerializer<Model> jpaSerializer;
-	private final HypermediableSerializer hypermediaSerializer;
+	private final HypermediableRule navigator;
+	private final String operation;
+	private final String resource;
 
 	public ModelSerializer(final Mirror mirror, final Logger logger,
 			final HypermediableRule navigator, final String operation,
 			final String resource) {
-		jpaSerializer = new JpaSerializer<Model>(mirror, logger) {};
-		hypermediaSerializer = new HypermediableSerializer(navigator, operation, resource){};
+		jpaSerializer = new JpaSerializer<Model>(mirror, logger) {
+		};
+		this.navigator = navigator;
+		this.operation = operation;
+		this.resource = resource;
 	}
 
 	public void addIgnoredField(@NotNull final String field) {
@@ -47,8 +52,12 @@ public class ModelSerializer implements JsonSerializer<Model> {
 	public JsonElement serialize(final Model src, final Type type,
 			final JsonSerializationContext context) {
 		if (Hypermediable.class.isInstance(src)) {
-			return hypermediaSerializer.serialize((Hypermediable) src, type,
-					context);
+			final JpaSerializer<?> o = (JpaSerializer<?>) jpaSerializer;
+			@SuppressWarnings("unchecked")
+			final JpaSerializer<Hypermediable> serializer = (JpaSerializer<Hypermediable>) o;
+			return new HypermediableSerializer(navigator, operation, resource,
+					serializer) {
+			}.serialize((Hypermediable) src, type, context);
 		} else {
 			return jpaSerializer.serialize(src, type, context);
 		}
