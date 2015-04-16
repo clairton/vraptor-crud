@@ -9,6 +9,9 @@ import net.vidageek.mirror.dsl.Mirror;
 import org.apache.logging.log4j.Logger;
 
 import br.eti.clairton.repository.Model;
+import br.eti.clairton.vraptor.hypermedia.HypermediableRule;
+import br.eti.clairton.vraptor.hypermedia.Operation;
+import br.eti.clairton.vraptor.hypermedia.Resource;
 
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
@@ -24,7 +27,9 @@ public class Producer {
 
 	@Produces
 	public JsonSerializer<Model> serializer(final @NotNull Mirror mirror,
-			final @NotNull Logger logger) {
-		return new ModelSerializer(mirror, logger);
+			final @NotNull Logger logger, final HypermediableRule navigator,
+			final @Operation String operation, final @Resource String resource) {
+		return new ModelSerializer(mirror, logger, navigator, operation,
+				resource);
 	}
 }

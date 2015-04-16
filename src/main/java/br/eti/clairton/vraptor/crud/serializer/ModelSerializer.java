@@ -3,7 +3,6 @@ package br.eti.clairton.vraptor.crud.serializer;
 import java.lang.reflect.Type;
 
 import javax.enterprise.inject.Vetoed;
-import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -12,6 +11,9 @@ import org.apache.logging.log4j.Logger;
 
 import br.eti.clairton.jpa.serializer.JpaSerializer;
 import br.eti.clairton.repository.Model;
+import br.eti.clairton.vraptor.hypermedia.Hypermediable;
+import br.eti.clairton.vraptor.hypermedia.HypermediableRule;
+import br.eti.clairton.vraptor.hypermedia.HypermediableSerializer;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
@@ -24,22 +26,18 @@ import com.google.gson.JsonSerializer;
  */
 @Vetoed
 public class ModelSerializer implements JsonSerializer<Model> {
-	private final JpaSerializer<Model> delegate;
+	private final JpaSerializer<Model> jpaSerializer;
+	private final HypermediableSerializer hypermediaSerializer;
 
-	@Deprecated
-	protected ModelSerializer() {
-		this(null, null);
-	}
-
-	@Inject
-	public ModelSerializer(@NotNull final Mirror mirror,
-			@NotNull final Logger logger) {
-		delegate = new JpaSerializer<Model>(mirror, logger) {
-		};
+	public ModelSerializer(final Mirror mirror, final Logger logger,
+			final HypermediableRule navigator, final String operation,
+			final String resource) {
+		jpaSerializer = new JpaSerializer<Model>(mirror, logger) {};
+		hypermediaSerializer = new HypermediableSerializer(navigator, operation, resource){};
 	}
 
 	public void addIgnoredField(@NotNull final String field) {
-		delegate.addIgnoredField(field);
+		jpaSerializer.addIgnoredField(field);
 	}
 
 	/**
@@ -48,6 +46,11 @@ public class ModelSerializer implements JsonSerializer<Model> {
 	@Override
 	public JsonElement serialize(final Model src, final Type type,
 			final JsonSerializationContext context) {
-		return delegate.serialize(src, type, context);
+		if (Hypermediable.class.isInstance(src)) {
+			return hypermediaSerializer.serialize((Hypermediable) src, type,
+					context);
+		} else {
+			return jpaSerializer.serialize(src, type, context);
+		}
 	}
 }

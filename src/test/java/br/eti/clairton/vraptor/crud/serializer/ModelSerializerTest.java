@@ -26,6 +26,9 @@ import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.eti.clairton.cdi.test.CdiJUnit4Runner;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
+import br.eti.clairton.vraptor.hypermedia.HypermediableRule;
+import br.eti.clairton.vraptor.hypermedia.Operation;
+import br.eti.clairton.vraptor.hypermedia.Resource;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -133,9 +136,12 @@ class OutroModelSerialiazer implements JsonSerializer<OutroModel> {
 	private final ModelSerializer modelSerializer;
 
 	@Inject
-	public OutroModelSerialiazer(Mirror mirror, Logger logger) {
+	public OutroModelSerialiazer(Mirror mirror, Logger logger,
+			final HypermediableRule navigator,
+			final @Operation String operation, final @Resource String resource) {
 		super();
-		this.modelSerializer = new ModelSerializer(mirror, logger);
+		this.modelSerializer = new ModelSerializer(mirror, logger, navigator,
+				operation, resource);
 		modelSerializer.addIgnoredField("nome");
 	}
 
