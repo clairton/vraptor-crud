@@ -1,0 +1,15 @@
+<settings>
+  <servers>
+    <server>
+      <id>mvn-repo</id>
+      <configuration>
+        <httpHeaders>
+          <property>
+            <name>x-oauth-basic</name>
+            <value>${env.TOKEN}</value>
+          </property>
+        </httpHeaders>
+      </configuration>
+    </server>
+  </servers>
+</settings> 
