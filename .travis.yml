@@ -1,8 +1,6 @@
 language: java
 jdk:
-- oraclejdk8
+  - oraclejdk8
 after_success:
-- mvn deploy -DskipTests
-env:
-  global:
-    secure: EuzQup+sU1dGlQ/7hp3vZFxPu0lrL24RMbxsjqIYRhS9USWycuftv3OahcnM5D3CkJKDNL97Y0Oe0QUSVWggGx30GmOrE7nJBePTJH/Jb6oqOK+9CKcFbWaFZFwd5I/EyQxxGDd1sBXYcsfzzCIKpRaRqbJTHv/xyztOh5YGTwI=
+  - echo "<settings><servers><server><id>mvn-repo</id><configuration><httpHeaders><property><name>x-oauth-basic</name><value>\${env.TOKEN}</value></property></httpHeaders></configuration></server></servers></settings>" > ~/settings.xml
+  - mvn deploy -DskipTests --settings ~/settings.xml
