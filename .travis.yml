@@ -2,10 +2,9 @@ language: java
 jdk: 
   - oraclejdk8
 before_install:
-  - echo $env.PUBLIC_KEY > ~/.ssh/travis_rsa_64.pub
-  - cat ~/.ssh/travis_rsa_64.pub
+  - echo $PUBLIC_KEY > ~/.ssh/travis_rsa_64.pub
   - base64 --decode --ignore-garbage ~/.ssh/travis_rsa_64.pub > ~/.ssh/id_rsa.pub
-  - echo $env.PRIVATE_KEY > ~/.ssh/travis_rsa_64
+  - echo $PRIVATE_KEY > ~/.ssh/travis_rsa_64
   - base64 --decode --ignore-garbage ~/.ssh/travis_rsa_64 > ~/.ssh/id_rsa
   - chmod 600 ~/.ssh/id_rsa
   - eval "$(ssh-agent -s)"
