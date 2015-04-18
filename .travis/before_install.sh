@@ -7,7 +7,7 @@ git config --global user.name "Travis CI"
 cat > ~/.ssh/id_rsa << EOL
 $env.PRIVATE_KEY
 EOL
- 
+
 chmod 600 ~/.ssh/id_rsa
 
 echo -e ">>> Hi github.com !"
