@@ -4,8 +4,8 @@ jdk:
 before_install:
   - echo "\$env.PUBLIC_KEY" > ~/.ssh/id_rsa.pub
   - echo "\$env.PRIVATE_KEY" > ~/.ssh/id_rsa
-  - eval "$(ssh-agent -s)"
   - chmod 400 ~/.ssh/id_rsa
+  - eval "$(ssh-agent -s)"
   - ssh-add ~/.ssh/id_rsa
   - ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 install: mvn deploy
