@@ -10,5 +10,4 @@ before_install:
   - eval "$(ssh-agent -s)"
   - ssh-add ~/.ssh/id_rsa
   - ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-  - ssh -T git@github.com
 install: mvn deploy
