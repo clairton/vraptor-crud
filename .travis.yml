@@ -1,6 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
-after_success:
+before_script:
   - echo "<settings><servers><server><id>mvn-repo</id><configuration><httpHeaders><property><name>x-oauth-basic</name><value>\${env.TOKEN}</value></property></httpHeaders></configuration></server></servers></settings>" > ~/settings.xml
-  - mvn deploy -DskipTests --settings ~/settings.xml
+script: mvn deploy --settings ~/settings.xml
