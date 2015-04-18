@@ -1,4 +1,4 @@
-# vraptor-crud [![Build Status](https://travis-ci.org/clairton/vraptor-crud.svg?branch=master)](https://travis-ci.org/clairton/vraptor-crud)
+# vraptor-crud[![Build Status](https://drone.io/github.com/clairton/vraptor-crud/status.png)](https://drone.io/github.com/clairton/vraptor-crud/latest)
 Bootstrap para construir uma aplicação REST com VRaptor para Single Page Application.
 
 É necessário usar a versão do java 1.8+ e usar o parametro --parameters na compilação.
