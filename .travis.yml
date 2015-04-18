@@ -1,9 +1,4 @@
 language: java
-jdk: 
-  - oraclejdk8
-before_install:
-  - echo "\$env.PUBLIC_KEY" > ~/.ssh/id_rsa.pub
-  - echo "\$env.PRIVATE_KEY" > ~/.ssh/id_rsa
-  - chmod 600 ~/.ssh/id_rsa
-  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+jdk: oraclejdk8
+before_install: .travis/before_install.sh
 install: mvn deploy
