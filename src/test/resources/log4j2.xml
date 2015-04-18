@@ -7,12 +7,12 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.apache.log4j.xml" level="info" />
-		<Logger name="org.jboss.weld" level="info" />
+		<Logger name="org.apache.log4j.xml" level="warn" />
+		<Logger name="org.jboss.weld" level="warn" />
 		<Logger name="br.eti.clairton" level="info" />
 		<Logger name="br.com.caelum" level="info" />
-		<Logger name="hibernate" level="info" />
-		<Logger name="org.hibernate" level="info" />
+		<Logger name="hibernate" level="warn" />
+		<Logger name="org.hibernate" level="warn" />
 		<Root level="debug">
 			<AppenderRef ref="STDOUT" />
 		</Root>
