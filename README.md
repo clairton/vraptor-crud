@@ -37,7 +37,7 @@ e promulgando-as caso não as conheça, para habilita-lo deve adicionar a classe
 ```
 
 
-O vraptor-crud possui um controller abstrato que pode ser extendido e com pouco esforço disponibiliza
+O vraptor-crud possui um controller abstrato que quando extendido pouco esforço disponibiliza
 em REST as operações básicas do CRUD por exemplo:
 ```java
 @Controller
@@ -62,7 +62,7 @@ especificos a pluralização não der certo, verifique o manual do https://githu
 que é a lib usada para fazer isso.
 De qualquer forma ao criar um controller extendendo de CrudController, terá as seguintes URL's:
 ```http
-URL                    HTTP Method   Method Java
+URL                    HTTP Method   Java Method
 /aplicacoes/new        [GET]         CrudController#new
 /aplicacoes/{id}/edit  [GET]         CrudController#edit(id)
 /aplicacoes/{id}       [GET]         CrudController#show(id)
@@ -72,6 +72,8 @@ URL                    HTTP Method   Method Java
 /aplicacoes/{id}       [DELETE]      CrudController#destroy(id)
 
 ``` 
+
+O formato aceito é JSON, sendo necessário setar o "Content-type" "como application/json".
 
 Se desejar que seu recurso seja multi-tenancy injete um Repository com o qualifier @Tenant, veja mais em
 https://github.com/clairton/tenant e https://github.com/clairton/repository.
