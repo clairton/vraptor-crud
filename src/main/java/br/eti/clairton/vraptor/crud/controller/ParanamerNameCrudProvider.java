@@ -58,9 +58,9 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 		if (isActive() && executable instanceof Method) {
 			final Method method = (Method) executable;
 			final Class<?> klass = method.getDeclaringClass();
-			if (CrudController.class.equals(klass)) {
+			if (CrudController.class.isAssignableFrom(klass)) {
 				for (final Parameter p : out) {
-					if ("model".equals(p.getName()) && Model.class.equals(p.getType())) {
+					if ("model".equals(p.getName()) && Model.class.isAssignableFrom(p.getType())) {
 						final ControllerMethod controllerMethod = getControllerMethod();
 						if (controllerMethod == null) {
 							continue;
