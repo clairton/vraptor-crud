@@ -59,7 +59,7 @@ public class ModelDeserializerTest {
 		final Aplicacao result = gson.fromJson(json, Aplicacao.class);
 		assertEquals("Teste", result.getNome());
 		assertEquals("0", result.getId().toString());
-		assertEquals(1, result.getRecursos().size());
+		assertEquals(2, result.getRecursos().size());
 	}
 
 	@Test

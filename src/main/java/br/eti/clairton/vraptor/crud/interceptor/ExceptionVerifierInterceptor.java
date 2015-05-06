@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -89,7 +90,11 @@ public class ExceptionVerifierInterceptor {
 			errors = asMessage(e.getMessage());
 		} catch (final ConstraintViolationException e) {
 			logger.debug("ConstraintViolation: {}", e.getMessage());
-			errors = adapter.to(e.getConstraintViolations());
+			@SuppressWarnings("rawtypes")
+			final Set violations = e.getConstraintViolations();
+			@SuppressWarnings("unchecked")
+			final Object b = adapter.to(violations);
+			errors = b;
 			status = 422;
 		} catch (final OptimisticLockException e) {
 			logger.debug("OptimisticLock: {}", e.getMessage());

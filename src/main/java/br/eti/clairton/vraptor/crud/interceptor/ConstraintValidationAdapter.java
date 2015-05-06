@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.enterprise.context.Dependent;
 import javax.validation.ConstraintViolation;
 
+import br.eti.clairton.inflector.Inflector;
+
 /**
  * Transforma as mensagens do BeanValidation em um map.
  * 
@@ -18,7 +20,8 @@ import javax.validation.ConstraintViolation;
  */
 @Dependent
 public class ConstraintValidationAdapter {
-
+	private final Inflector inflector = new Inflector();
+	
 	/**
 	 * Transforma as mensagens do BeanValidation em um map.
 	 * 
@@ -26,10 +29,14 @@ public class ConstraintValidationAdapter {
 	 *            violações do bean validation
 	 * @return map com os erros, sendo a chave o nome do atributo
 	 */
-	public Map<String, List<String>> to(final Set<ConstraintViolation<?>> violations) {
+	public <T>Map<String, List<String>> to(final Set<ConstraintViolation<T>> violations) {
 		final Map<String, List<String>> errors = new HashMap<String, List<String>>();
 		for (final ConstraintViolation<?> violation : violations) {
-			final String key = violation.getPropertyPath().toString();
+			String key = violation.getPropertyPath().toString();
+			if(key.isEmpty()){
+				final Class<?> type = violation.getRootBeanClass();
+				key = inflector.uncapitalize(type.getSimpleName());
+			}
 			if (!errors.containsKey(key)) {
 				errors.put(key, new ArrayList<String>());
 			}
