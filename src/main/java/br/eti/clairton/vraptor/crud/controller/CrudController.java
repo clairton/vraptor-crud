@@ -192,7 +192,7 @@ public abstract class CrudController<T extends Model> {
 	@Protected
 	@Authenticated
 	@ExceptionVerifier
-	public void destroy(final Long id) {
+	public void remove(final Long id) {
 		repository.remove(modelType, id);
 		result.use(http()).setStatusCode(200);
 	}
