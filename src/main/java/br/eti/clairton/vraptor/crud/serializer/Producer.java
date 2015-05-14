@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import net.vidageek.mirror.dsl.Mirror;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.eti.clairton.repository.Model;
@@ -17,17 +18,18 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
 public class Producer {
+	private final Logger logger = LogManager.getLogger(ModelSerializer.class);
 
 	@Produces
 	public JsonDeserializer<Model> deserializer(
 			final @NotNull EntityManager entityManager,
-			final @NotNull Mirror mirror, final @NotNull Logger logger) {
+			final @NotNull Mirror mirror) {
 		return new ModelDeserializer(entityManager, mirror, logger);
 	}
 
 	@Produces
 	public JsonSerializer<Model> serializer(final @NotNull Mirror mirror,
-			final @NotNull Logger logger, final HypermediableRule navigator,
+			final HypermediableRule navigator,
 			final @Operation String operation, final @Resource String resource) {
 		return new ModelSerializer(mirror, logger, navigator, operation,
 				resource);
