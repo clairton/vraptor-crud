@@ -17,7 +17,7 @@ import br.com.caelum.vraptor.view.Status;
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
 @Intercepts
-public class CORSInterceptor {
+public class CorsInterceptor {
 
 	@Inject
 	private Result result;

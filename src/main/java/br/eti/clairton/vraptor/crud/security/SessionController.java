@@ -69,5 +69,4 @@ public class SessionController implements Serializable {
 	public void destroy(final String key) {
 		locksmith.invalidate(key);
 	}
-
 }

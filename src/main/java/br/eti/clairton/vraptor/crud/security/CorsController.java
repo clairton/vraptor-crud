@@ -22,7 +22,7 @@ import br.com.caelum.vraptor.view.Status;
  */
 @Controller
 @Path("")
-public class CORSController {
+public class CorsController {
 
 	@Inject
 	private Result result;
