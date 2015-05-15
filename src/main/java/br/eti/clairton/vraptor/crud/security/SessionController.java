@@ -1,5 +1,8 @@
 package br.eti.clairton.vraptor.crud.security;
 
+import static br.com.caelum.vraptor.view.Results.http;
+import static br.com.caelum.vraptor.view.Results.json;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -13,6 +16,7 @@ import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Post;
+import br.com.caelum.vraptor.Result;
 import br.eti.clairton.security.Locksmith;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 
@@ -21,13 +25,14 @@ public class SessionController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final Locksmith locksmith;
 	private final HttpServletResponse response;
+	private final Result result;
 
 	/**
 	 * CDI eye only.
 	 */
 	@Deprecated
 	protected SessionController() {
-		this(null, null);
+		this(null, null, null);
 	}
 
 	/**
@@ -40,9 +45,10 @@ public class SessionController implements Serializable {
 	 */
 	@Inject
 	public SessionController(final Locksmith locksmith,
-			final HttpServletResponse response) {
+			final HttpServletResponse response, final Result result) {
 		this.locksmith = locksmith;
 		this.response = response;
+		this.result = result;
 	}
 
 	@Post
@@ -50,16 +56,21 @@ public class SessionController implements Serializable {
 	@Consumes("application/json")
 	public void create(@NotNull final String user,
 			@NotNull final String password) throws CredentialNotFoundException {
-		try {
-			final String token = locksmith.create(user, password);
-			final PrintWriter writer = response.getWriter();
-			response.setStatus(201);
-			final String json = String.format("{\"token\": \"%s\"}", token);
-			writer.print(json);
-			writer.flush();
-			writer.close();
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
+		final String token = locksmith.create(user, password);
+		if (token instanceof String) {
+			try {
+				final PrintWriter writer = response.getWriter();
+				response.setStatus(201);
+				final String json = String.format("{\"token\": \"%s\"}", token);
+				writer.print(json);
+				writer.flush();
+				writer.close();
+			} catch (final IOException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			result.use(http()).setStatusCode(201);
+			result.use(json()).from(token).serialize();
 		}
 	}
 
