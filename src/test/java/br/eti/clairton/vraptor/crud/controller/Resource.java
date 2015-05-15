@@ -1,6 +1,10 @@
 package br.eti.clairton.vraptor.crud.controller;
 
 import java.sql.Connection;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -25,6 +29,8 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.AttributeBuilder;
 import br.eti.clairton.security.App;
+import br.eti.clairton.security.Gate;
+import br.eti.clairton.security.GateInMemory;
 import br.eti.clairton.security.Lock;
 import br.eti.clairton.security.LockInMemory;
 import br.eti.clairton.security.Locksmith;
@@ -154,5 +160,24 @@ public class Resource {
 	@Produces
 	public Locksmith getLocksmith(@Default Lock lock) {
 		return new LocksmithInMemory(lock);
+	}
+
+	@Produces
+	public Gate getGate() {
+		final Map<String, Map<String, List<String>>> roles = new HashMap<String, Map<String, List<String>>>() {
+			private static final long serialVersionUID = 1L;
+
+			{
+				put("Pass", new HashMap<String, List<String>>() {
+					private static final long serialVersionUID = 1L;
+					{
+						put("aplicacao", Arrays.asList("create", "update"));
+					}
+				});
+			}
+		};
+		Map<String, Map<String, Map<String, List<String>>>> authorizations = new HashMap<String, Map<String, Map<String, List<String>>>>();
+		authorizations.put("admin", roles);
+		return new GateInMemory();
 	}
 }

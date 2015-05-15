@@ -188,8 +188,6 @@ public class CrudControllerTest {
 		final List<?> aplicacoes = (List<?>) o.get("aplicacoes");
 		assertNotNull(aplicacoes);
 		assertEquals(3, aplicacoes.size());
-		final List<?> links = (List<?>) o.get("links");
-		assertEquals(1, links.size());
 	}
 
 	@Test
@@ -201,8 +199,6 @@ public class CrudControllerTest {
 		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		final Map<?, ?> aplicacao = (Map<?, ?>) o.get("aplicacao");
 		assertEquals("Testezinho", aplicacao.get("nome"));
-		final List<?> links = (List<?>) aplicacao.get("links");
-		assertEquals(1, links.size());
 		assertEquals(Double.valueOf(id), aplicacao.get("id"));
 	}
 

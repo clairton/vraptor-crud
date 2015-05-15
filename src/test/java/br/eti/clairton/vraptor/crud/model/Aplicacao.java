@@ -13,6 +13,8 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import br.eti.clairton.repository.Model;
+
 /**
  * Representa uma Aplicação.
  * 
