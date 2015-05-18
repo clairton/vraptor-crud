@@ -2,7 +2,7 @@ package br.eti.clairton.vraptor.crud.serializer;
 
 import java.lang.reflect.Type;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
@@ -26,7 +26,7 @@ import com.google.gson.JsonParseException;
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
-@Dependent
+@Vetoed
 public class ModelDeserializer implements JsonDeserializer<Model> {
 	private final JpaDeserializer<Model> delegate;
 	private final Logger logger = LogManager.getLogger(JpaSerializer.class);

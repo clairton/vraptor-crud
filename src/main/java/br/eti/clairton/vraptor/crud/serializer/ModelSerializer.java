@@ -2,7 +2,7 @@ package br.eti.clairton.vraptor.crud.serializer;
 
 import java.lang.reflect.Type;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
@@ -23,7 +23,7 @@ import com.google.gson.JsonSerializer;
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
-@Dependent
+@Vetoed
 public class ModelSerializer implements JsonSerializer<Model> {
 	private final Logger logger = LogManager.getLogger(JpaSerializer.class);
 	private final JpaSerializer<Model> jpaSerializer;

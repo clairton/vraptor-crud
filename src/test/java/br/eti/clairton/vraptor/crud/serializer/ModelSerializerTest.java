@@ -12,17 +12,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
 
-import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
+import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
+import br.com.caelum.vraptor.serialization.gson.RegisterType;
 import br.eti.clairton.cdi.test.CdiJUnit4Runner;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
@@ -113,6 +114,13 @@ public class ModelSerializerTest {
 		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
 		assertEquals(asList(100.0, 200.0), resultado.get("aplicacoes"));
 	}
+	
+
+	@Produces
+	public JsonSerializer<OutroModel> produce() {
+		return new OutroModelSerialiazer(new Mirror());
+	}
+
 }
 
 class OutroModel extends Aplicacao {
@@ -128,12 +136,13 @@ class OutroModel extends Aplicacao {
 	}
 }
 
-@Dependent
+
+@RegisterStrategy(RegisterType.SINGLE)
 class OutroModelSerialiazer implements JsonSerializer<OutroModel> {
 	private final ModelSerializer modelSerializer;
 
 	@Inject
-	public OutroModelSerialiazer(Mirror mirror, Logger logger) {
+	public OutroModelSerialiazer(Mirror mirror) {
 		super();
 		this.modelSerializer = new ModelSerializer(mirror);
 		modelSerializer.addIgnoredField("nome");
