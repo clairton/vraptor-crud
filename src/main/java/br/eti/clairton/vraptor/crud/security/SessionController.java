@@ -1,7 +1,7 @@
 package br.eti.clairton.vraptor.crud.security;
 
-import static br.com.caelum.vraptor.view.Results.json;
 import static br.com.caelum.vraptor.view.Results.http;
+import static br.com.caelum.vraptor.view.Results.json;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +17,7 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.http.MutableRequest;
 import br.eti.clairton.security.Locksmith;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 
@@ -25,6 +26,7 @@ public class SessionController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final Locksmith locksmith;
 	private final HttpServletResponse response;
+	private final MutableRequest request;
 	private final Result result;
 
 	/**
@@ -32,7 +34,7 @@ public class SessionController implements Serializable {
 	 */
 	@Deprecated
 	protected SessionController() {
-		this(null, null, null);
+		this(null, null, null, null);
 	}
 
 	/**
@@ -45,18 +47,21 @@ public class SessionController implements Serializable {
 	 */
 	@Inject
 	public SessionController(final Locksmith locksmith,
-			final HttpServletResponse response, final Result result) {
+			final HttpServletResponse response, final MutableRequest request,
+			final Result result) {
 		this.locksmith = locksmith;
 		this.response = response;
 		this.result = result;
+		this.request = request;
 	}
 
 	@Post
 	@ExceptionVerifier
 	@Consumes(value = "application/json")
-	public <T>void create(@NotNull final String user,
+	public <T> void create(@NotNull final String user,
 			@NotNull final String password) throws CredentialNotFoundException {
 		final T token = locksmith.create(user, password);
+		request.setParameter("Authorization", "Bearer " + token);
 		if (token instanceof String) {
 			try {
 				final PrintWriter writer = response.getWriter();
