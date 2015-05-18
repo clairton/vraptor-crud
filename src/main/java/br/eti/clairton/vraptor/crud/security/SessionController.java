@@ -1,7 +1,7 @@
 package br.eti.clairton.vraptor.crud.security;
 
-import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
+import static br.com.caelum.vraptor.view.Results.http;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,10 +53,10 @@ public class SessionController implements Serializable {
 
 	@Post
 	@ExceptionVerifier
-	@Consumes("application/json")
-	public void create(@NotNull final String user,
+	@Consumes(value = "application/json")
+	public <T>void create(@NotNull final String user,
 			@NotNull final String password) throws CredentialNotFoundException {
-		final String token = locksmith.create(user, password);
+		final T token = locksmith.create(user, password);
 		if (token instanceof String) {
 			try {
 				final PrintWriter writer = response.getWriter();
@@ -70,7 +70,7 @@ public class SessionController implements Serializable {
 			}
 		} else {
 			result.use(http()).setStatusCode(201);
-			result.use(json()).from(token).serialize();
+			result.use(json()).withoutRoot().from(token).serialize();
 		}
 	}
 
