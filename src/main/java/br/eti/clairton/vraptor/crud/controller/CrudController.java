@@ -14,6 +14,9 @@ import java.util.Map;
 import javax.servlet.ServletRequest;
 import javax.validation.constraints.NotNull;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
@@ -42,6 +45,8 @@ import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
  *            tipo do modelo
  */
 public abstract class CrudController<T extends Model> {
+	private final Logger logger = LogManager.getLogger(CrudController.class);
+
 	private final Repository repository;
 
 	private final Class<T> modelType;
@@ -100,6 +105,7 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void create(final T model) {
+		logger.debug("Salvando registro");
 		final T response = repository.save(model);
 		serialize(response);
 	}
@@ -112,6 +118,7 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void index() {
+		logger.debug("Recuperando registros");
 		final Collection<T> collection = find();
 		serialize(collection);
 	}
@@ -128,13 +135,8 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	@Operation("new")
 	public void new_() {
-		final T response;
-		try {
-			final Constructor<T> constructor = modelType.getConstructor();
-			response = constructor.newInstance();
-		} catch (final Exception e) {
-			throw new NotNewableExeception(e);
-		}
+		logger.debug("Criando registro");
+		final T response = createResource();
 		serialize(response);
 	}
 
@@ -143,6 +145,7 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void edit(final Long id) {
+		logger.debug("Editando registro");
 		retrieve(id);
 	}
 
@@ -157,6 +160,7 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void show(final Long id) {
+		logger.debug("Mostrando registro");
 		retrieve(id);
 	}
 
@@ -171,6 +175,7 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void remove(final Long id) {
+		logger.debug("Removendo registro");
 		repository.remove(modelType, id);
 		result.use(http()).setStatusCode(200);
 	}
@@ -189,6 +194,7 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void update(final T model) {
+		logger.debug("Atualizando registro");
 		final T response = repository.save(model);
 		serialize(response);
 	}
@@ -240,6 +246,15 @@ public abstract class CrudController<T extends Model> {
 			repository.where(predicates);
 		}
 		return repository.list(paginate.offset, paginate.limit);
+	}
+
+	protected T createResource() {
+		try {
+			final Constructor<T> constructor = modelType.getConstructor();
+			return constructor.newInstance();
+		} catch (final Exception e) {
+			throw new NotNewableExeception(e);
+		}
 	}
 
 	private void retrieve(final Long id) {
