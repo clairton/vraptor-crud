@@ -111,7 +111,8 @@ public abstract class CrudController<T extends Model> {
 	}
 
 	/**
-	 * Mostra os recursos. Parametros para filtagem são mandados na URL.
+	 * Mostra os recursos.<br/>
+	 * Parametros para pesquisa são mandados na URL.
 	 */
 	@Get
 	@Protected
@@ -140,6 +141,12 @@ public abstract class CrudController<T extends Model> {
 		serialize(response);
 	}
 
+	/**
+	 * Edita um recurso.
+	 * 
+	 * @param id
+	 *            do recurso
+	 */
 	@Get("{id}/edit")
 	@Protected
 	@Authenticated
@@ -165,7 +172,7 @@ public abstract class CrudController<T extends Model> {
 	}
 
 	/**
-	 * Deleta um recurso.
+	 * Remove um recurso.
 	 * 
 	 * @param id
 	 *            id do recurso
@@ -200,7 +207,7 @@ public abstract class CrudController<T extends Model> {
 	}
 
 	/**
-	 * serialize {@inheritDoc}
+	 * Nome do recurso atual.
 	 */
 	@Resource
 	@Ignore
@@ -219,6 +226,12 @@ public abstract class CrudController<T extends Model> {
 		serializer.serialize();
 	}
 
+	/**
+	 * Serializa um coleção.
+	 * 
+	 * @param collection
+	 *            coleção a ser serializada
+	 */
 	protected void serialize(final Collection<T> collection) {
 		final String plural = inflector.pluralize(modelType.getSimpleName());
 		final String tag = inflector.uncapitalize(plural);
