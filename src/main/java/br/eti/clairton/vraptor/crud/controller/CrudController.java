@@ -85,15 +85,7 @@ public abstract class CrudController<T extends Model> {
 		this.inflector = inflector;
 		this.request = request;
 		this.queryParser = queryParser;
-		if (modelType != null) {
-			final StringBuilder builder = new StringBuilder();
-			final String simpleName = modelType.getSimpleName();
-			builder.append(simpleName.substring(0, 1).toLowerCase());
-			builder.append(simpleName.substring(1));
-			this.resourceName = builder.toString();
-		} else {
-			resourceName = null;
-		}
+		this.resourceName = resourceName();
 	}
 
 	/**
@@ -225,6 +217,18 @@ public abstract class CrudController<T extends Model> {
 		final String plural = inflector.pluralize(modelType.getSimpleName());
 		final String tag = inflector.uncapitalize(plural);
 		result.use(json()).from(collection, tag).serialize();
+	}
+
+	protected String resourceName() {
+		if (modelType != null) {
+			final StringBuilder builder = new StringBuilder();
+			final String simpleName = modelType.getSimpleName();
+			builder.append(simpleName.substring(0, 1).toLowerCase());
+			builder.append(simpleName.substring(1));
+			return builder.toString();
+		} else {
+			return null;
+		}
 	}
 
 	protected List<T> find() {
