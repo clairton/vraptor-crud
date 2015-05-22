@@ -8,6 +8,7 @@ import static br.eti.clairton.vraptor.crud.controller.Param.PER_PAGE;
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -74,8 +75,7 @@ public abstract class CrudController<T extends Model> {
 	 *            instancia de quey parser
 	 */
 	public CrudController(final @NotNull Class<T> modelType,
-			final @NotNull Repository repository, 
-			final @NotNull Result result,
+			final @NotNull Repository repository, final @NotNull Result result,
 			final @Language @NotNull Inflector inflector,
 			final @NotNull ServletRequest request,
 			final @NotNull QueryParser queryParser) {
@@ -87,13 +87,13 @@ public abstract class CrudController<T extends Model> {
 		this.queryParser = queryParser;
 		if (modelType != null) {
 			final StringBuilder builder = new StringBuilder();
- 			final String simpleName = modelType.getSimpleName();
+			final String simpleName = modelType.getSimpleName();
 			builder.append(simpleName.substring(0, 1).toLowerCase());
 			builder.append(simpleName.substring(1));
 			this.resourceName = builder.toString();
- 		} else {
- 			resourceName = null;
- 		}
+		} else {
+			resourceName = null;
+		}
 	}
 
 	/**
@@ -120,16 +120,7 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void index() {
-		final Page paginate = paginate();
-		final Integer page = paginate.offset;
-		final Integer perPage = paginate.limit;
-		final Collection<Predicate> predicates = getPredicates();
-		repository.from(modelType);
-		repository.distinct();
-		if (!predicates.isEmpty()) {
-			repository.where(predicates);
-		}
-		final Collection<T> collection = repository.collection(page, perPage);
+		final Collection<T> collection = find();
 		serialize(collection);
 	}
 
@@ -227,17 +218,24 @@ public abstract class CrudController<T extends Model> {
 	 */
 	protected void serialize(final T model) {
 		final Serializer serializer = result.use(json()).from(model);
-		serialize(serializer);
-	}
-
-	protected void serialize(final Serializer serializer) {
 		serializer.serialize();
 	}
 
 	protected void serialize(final Collection<T> collection) {
 		final String plural = inflector.pluralize(modelType.getSimpleName());
 		final String tag = inflector.uncapitalize(plural);
-		serialize(result.use(json()).from(collection, tag));
+		result.use(json()).from(collection, tag).serialize();
+	}
+
+	protected List<T> find() {
+		final Page paginate = paginate();
+		final Collection<Predicate> predicates = getPredicates();
+		repository.from(modelType);
+		repository.distinct();
+		if (!predicates.isEmpty()) {
+			repository.where(predicates);
+		}
+		return repository.list(paginate.offset, paginate.limit);
 	}
 
 	private void retrieve(final Long id) {
