@@ -2,9 +2,12 @@ package br.eti.clairton.vraptor.crud.controller;
 
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
+import static br.eti.clairton.vraptor.crud.controller.Param.PAGE;
+import static br.eti.clairton.vraptor.crud.controller.Param.PER_PAGE;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -71,8 +74,9 @@ public abstract class CrudController<T extends Model> {
 	 *            instancia de quey parser
 	 */
 	public CrudController(final @NotNull Class<T> modelType,
-			final @NotNull Repository repository, final @NotNull Result result,
-			@Language final @NotNull Inflector inflector,
+			final @NotNull Repository repository, 
+			final @NotNull Result result,
+			final @Language @NotNull Inflector inflector,
 			final @NotNull ServletRequest request,
 			final @NotNull QueryParser queryParser) {
 		this.repository = repository;
@@ -83,13 +87,13 @@ public abstract class CrudController<T extends Model> {
 		this.queryParser = queryParser;
 		if (modelType != null) {
 			final StringBuilder builder = new StringBuilder();
-			final String simpleName = modelType.getSimpleName();
+ 			final String simpleName = modelType.getSimpleName();
 			builder.append(simpleName.substring(0, 1).toLowerCase());
 			builder.append(simpleName.substring(1));
 			this.resourceName = builder.toString();
-		} else {
-			resourceName = null;
-		}
+ 		} else {
+ 			resourceName = null;
+ 		}
 	}
 
 	/**
@@ -116,19 +120,10 @@ public abstract class CrudController<T extends Model> {
 	@Authenticated
 	@ExceptionVerifier
 	public void index() {
-		final Map<String, String[]> params = request.getParameterMap();
-		final Integer page;
-		final Integer perPage;
-		if (params != null && params.containsKey(Param.PAGE)
-				&& params.containsKey(Param.PER_PAGE)) {
-			page = Integer.valueOf(params.get(Param.PAGE)[0]);
-			perPage = Integer.valueOf(params.get(Param.PER_PAGE)[0]);
-		} else {
-			page = 0;
-			perPage = 0;
-		}
-		final Collection<Predicate> predicates = queryParser.parse(request,
-				modelType);
+		final Page paginate = paginate();
+		final Integer page = paginate.offset;
+		final Integer perPage = paginate.limit;
+		final Collection<Predicate> predicates = getPredicates();
 		repository.from(modelType);
 		repository.distinct();
 		if (!predicates.isEmpty()) {
@@ -248,5 +243,39 @@ public abstract class CrudController<T extends Model> {
 	private void retrieve(final Long id) {
 		final T response = repository.byId(modelType, id);
 		serialize(response);
+	}
+
+	private Collection<Predicate> getPredicates() {
+		return queryParser.parse(request, modelType);
+	}
+
+	private Page paginate() {
+		final Map<String, String[]> params;
+		if (request.getParameterMap() != null) {
+			params = request.getParameterMap();
+		} else {
+			params = new HashMap<>();
+		}
+		final Integer page;
+		final Integer perPage;
+		if (params.containsKey(PAGE) && params.containsKey(PER_PAGE)) {
+			page = Integer.valueOf(params.get(PAGE)[0]);
+			perPage = Integer.valueOf(params.get(PER_PAGE)[0]);
+		} else {
+			page = 0;
+			perPage = 0;
+		}
+		return new Page(page, perPage);
+	}
+
+	private static class Page {
+		public final Integer offset;
+		public final Integer limit;
+
+		public Page(final Integer offet, final Integer limit) {
+			super();
+			this.offset = offet;
+			this.limit = limit;
+		}
 	}
 }

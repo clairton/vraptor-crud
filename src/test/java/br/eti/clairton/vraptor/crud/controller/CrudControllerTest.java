@@ -29,6 +29,8 @@ import br.com.caelum.vraptor.controller.HttpMethod;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
+import br.eti.clairton.inflector.Inflector;
+import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
 
@@ -89,10 +91,8 @@ public class CrudControllerTest {
 		final UserFlow userFlow = navigate().post("/aplicacoes", parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
-		Long id = assertAplicacao(new Aplicacao("teste"),
-				result.getResponseBody());
-		assertEquals(200, navigate().get("/aplicacoes/" + id).execute()
-				.getResponse().getStatus());
+		final Long id = assertAplicacao(new Aplicacao("teste"), result.getResponseBody());
+		assertEquals(200, navigate().get("/aplicacoes/" + id).execute().getResponse().getStatus());
 	}
 
 	@Test
@@ -276,7 +276,7 @@ public class CrudControllerTest {
 	public void testGetResourceName() {
 		final String resourceName = "aplicacao";
 		final CrudController<Aplicacao> resourceable = new CrudController<Aplicacao>(
-				Aplicacao.class, null, null, null, null, null) {
+				Aplicacao.class, null, null, Inflector.getForLocale(Locale.pt_BR), null, null) {
 		};
 		assertEquals(resourceName, resourceable.getResourceName());
 	}
