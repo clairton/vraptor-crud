@@ -8,7 +8,6 @@ import static br.eti.clairton.vraptor.crud.controller.Param.PER_PAGE;
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -27,7 +26,9 @@ import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.gson.WithRoot;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
+import br.eti.clairton.repository.Meta;
 import br.eti.clairton.repository.Model;
+import br.eti.clairton.repository.PaginatedCollection;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.security.Authenticated;
@@ -120,7 +121,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void index() {
 		logger.debug("Recuperando registros");
-		final Collection<T> collection = find();
+		final PaginatedCollection<T, Meta> collection = find();
 		serialize(collection);
 	}
 
@@ -232,7 +233,7 @@ public abstract class CrudController<T extends Model> {
 	 * @param collection
 	 *            coleção a ser serializada
 	 */
-	protected void serialize(final Collection<T> collection) {
+	protected void serialize(final PaginatedCollection<T, Meta> collection) {
 		final String plural = inflector.pluralize(modelType.getSimpleName());
 		final String tag = inflector.uncapitalize(plural);
 		result.use(json()).from(collection, tag).serialize();
@@ -250,7 +251,7 @@ public abstract class CrudController<T extends Model> {
 		}
 	}
 
-	protected List<T> find() {
+	protected PaginatedCollection<T, Meta> find() {
 		final Page paginate = paginate();
 		final Collection<Predicate> predicates = getPredicates();
 		repository.from(modelType);
@@ -258,7 +259,7 @@ public abstract class CrudController<T extends Model> {
 		if (!predicates.isEmpty()) {
 			repository.where(predicates);
 		}
-		return repository.list(paginate.offset, paginate.limit);
+		return repository.collection(paginate.offset, paginate.limit);
 	}
 
 	protected T createResource() {
