@@ -3,7 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.eti.clairton</groupId>
 	<artifactId>vraptor-crud</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
+	<url>https://github.com/clairton/vraptor-crud</url>
+	<scm>
+      <connection>scm:git:git@github.com:clairton/vraptor-crud.git</connection>
+      <url>scm:git:git@github.com:clairton/vraptor-crud.git</url>
+      <developerConnection>scm:git:git@github.com:clairton/vraptor-crud.git</developerConnection>
+  </scm>
 	<properties>
 		<deltaspike.version>1.3.0</deltaspike.version>
 	</properties>
@@ -11,32 +17,56 @@
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>inflector</artifactId>
-			<version>0.0.1</version>
-			<scope>compile</scope>
+			<version>0.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.eti.clairton</groupId>
+			<artifactId>tenant</artifactId>
+			<version>0.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.eti.clairton</groupId>
+			<artifactId>identificator</artifactId>
+			<version>0.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.vidageek</groupId>
+			<artifactId>mirror</artifactId>
+			<version>1.6.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>jpa-serializer</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-			<scope>compile</scope>
+			<version>0.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>security</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-			<scope>compile</scope>
+			<version>0.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>repository</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-			<scope>compile</scope>
+			<version>0.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -113,7 +143,7 @@
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>ds-test</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>0.1.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
