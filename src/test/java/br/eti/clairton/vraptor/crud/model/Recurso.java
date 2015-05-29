@@ -16,12 +16,12 @@ public class Recurso extends br.eti.clairton.repository.Model {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@NotNull
-	private final Aplicacao aplicacao;
+	private Aplicacao aplicacao;
 
 	@NotNull
 	@Size(min = 1, max = 50)
 	@Identificator
-	private final String nome;
+	private String nome;
 
 	@Deprecated
 	public Recurso() {
