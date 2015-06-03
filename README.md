@@ -105,6 +105,8 @@ não é obrigatório, sendo que se não for informada é assumida como "igual".
 As operações lógicas disponíveis são:
 * == Igual
 * =* Igual ignorando maisculas e minusculas
+* * Contém
+* !* Não Contém
 * <> Diferente
 * ∃  Existe
 * ∅  Nulo
