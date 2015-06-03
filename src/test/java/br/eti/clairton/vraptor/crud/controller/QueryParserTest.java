@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -16,7 +17,9 @@ import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import br.eti.clairton.repository.Comparators;
+import br.eti.clairton.repository.Order;
 import br.eti.clairton.repository.Predicate;
+import br.eti.clairton.repository.Order.Type;
 import br.eti.clairton.vraptor.crud.controller.QueryParser;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Aplicacao_;
@@ -48,6 +51,19 @@ public class QueryParserTest {
 		assertEquals(Arrays.asList(values), predicateNome.getValue());
 		assertEquals("*", predicateNome.getComparator().toString());
 		assertEquals("nome", predicateNome.getAttribute().getName());
+	}
+
+	@Test
+	public void testOrder() {
+		request.addParameter("direction", new String[]{"asc", "desc"});
+		request.addParameter("sort", new String[]{"nome", "aplicacao.id", "aplicacao.nome"});
+		final List<Order> orders = queryParser.order(request, Recurso.class);
+		assertEquals(3, orders.size());
+		assertEquals(Type.ASC, orders.get(0).getType());
+		assertEquals(Type.DESC, orders.get(1).getType());
+		assertEquals(Type.ASC, orders.get(2).getType());
+		assertEquals(1, orders.get(0).getAttributes().size());
+		assertEquals(2, orders.get(1).getAttributes().size());
 	}
 
 	@Test

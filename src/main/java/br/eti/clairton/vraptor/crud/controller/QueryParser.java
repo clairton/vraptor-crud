@@ -1,9 +1,17 @@
 package br.eti.clairton.vraptor.crud.controller;
 
+import static br.eti.clairton.vraptor.crud.controller.Param.SORT;
+import static br.eti.clairton.vraptor.crud.controller.Param.PAGE;
+import static br.eti.clairton.vraptor.crud.controller.Param.PER_PAGE;
+import static br.eti.clairton.vraptor.crud.controller.Param.DIRECTION;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.enterprise.context.Dependent;
@@ -20,10 +28,14 @@ import br.eti.clairton.repository.AttributeBuilder;
 import br.eti.clairton.repository.Comparator;
 import br.eti.clairton.repository.Comparators;
 import br.eti.clairton.repository.Model;
+import br.eti.clairton.repository.Order;
+import br.eti.clairton.repository.Order.Type;
 import br.eti.clairton.repository.Predicate;
 
 @Dependent
 public class QueryParser {
+	private final List<String> query = Arrays.asList(SORT,PAGE,PER_PAGE,DIRECTION);
+	
 	private final AttributeBuilder builder;
 
 	private final Converters converters;
@@ -51,7 +63,7 @@ public class QueryParser {
 		final Enumeration<String> parameters = request.getParameterNames();
 		while (parameters.hasMoreElements()) {
 			final String field = parameters.nextElement();
-			if (Param.PAGE.equals(field) || Param.PER_PAGE.equals(field)) {
+			if (query.contains(field)) {
 				continue;
 			}
 			final Predicate predicate;
@@ -61,6 +73,62 @@ public class QueryParser {
 			predicates.add(predicate);
 		}
 		return predicates;
+	}
+	
+	public List<Order> order(final ServletRequest request,
+			final Class<? extends Model> modelType){
+		final Map<String, String[]> params;
+		if (request.getParameterMap() != null) {
+			params = request.getParameterMap();
+		} else {
+			params = new HashMap<>();
+		}
+		final String[] sort;
+		final String[] orderBy;
+		if (params.containsKey(DIRECTION)) {
+			sort = params.get(DIRECTION);
+		} else {
+			sort = new String[]{"asc"};
+		}
+		if (params.containsKey(SORT)) {
+			orderBy = params.get(SORT);
+		} else {
+			orderBy = new String[]{"id"};
+		}
+		final List<Order> orders = new ArrayList<>();
+		for(int i = 0, j = orderBy.length; i < j; i++){
+			final String field = orderBy[i];
+			final Attribute<?, ?>[] attrs = builder.with(modelType, field);
+			Type type;
+			try{
+				type = Type.byString(sort[i]);
+			}catch(ArrayIndexOutOfBoundsException e){
+				type = Type.ASC;
+			}
+			final Order order = new Order(type, attrs);
+			orders.add(order);
+		}
+		return orders;
+	}
+
+	public Page paginate(final ServletRequest request,
+			final Class<? extends Model> modelType) {
+		final Map<String, String[]> params;
+		if (request.getParameterMap() != null) {
+			params = request.getParameterMap();
+		} else {
+			params = new HashMap<>();
+		}
+		final Integer page;
+		final Integer perPage;
+		if (params.containsKey(PAGE) && params.containsKey(PER_PAGE)) {
+			page = Integer.valueOf(params.get(PAGE)[0]);
+			perPage = Integer.valueOf(params.get(PER_PAGE)[0]);
+		} else {
+			page = 0;
+			perPage = 0;
+		}
+		return new Page(page, perPage);
 	}
 
 	protected Record to(final String[] values) {

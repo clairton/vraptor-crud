@@ -178,6 +178,35 @@ public class CrudControllerTest {
 	}
 
 	@Test
+	public void testOrder() {
+		final Parameters decorator = parameters;
+		parameters = new Parameters() {
+			@Override
+			public void fill(final MockHttpServletRequest request) {
+				decorator.fill(request);
+				// nome=*Teste&direction=AsC&sort=nome
+				request.addParameter("nome", "*Teste");
+				request.addParameter("direction", "AsC");
+				request.addParameter("sort", "nome");
+			}
+		};
+		json = "{}";
+		final String url = "/aplicacoes";
+		final UserFlow flow = navigate().get(url, parameters);
+		final VRaptorTestResult result = flow.execute();
+		assertEquals(200, result.getResponse().getStatus());
+		final String response = result.getResponseBody();
+		final Map<?, ?> o = gson.fromJson(response, Map.class);
+		assertNotNull(o);
+		final List<?> aplicacoes = (List<?>) o.get("aplicacoes");
+		assertNotNull(aplicacoes);
+		assertEquals(3, aplicacoes.size());
+		assertEquals("Teste", ((Map<?, ?>) aplicacoes.get(0)).get("nome"));
+		assertEquals("TesteOutro", ((Map<?, ?>) aplicacoes.get(1)).get("nome"));
+		assertEquals("Testezinho", ((Map<?, ?>) aplicacoes.get(2)).get("nome"));
+	}
+
+	@Test
 	public void testIndex() {
 		final UserFlow flow = navigate().get("/aplicacoes");
 		final VRaptorTestResult result = flow.execute();

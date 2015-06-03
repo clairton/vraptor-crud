@@ -2,13 +2,10 @@ package br.eti.clairton.vraptor.crud.controller;
 
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
-import static br.eti.clairton.vraptor.crud.controller.Param.PAGE;
-import static br.eti.clairton.vraptor.crud.controller.Param.PER_PAGE;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.ServletRequest;
 import javax.validation.constraints.NotNull;
@@ -29,6 +26,7 @@ import br.eti.clairton.inflector.Language;
 import br.eti.clairton.paginated.collection.Meta;
 import br.eti.clairton.paginated.collection.PaginatedCollection;
 import br.eti.clairton.repository.Model;
+import br.eti.clairton.repository.Order;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.security.Authenticated;
@@ -253,12 +251,14 @@ public abstract class CrudController<T extends Model> {
 
 	protected PaginatedCollection<T, Meta> find() {
 		final Page paginate = paginate();
-		final Collection<Predicate> predicates = getPredicates();
+		final Collection<Predicate> predicates = predicates();
 		repository.from(modelType);
 		repository.distinct();
 		if (!predicates.isEmpty()) {
 			repository.where(predicates);
 		}
+		final List<Order> orders = orders();
+		repository.orderBy(orders);
 		return repository.collection(paginate.offset, paginate.limit);
 	}
 
@@ -271,42 +271,20 @@ public abstract class CrudController<T extends Model> {
 		}
 	}
 
-	private void retrieve(final Long id) {
+	protected void retrieve(final Long id) {
 		final T response = repository.byId(modelType, id);
 		serialize(response);
 	}
 
-	private Collection<Predicate> getPredicates() {
+	protected Collection<Predicate> predicates() {
 		return queryParser.parse(request, modelType);
 	}
 
-	private Page paginate() {
-		final Map<String, String[]> params;
-		if (request.getParameterMap() != null) {
-			params = request.getParameterMap();
-		} else {
-			params = new HashMap<>();
-		}
-		final Integer page;
-		final Integer perPage;
-		if (params.containsKey(PAGE) && params.containsKey(PER_PAGE)) {
-			page = Integer.valueOf(params.get(PAGE)[0]);
-			perPage = Integer.valueOf(params.get(PER_PAGE)[0]);
-		} else {
-			page = 0;
-			perPage = 0;
-		}
-		return new Page(page, perPage);
+	protected Page paginate() {
+		return queryParser.paginate(request, modelType);
 	}
 
-	private static class Page {
-		public final Integer offset;
-		public final Integer limit;
-
-		public Page(final Integer offet, final Integer limit) {
-			super();
-			this.offset = offet;
-			this.limit = limit;
-		}
+	protected List<Order> orders() {
+		return queryParser.order(request, modelType);
 	}
 }

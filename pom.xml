@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>repository</artifactId>
-			<version>0.3.0</version>
+			<version>0.3.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
