@@ -3,6 +3,8 @@ package br.eti.clairton.vraptor.crud.controller;
 public class Param {
     public static final String PAGE = "page";
     
+    public static final String SORT = "sort";
+    
     public static final String PER_PAGE = "per_page";
     
     public static final String ORDER_BY = "order_by";
