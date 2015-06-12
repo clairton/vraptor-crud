@@ -249,7 +249,8 @@ public abstract class CrudController<T extends Model> {
 		}
 	}
 
-	protected PaginatedCollection<T, Meta> find() {
+	@Ignore
+	public PaginatedCollection<T, Meta> find() {
 		final Page paginate = paginate();
 		final Collection<Predicate> predicates = predicates();
 		repository.from(modelType);
