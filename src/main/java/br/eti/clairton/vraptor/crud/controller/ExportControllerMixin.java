@@ -36,7 +36,7 @@ public interface ExportControllerMixin<T extends Model> {
 		final String path = getService().toFile(collection);
 		final Map<String, String> map = new HashMap<>();
 		map.put("file_path", path);
-		getResult().use(json()).from(map).serialize();
+		getResult().use(json()).withoutRoot().from(map).serialize();
 	}
 	
 	/**
