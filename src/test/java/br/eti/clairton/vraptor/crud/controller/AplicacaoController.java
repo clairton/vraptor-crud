@@ -41,7 +41,7 @@ public class AplicacaoController extends CrudController<Aplicacao> implements
 	public Result getResult() {
 		return result;
 	}
-	
+
 	@Override
 	@Ignore
 	public HttpServletResponse getResponse() {
@@ -55,7 +55,7 @@ public class AplicacaoController extends CrudController<Aplicacao> implements
 			@Override
 			@Ignore
 			public String toFile(Collection<?> collection) {
-				return "src/test/resources/test.properties";
+				return "src/test/resources/test.csv";
 			}
 
 			@Override

@@ -62,6 +62,10 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 		final Collection<String> collection = new ArrayList<String>();
 		final String controllerName = extractControllerNameFrom(type);
 		for (final String uri : uris) {
+			if("/.{format}".equals(uri)){
+				collection.add((controllerName + ".{format}"));
+				continue;
+			}
 			// adiciona o nome do controller para ficar /aplicacoes/{id}
 			collection.add((controllerName + uri).replace("//", "/"));
 		}
@@ -77,8 +81,7 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 		if (prefix == null || prefix.isEmpty()) {
 			String baseName = StringUtils.lowercaseFirst(type.getSimpleName());
 			if (baseName.endsWith("Controller")) {
-				baseName = baseName.substring(0,
-						baseName.lastIndexOf("Controller"));
+				baseName = baseName.substring(0, baseName.lastIndexOf("Controller"));
 			}
 			return "/" + inflector.pluralize(baseName);
 		} else {

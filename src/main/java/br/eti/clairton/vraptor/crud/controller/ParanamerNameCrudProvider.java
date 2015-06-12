@@ -52,9 +52,7 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 			out[i] = new Parameter(i, parameters[i].getName(), executable);
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("parameter names for {}: {}", executable, Arrays.toString(out));
-		}
+		logger.debug("parameter names for {}: {}", executable, Arrays.toString(out));
 		if (isActive() && executable instanceof Method) {
 			final Method method = (Method) executable;
 			final Class<?> klass = method.getDeclaringClass();

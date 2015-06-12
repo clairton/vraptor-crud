@@ -27,11 +27,11 @@ public interface ExportControllerMixin<T extends Model> {
 	 * Exporta os recursos.<br/>
 	 * Parametros para pesquisa são mandados na URL.
 	 */
-	@Post("/export")
+	@Post(".{format}")
 	@Protected
 	@Authenticated
 	@ExceptionVerifier
-	default void export() {
+	default void export(String format) {
 		final Collection<T> collection = find();
 		final String path = getService().toFile(collection);
 		final Map<String, String> map = new HashMap<>();

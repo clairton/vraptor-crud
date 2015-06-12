@@ -8,8 +8,7 @@ import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 
 /**
- * Torna os controllers possíveis de serem usados por uma interface Single Page
- * Application.
+ * Torna os controllers possíveis de serem usados por uma cliente SPA.</br>
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
@@ -23,7 +22,7 @@ public class SinglePagePathResolver extends DefaultPathResolver {
 	}
 
 	@Inject
-	public SinglePagePathResolver(FormatResolver resolver) {
+	public SinglePagePathResolver(final FormatResolver resolver) {
 		super(resolver);
 	}
 
@@ -31,7 +30,7 @@ public class SinglePagePathResolver extends DefaultPathResolver {
 	 * Sempre deve retorna "index.html", pq em uma SPA não há navegação.
 	 */
 	@Override
-	public String pathFor(ControllerMethod method) {
+	public String pathFor(final ControllerMethod method) {
 		return "index.html";
 	}
 }

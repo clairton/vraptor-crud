@@ -32,7 +32,7 @@ public class ExportControllerMixinTest {
 
 	@Test
 	public void testExport() throws Exception {
-		controller.export();
+		controller.export("csv");
 		final String json = result.serializedResult();
 		assertEquals("{\"file_path\":\"" + file + "\"}", json);
 	}
