@@ -172,12 +172,13 @@ public class Resource {
 					private static final long serialVersionUID = 1L;
 					{
 						put("aplicacao", Arrays.asList("create", "update"));
+						put("download", Arrays.asList("get"));
 					}
 				});
 			}
 		};
 		Map<String, Map<String, Map<String, List<String>>>> authorizations = new HashMap<String, Map<String, Map<String, List<String>>>>();
 		authorizations.put("admin", roles);
-		return new GateInMemory();
+		return new GateInMemory(authorizations);
 	}
 }

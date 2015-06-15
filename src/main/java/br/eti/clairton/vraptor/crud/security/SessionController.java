@@ -2,6 +2,7 @@ package br.eti.clairton.vraptor.crud.security;
 
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
+import static java.lang.String.format;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,7 +67,7 @@ public class SessionController implements Serializable {
 			try {
 				final PrintWriter writer = response.getWriter();
 				response.setStatus(201);
-				final String json = String.format("{\"token\": \"%s\"}", token);
+				final String json = format("{\"token\": \"%s\"}", token);
 				writer.print(json);
 				writer.flush();
 				writer.close();

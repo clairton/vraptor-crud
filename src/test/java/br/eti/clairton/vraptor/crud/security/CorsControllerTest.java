@@ -3,6 +3,10 @@ package br.eti.clairton.vraptor.crud.security;
 import static br.com.caelum.vraptor.controller.HttpMethod.OPTIONS;
 import static br.eti.clairton.vraptor.crud.controller.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,7 +51,11 @@ public class CorsControllerTest {
 		final HttpServletResponse response = result.getResponse();
 		assertEquals(204, response.getStatus());
 		final String actual = response.getHeaders(h).iterator().next();
-		assertEquals("GET, PUT, DELETE, OPTIONS", actual);
+		List<String> methods = Arrays.asList(actual.split(", "));
+		assertTrue(methods.contains("GET"));
+		assertTrue(methods.contains("PUT"));
+		assertTrue(methods.contains("DELETE"));
+		assertTrue(methods.contains("OPTIONS"));
 	}
 
 	@Test
@@ -57,6 +65,8 @@ public class CorsControllerTest {
 		final HttpServletResponse response = result.getResponse();
 		assertEquals(204, response.getStatus());
 		final String actual = response.getHeaders(h).iterator().next();
-		assertEquals("GET, OPTIONS", actual);
+		List<String> methods = Arrays.asList(actual.split(", "));
+		assertTrue(methods.contains("GET"));
+		assertTrue(methods.contains("OPTIONS"));
 	}
 }
