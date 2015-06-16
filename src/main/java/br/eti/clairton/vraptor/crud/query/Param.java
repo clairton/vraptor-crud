@@ -1,4 +1,4 @@
-package br.eti.clairton.vraptor.crud.controller;
+package br.eti.clairton.vraptor.crud.query;
 
 public class Param {
     public static final String PAGE = "page";

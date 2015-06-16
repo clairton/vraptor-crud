@@ -1,9 +1,9 @@
-package br.eti.clairton.vraptor.crud.controller;
+package br.eti.clairton.vraptor.crud.query;
 
-import static br.eti.clairton.vraptor.crud.controller.Param.SORT;
-import static br.eti.clairton.vraptor.crud.controller.Param.PAGE;
-import static br.eti.clairton.vraptor.crud.controller.Param.PER_PAGE;
-import static br.eti.clairton.vraptor.crud.controller.Param.DIRECTION;
+import static br.eti.clairton.vraptor.crud.query.Param.DIRECTION;
+import static br.eti.clairton.vraptor.crud.query.Param.PAGE;
+import static br.eti.clairton.vraptor.crud.query.Param.PER_PAGE;
+import static br.eti.clairton.vraptor.crud.query.Param.SORT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +63,7 @@ public class QueryParser {
 		final Enumeration<String> parameters = request.getParameterNames();
 		while (parameters.hasMoreElements()) {
 			final String field = parameters.nextElement();
-			if (query.contains(field)) {
+			if (query.contains(field) || "format".equals(field)) {
 				continue;
 			}
 			final Predicate predicate;

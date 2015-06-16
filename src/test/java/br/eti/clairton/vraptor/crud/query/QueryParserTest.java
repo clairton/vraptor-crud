@@ -1,4 +1,4 @@
-package br.eti.clairton.vraptor.crud.controller;
+package br.eti.clairton.vraptor.crud.query;
 
 import static br.eti.clairton.vraptor.crud.controller.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
@@ -20,11 +20,12 @@ import br.eti.clairton.repository.Comparators;
 import br.eti.clairton.repository.Order;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Order.Type;
-import br.eti.clairton.vraptor.crud.controller.QueryParser;
+import br.eti.clairton.vraptor.crud.controller.VRaptorRunner;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Aplicacao_;
 import br.eti.clairton.vraptor.crud.model.Recurso;
 import br.eti.clairton.vraptor.crud.model.Recurso_;
+import br.eti.clairton.vraptor.crud.query.QueryParser;
 
 @RunWith(VRaptorRunner.class)
 public class QueryParserTest {

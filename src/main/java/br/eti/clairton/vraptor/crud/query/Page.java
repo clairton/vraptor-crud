@@ -1,6 +1,6 @@
-package br.eti.clairton.vraptor.crud.controller;
+package br.eti.clairton.vraptor.crud.query;
 
-class Page {
+public class Page {
 	public final Integer offset;
 	public final Integer limit;
 
