@@ -1,10 +1,10 @@
-package br.eti.clairton.vraptor.crud.controller;
+package br.eti.clairton.vraptor.crud.query;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import br.eti.clairton.vraptor.crud.controller.Param;
+import br.eti.clairton.vraptor.crud.query.Param;
 
 public class ParamTest {
 	@Test
