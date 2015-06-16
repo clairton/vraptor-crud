@@ -4,19 +4,20 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
 
 @RunWith(VRaptorRunner.class)
-public class DownloadControllerMixinIntegrationTest extends ControllerIntegration{
+public class DownloadControllerMixinIntegrationTest{
 
 	@Test
 	public void testDownalodFile() throws Exception {
-		authenticate("admin", "123456");
-		final UserFlow flow = navigate().get("/downloads/test.csv", parameters);
+		final UserFlow flow = VRaptorRunner.navigate().get("/downloads/test.csv");
 		final VRaptorTestResult result = flow.execute();
-		//test only is path in accessible
-		assertEquals(401, result.getResponse().getStatus());
+		final MockHttpServletResponse response = result.getResponse();
+		assertEquals(200, response.getStatus());
+		assertEquals("qwerty", response.getContentAsString());
 	}
 }

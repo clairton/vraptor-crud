@@ -12,8 +12,6 @@ import javax.validation.constraints.NotNull;
 
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
-import br.eti.clairton.security.Authenticated;
-import br.eti.clairton.security.Protected;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 
 @Controller
@@ -36,8 +34,6 @@ public class DownloadController {
 	 * Recupera o arquivo gerado.<br/>
 	 */
 	@Get("/{path}")
-	@Protected
-	@Authenticated
 	@ExceptionVerifier
 	public void get(final @NotNull String path) {
 		final File file = service.toFile(path);
