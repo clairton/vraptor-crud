@@ -33,6 +33,7 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
+import br.eti.clairton.vraptor.crud.query.Param;
 
 import com.google.gson.Gson;
 

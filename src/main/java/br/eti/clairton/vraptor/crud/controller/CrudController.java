@@ -34,6 +34,8 @@ import br.eti.clairton.security.Operation;
 import br.eti.clairton.security.Protected;
 import br.eti.clairton.security.Resource;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
+import br.eti.clairton.vraptor.crud.query.Page;
+import br.eti.clairton.vraptor.crud.query.QueryParser;
 
 /**
  * Controller abstrato para servir como base para um CRUD.

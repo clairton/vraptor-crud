@@ -9,6 +9,7 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.vraptor.crud.model.Recurso;
+import br.eti.clairton.vraptor.crud.query.QueryParser;
 
 @Controller
 public class RecursoController extends CrudController<Recurso> {

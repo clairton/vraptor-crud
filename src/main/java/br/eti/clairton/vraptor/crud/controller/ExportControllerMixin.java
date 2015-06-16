@@ -27,7 +27,7 @@ public interface ExportControllerMixin<T extends Model> {
 	@ExceptionVerifier
 	default void export(String format) {
 		final Collection<T> collection = find();
-		final String path = getService().toFile(collection);
+		final String path = getService().toFile(collection, new HashMap<>(), "."+format);
 		final Map<String, String> map = new HashMap<>();
 		map.put("file_path", path);
 		getResult().use(json()).withoutRoot().from(map).serialize();

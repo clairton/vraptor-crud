@@ -26,7 +26,7 @@ No caso de usar maven, segue um exemplo:
 </build>
 ```
 O controle de erros e mensagens é efetuado através de um interceptor do CDI que avaliar as exceções lançadas,
-e promulgando-as caso não as conheça, para habilita-lo deve adicionar a classe no beans.xml da sua aplicação:
+e promulgando-as caso não as conheça. Para habilita-lo, deve adicionar a classe no beans.xml da sua aplicação:
 
 ```xml
 <beans>
@@ -117,6 +117,27 @@ As operações lógicas disponíveis são:
 * <= Menor ou Igual
 
 A implementação de segurança é opcional, para mais detalhes veja https://github.com/clairton/security.
+
+#Geração Relatórios
+
+O projeto também conta com um mixin para geração de relatórios. Implementando a interface ExportControllerMixin:
+```http
+URL                    HTTP Method   Java Method
+/aplicacoes.{format}   [POST]        ExportControllerMixin#export(format)
+```
+```java
+http://meudominio.com/app/aplicacoes.{format}
+```
+O método gerara um arquivo e devolverá o nome desse arquivo em JSON na propriedade file_path. Posteriormente, o download
+do arquivo pode ser feito:
+```http
+URL                    HTTP Method   Java Method
+/downloads/{path}     [GET]          DownloadController#get(path)
+```
+```java
+http://meudominio.com/app/downloads/{path}
+```
+Será necessário uma implementação da interface FileService, recomendamos o uso do projeto https://github.com/clairton/exporter.
 
 
 Se usar o maven, será necessário adicionar os repositórios:
