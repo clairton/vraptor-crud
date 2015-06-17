@@ -62,8 +62,8 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 		final Collection<String> collection = new ArrayList<String>();
 		final String controllerName = extractControllerNameFrom(type);
 		for (final String uri : uris) {
-			if("/.{format}".equals(uri)){
-				collection.add((controllerName + ".{format}"));
+			if(uri.matches("/\\.(?i)(csv|pdf|html|xls)$")){
+				collection.add((controllerName + uri.replace("/", "")));
 				continue;
 			}
 			// adiciona o nome do controller para ficar /aplicacoes/{id}
