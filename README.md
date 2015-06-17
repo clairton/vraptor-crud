@@ -80,41 +80,7 @@ https://github.com/clairton/tenant e https://github.com/clairton/repository.
 
 As URL padrao do recurso(/path-da-aplicacao/recurso com o metodo HTTP GET), possui um mecanismo de query params, 
 que aplicaca filtros na consultado do banco de dados, para tornar ela mais poderosa algumas opções podem ser usadas,
-segue exemplos:
-```java
-http://meudominio.com/app/recurso?nome=abc //retornara o recurso com o nome igual a "abc"
-
-http://meudominio.com/app/recurso?operacao.nome=abc //retornara o recurso com o nome da operacao igual a "abc"
-
-http://meudominio.com/app/recurso?operacao[nome]=abc //retornara o recurso com o nome da operacao igual a "abc"
-
-http://meudominio.com/app/recurso?id=>=1&id=<=11 //retornara o recurso com o id entre 1 e 11
-
-http://meudominio.com/app/recurso?page=2&per_page=10 //retornara a segunda pagina com 10 itens
-
-http://meudominio.com/app/recurso?sort=operacao.id&direction=ASC//ordenara ascendentemente pelo id da operação
-
-http://meudominio.com/app/recurso?sort=operacao.id&direction=DESC//ordenara decrescente pelo id da operação
-
-http://meudominio.com/app/recurso?sort[]=id&sort[]=operacao.id//ordenara pelo id e pelo id da operação
-```
-Se for informado somente a opção "sort", "direction" assume ASC.
-
-Como pode notar a formato é o seguinte "nomeDoCampo=[operacaoLogica]valorDoFiltro", a operação lógica
-não é obrigatório, sendo que se não for informada é assumida como "igual".
-As operações lógicas disponíveis são:
-* == Igual
-* =* Igual ignorando maisculas e minusculas
-* * Contém
-* !* Não Contém
-* <> Diferente
-* ∃  Existe
-* ∅  Nulo
-* !∅ Não Nulo
-* >  Maior
-* >= Maior ou Igual
-* <  Menor
-* <= Menor ou Igual
+para isso verifique https://github.com/clairton/repository-vraptor:
 
 A implementação de segurança é opcional, para mais detalhes veja https://github.com/clairton/security.
 

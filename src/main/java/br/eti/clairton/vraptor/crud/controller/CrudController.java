@@ -29,13 +29,13 @@ import br.eti.clairton.repository.Model;
 import br.eti.clairton.repository.Order;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
+import br.eti.clairton.repository.vraptor.Page;
+import br.eti.clairton.repository.vraptor.QueryParser;
 import br.eti.clairton.security.Authenticated;
 import br.eti.clairton.security.Operation;
 import br.eti.clairton.security.Protected;
 import br.eti.clairton.security.Resource;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
-import br.eti.clairton.vraptor.crud.query.Page;
-import br.eti.clairton.vraptor.crud.query.QueryParser;
 
 /**
  * Controller abstrato para servir como base para um CRUD.

@@ -9,8 +9,8 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.repository.Tenant;
+import br.eti.clairton.repository.vraptor.QueryParser;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
-import br.eti.clairton.vraptor.crud.query.QueryParser;
 
 @Controller
 public class AplicacaoController extends CrudController<Aplicacao> implements

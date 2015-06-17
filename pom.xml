@@ -70,6 +70,12 @@
 		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
+			<artifactId>repository-vraptor</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.eti.clairton</groupId>
 			<artifactId>paginated-collection</artifactId>
 			<version>0.1.0</version>
 			<scope>provided</scope>
