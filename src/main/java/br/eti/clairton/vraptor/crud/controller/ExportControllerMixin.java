@@ -31,11 +31,12 @@ public interface ExportControllerMixin<T extends Model> {
 		final String path = getService().toFile(collection, new HashMap<>(), "." + format);
 		final File file = getService().toFile(path);
 		try {
-			getResponse().setContentType("application/octet-stream");
 			getResponse().setContentLength((int) file.length());
 			final String disposition = format("attachment; filename=\"%s\"", file.getName());
 			getResponse().setHeader("Content-Disposition", disposition);
-
+			getResponse().setContentType("application/"+format);
+			//getResponse().setContentType("application/octet-stream");
+			
 			final OutputStream out = getResponse().getOutputStream();
 			try (final FileInputStream in = new FileInputStream(file)) {
 				byte[] buffer = new byte[4096];
