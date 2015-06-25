@@ -7,10 +7,6 @@ import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
 import net.vidageek.mirror.dsl.Mirror;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import br.eti.clairton.jpa.serializer.JpaSerializer;
 import br.eti.clairton.repository.Model;
 
@@ -20,18 +16,16 @@ import com.google.gson.JsonSerializer;
 
 /**
  * Deserializa os objetos da de forma a integrar com o modo ActiveSerializer.
- * 
+ *
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
 @Vetoed
 public class ModelSerializer implements JsonSerializer<Model> {
-	private final Logger logger = LogManager.getLogger(JpaSerializer.class);
 	private final JpaSerializer<Model> jpaSerializer;
 
 	@Inject
 	public ModelSerializer(final Mirror mirror) {
-		jpaSerializer = new JpaSerializer<Model>(mirror, logger) {
-		};
+		jpaSerializer = new JpaSerializer<Model>();
 	}
 
 	public void addIgnoredField(@NotNull final String field) {
