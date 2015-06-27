@@ -1,17 +1,8 @@
 package br.eti.clairton.vraptor.crud.serializer;
 
-import java.lang.reflect.Type;
-
-import javax.enterprise.inject.Vetoed;
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-
-import net.vidageek.mirror.dsl.Mirror;
 import br.eti.clairton.jpa.serializer.JpaSerializer;
 import br.eti.clairton.repository.Model;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
@@ -19,25 +10,5 @@ import com.google.gson.JsonSerializer;
  *
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
-@Vetoed
-public class ModelSerializer implements JsonSerializer<Model> {
-	private final JpaSerializer<Model> jpaSerializer;
-
-	@Inject
-	public ModelSerializer(final Mirror mirror) {
-		jpaSerializer = new JpaSerializer<Model>();
-	}
-
-	public void addIgnoredField(@NotNull final String field) {
-		jpaSerializer.addIgnoredField(field);
-	}
-
-	/**
-	 * {@inheritDoc}.
-	 */
-	@Override
-	public JsonElement serialize(final Model src, final Type type,
-			final JsonSerializationContext context) {
-		return jpaSerializer.serialize(src, type, context);
-	}
+public class ModelSerializer extends JpaSerializer<Model> implements JsonSerializer<Model> {
 }

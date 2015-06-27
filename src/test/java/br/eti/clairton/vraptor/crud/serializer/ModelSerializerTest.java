@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import net.vidageek.mirror.dsl.Mirror;
@@ -25,12 +23,11 @@ import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
 import br.com.caelum.vraptor.serialization.gson.RegisterType;
 import br.eti.clairton.cdi.test.CdiJUnit4Runner;
+import br.eti.clairton.jpa.serializer.JpaSerializer;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 @RunWith(CdiJUnit4Runner.class)
@@ -70,11 +67,10 @@ public class ModelSerializerTest {
 	}
 
 	@Test
-	public void testAddIgnoreFlied() {
+	public void testAddIgnoreField() {
 		final Long idAplicacao = 1000l;
 		final OutroModel outroModel = new OutroModel("teste");
 		mirror.on(outroModel).set().field("id").withValue(idAplicacao);
-		mirror.on(outroModel).set().field("nome").withValue(null);
 		final String json = gson.toJson(outroModel, OutroModel.class);
 		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
 		assertEquals("PSADGKSADGLDSLÇ", resultado.get("outroValor"));
@@ -114,13 +110,6 @@ public class ModelSerializerTest {
 		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
 		assertEquals(asList(100.0, 200.0), resultado.get("aplicacoes"));
 	}
-	
-
-	@Produces
-	public JsonSerializer<OutroModel> produce() {
-		return new OutroModelSerialiazer(new Mirror());
-	}
-
 }
 
 class OutroModel extends Aplicacao {
@@ -138,20 +127,9 @@ class OutroModel extends Aplicacao {
 
 
 @RegisterStrategy(RegisterType.SINGLE)
-class OutroModelSerialiazer implements JsonSerializer<OutroModel> {
-	private final ModelSerializer modelSerializer;
-
-	@Inject
-	public OutroModelSerialiazer(Mirror mirror) {
-		super();
-		this.modelSerializer = new ModelSerializer(mirror);
-		modelSerializer.addIgnoredField("nome");
+class OutroModelSerialiazer extends JpaSerializer<OutroModel> implements JsonSerializer<OutroModel> {
+	
+	public OutroModelSerialiazer() {
+		addIgnoredField("nome");
 	}
-
-	@Override
-	public JsonElement serialize(OutroModel src, Type type,
-			JsonSerializationContext context) {
-		return modelSerializer.serialize(src, type, context);
-	}
-
 }
