@@ -11,11 +11,9 @@
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<!-- Hibernate Properties -->
-			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
-<!-- 			<property name="hibernate.jndi.class" value="org.jboss.as.naming.InitialContextFactory" /> -->
 		</properties>
 	</persistence-unit>
 </persistence>
