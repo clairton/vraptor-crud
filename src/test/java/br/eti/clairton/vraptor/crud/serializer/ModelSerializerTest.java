@@ -20,15 +20,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
-import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
-import br.com.caelum.vraptor.serialization.gson.RegisterType;
 import br.eti.clairton.cdi.test.CdiJUnit4Runner;
-import br.eti.clairton.jpa.serializer.JpaSerializer;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSerializer;
 
 @RunWith(CdiJUnit4Runner.class)
 public class ModelSerializerTest {
@@ -59,7 +55,7 @@ public class ModelSerializerTest {
 		});
 		object.adicionar(recursos);
 		final String json = gson.toJson(object);
-		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
+		final Map<?, ?> resultado = gson.fromJson(json, Map.class);
 		final List<?> list = (List<?>) resultado.get("recursos");
 		assertEquals(2, list.size());
 		assertEquals("Teste", resultado.get("nome"));
@@ -72,7 +68,7 @@ public class ModelSerializerTest {
 		final OutroModel outroModel = new OutroModel("teste");
 		mirror.on(outroModel).set().field("id").withValue(idAplicacao);
 		final String json = gson.toJson(outroModel, OutroModel.class);
-		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
+		final Map<?, ?> resultado = gson.fromJson(json, Map.class);
 		assertEquals("PSADGKSADGLDSLÇ", resultado.get("outroValor"));
 		assertEquals(1000.0, resultado.get("id"));
 		assertFalse(resultado.containsKey("nome"));
@@ -109,27 +105,5 @@ public class ModelSerializerTest {
 		final String json = gson.toJson(model, ModelManyToMany.class);
 		final Map<?, ?> resultado = gson.fromJson(json, HashMap.class);
 		assertEquals(asList(100.0, 200.0), resultado.get("aplicacoes"));
-	}
-}
-
-class OutroModel extends Aplicacao {
-	private static final long serialVersionUID = 6016230217349046379L;
-	private String outroValor = "PSADGKSADGLDSLÇ";
-
-	public OutroModel(final String nome) {
-		super(nome);
-	}
-
-	public String getOutroValor() {
-		return outroValor;
-	}
-}
-
-
-@RegisterStrategy(RegisterType.SINGLE)
-class OutroModelSerialiazer extends JpaSerializer<OutroModel> implements JsonSerializer<OutroModel> {
-	
-	public OutroModelSerialiazer() {
-		addIgnoredField("nome");
 	}
 }
