@@ -45,15 +45,15 @@ public class GsonBuilderWrapper  extends br.com.caelum.vraptor.serialization.gso
 	
 	
 	public Gson create() {
-		for (JsonSerializer<?> adapter : jsonSerializers) {
+		for (final JsonSerializer<?> adapter : jsonSerializers) {
 			registerAdapter(getAdapterType(adapter), adapter);
 		}
 
-		for (JsonDeserializer<?> adapter : jsonDeserializers) {
+		for (final JsonDeserializer<?> adapter : jsonDeserializers) {
 			registerAdapter(getAdapterType(adapter), adapter);
 		}
 		
-		for (ExclusionStrategy exclusion : exclusions) {
+		for (final ExclusionStrategy exclusion : exclusions) {
 			getGsonBuilder().addSerializationExclusionStrategy(exclusion);
 		}
 		
