@@ -30,9 +30,9 @@ public class GsonBuilderWrapper  extends br.com.caelum.vraptor.serialization.gso
 	private final Iterable<JsonSerializer<?>> jsonSerializers;
 	private final Iterable<JsonDeserializer<?>> jsonDeserializers;
 	private List<ExclusionStrategy> exclusions;
-	
+
 	@Inject
-	public GsonBuilderWrapper(final @Any Instance<JsonSerializer<?>> jsonSerializers, 
+	public GsonBuilderWrapper(final @Any Instance<JsonSerializer<?>> jsonSerializers,
 			final @Any Instance<JsonDeserializer<?>> jsonDeserializers,
 			final Serializee serializee) {
 		super(jsonSerializers, jsonDeserializers, serializee);
@@ -40,10 +40,10 @@ public class GsonBuilderWrapper  extends br.com.caelum.vraptor.serialization.gso
 		this.jsonDeserializers = jsonDeserializers;
 		ExclusionStrategy exclusion = new Exclusions(serializee);
 		exclusions = singletonList(exclusion);
-
 	}
-	
-	
+
+
+	@Override
 	public Gson create() {
 		for (final JsonSerializer<?> adapter : jsonSerializers) {
 			registerAdapter(getAdapterType(adapter), adapter);
@@ -52,25 +52,25 @@ public class GsonBuilderWrapper  extends br.com.caelum.vraptor.serialization.gso
 		for (final JsonDeserializer<?> adapter : jsonDeserializers) {
 			registerAdapter(getAdapterType(adapter), adapter);
 		}
-		
+
 		for (final ExclusionStrategy exclusion : exclusions) {
 			getGsonBuilder().addSerializationExclusionStrategy(exclusion);
 		}
-		
+
 		return getGsonBuilder().create();
 	}
-	
-	private void registerAdapter(final Class<?> adapterType, final Object adapter) {
+
+	protected void registerAdapter(final Class<?> adapterType, final Object adapter) {
 		logger.info("Add adapter {} to type {}", adapter.getClass().getSimpleName(), adapterType.getSimpleName());
 		final RegisterStrategy registerStrategy = adapter.getClass().getAnnotation(RegisterStrategy.class);
 		if ((registerStrategy != null) && (registerStrategy.value().equals(RegisterType.SINGLE))) {
 			getGsonBuilder().registerTypeAdapter(adapterType, adapter);
 		} else {
 			getGsonBuilder().registerTypeHierarchyAdapter(adapterType, adapter);
-		}	
-	}	
-	
-	private Class<?> getAdapterType(final Object adapter) {
+		}
+	}
+
+	protected Class<?> getAdapterType(final Object adapter) {
 		final Class<?> klazz;
 		if(adapter.getClass().getName().contains("$Proxy$")){
 			final String[] split = adapter.getClass().getName().split("\\$Proxy\\$");
@@ -92,5 +92,5 @@ public class GsonBuilderWrapper  extends br.com.caelum.vraptor.serialization.gso
 			return (Class<?>) actualType;
 		}
 	}
-	
+
 }
