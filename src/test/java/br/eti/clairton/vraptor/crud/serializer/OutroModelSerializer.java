@@ -4,12 +4,15 @@ import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
+import br.com.caelum.vraptor.serialization.gson.RegisterType;
 import br.eti.clairton.repository.Model;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+@RegisterStrategy(RegisterType.SINGLE)
 public class OutroModelSerializer implements JsonSerializer<OutroModel> {
 	private final JsonSerializer<Model> serializer;
 
