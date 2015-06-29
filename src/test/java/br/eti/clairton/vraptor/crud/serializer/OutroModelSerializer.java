@@ -10,15 +10,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class OutroModelSerialiazer implements JsonSerializer<OutroModel> {
+public class OutroModelSerializer implements JsonSerializer<OutroModel> {
 	private final JsonSerializer<Model> serializer;
-	
+
 	@Inject
-	public OutroModelSerialiazer(final ModelSerializer serializer) {
+	public OutroModelSerializer(final ModelSerializer serializer) {
 		serializer.addIgnoredField("nome");
 		this.serializer = serializer;
 	}
-	
+
 	@Override
 	public JsonElement serialize(final OutroModel src, final Type type, final JsonSerializationContext context) {
 		return serializer.serialize(src, type, context);

@@ -80,6 +80,15 @@ public class ModelDeserializerTest {
 	}
 
 	@Test
+	public void testOutroModel() {
+		final String json = "{'id': '1111', 'nome': 'Teste', 'recursos': [{'nome':'NomeDoRecurso'}]}";
+		final OutroModel result = gson.fromJson(json, OutroModel.class);
+		assertEquals(Long.valueOf(1111l), result.getId());
+		assertEquals("Teste", result.getNome());
+		assertEquals("NomeDoRecurso", result.getRecursos().iterator().next().getNome());
+	}
+
+	@Test
 	public void testManyToMany() {
 		final ModelManyToMany object = new ModelManyToMany();
 		final String json = "{'id': '1111', 'aplicacoes': [444,555]}";
