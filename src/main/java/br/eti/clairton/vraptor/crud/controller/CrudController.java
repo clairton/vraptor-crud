@@ -107,8 +107,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void create(final T model) {
 		logger.debug("Salvando registro");
-		final T response = repository.save(model);
-		serialize(response);
+		createAndSerializeRecord(model);
 	}
 
 	/**
@@ -121,8 +120,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void index() {
 		logger.debug("Recuperando registros");
-		final PaginatedCollection<T, Meta> collection = find();
-		serialize(collection);
+		findAndSerializeRecord();
 	}
 
 	/**
@@ -138,8 +136,7 @@ public abstract class CrudController<T extends Model> {
 	@Operation("new")
 	public void new_() {
 		logger.debug("Criando registro");
-		final T response = createResource();
-		serialize(response);
+		instanceAndSerializeRecord();
 	}
 
 	/**
@@ -154,7 +151,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void edit(final Long id) {
 		logger.debug("Editando registro");
-		retrieve(id);
+		retrieveAndSerializeRecord(id);
 	}
 
 	/**
@@ -169,7 +166,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void show(final Long id) {
 		logger.debug("Mostrando registro");
-		retrieve(id);
+		retrieveAndSerializeRecord(id);
 	}
 
 	/**
@@ -184,8 +181,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void remove(final Long id) {
 		logger.debug("Removendo registro");
-		repository.remove(modelType, id);
-		result.use(http()).setStatusCode(200);
+		removeAndSerializeResource(modelType, id);
 	}
 
 	/**
@@ -203,8 +199,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void update(final T model) {
 		logger.debug("Atualizando registro");
-		final T response = repository.save(model);
-		serialize(response);
+		updateAndSerializeRecord(model);
 	}
 
 	/**
@@ -239,6 +234,11 @@ public abstract class CrudController<T extends Model> {
 		result.use(json()).from(collection, tag).serialize();
 	}
 
+	/**
+	 * Recupera o nome do recurso,
+	 * 
+	 * @return String
+	 */
 	protected String resourceName() {
 		if (modelType != null) {
 			final StringBuilder builder = new StringBuilder();
@@ -251,6 +251,11 @@ public abstract class CrudController<T extends Model> {
 		}
 	}
 
+	/**
+	 * Busca pelos registros no banco de dados aplicando filtro e paginação.
+	 * 
+	 * @return {@link PaginatedCollection}
+	 */
 	@Ignore
 	public PaginatedCollection<T, Meta> find() {
 		final Page paginate = paginate();
@@ -265,7 +270,87 @@ public abstract class CrudController<T extends Model> {
 		return repository.collection(paginate.offset, paginate.limit);
 	}
 
-	protected T createResource() {
+	/**
+	 * Atualiza o model no banco de dados e serializa a reposta.
+	 */
+	protected void updateAndSerializeRecord(final T model) {
+		final T response = updateRecord(model);
+		serialize(response);
+	}
+
+	/**
+	 * Cria o model no model de dados e serializa a reposta.
+	 */
+	protected void createAndSerializeRecord(final T model) {
+		final T response = createRecord(model);
+		serialize(response);
+	}
+
+	/**
+	 * Busca pelos registros aplicandos filtros e paginação, depois serializa a reposta.
+	 */
+	protected void findAndSerializeRecord() {
+		final PaginatedCollection<T, Meta> collection = find();
+		serialize(collection);
+	}
+
+	/**
+	 * Instancia um novo registro e serializa a reposta.
+	 */
+	protected void instanceAndSerializeRecord() {
+		final T response = instanceRecord();
+		serialize(response);
+	}
+
+	/**
+	 * Salva um registro no banco de dados.
+	 * 
+	 * @param model registro a ser salvo
+	 * 
+	 * @return registro salvo
+	 */
+	protected T saveRecord(final T model) {
+		return repository.save(model);
+	}
+
+	/**
+	 * Atualiza um registro no banco de dados.
+	 * 
+	 * @param model registro a ser atualizado
+	 * 
+	 * @return registro atualizado
+	 */
+	protected T updateRecord(T model) {
+		return saveRecord(model);
+	}
+	
+	/**
+	 * Cria um registro no banco de dados.
+	 * 
+	 * @param model registro a ser criado
+	 * 
+	 * @return registro criado
+	 */
+	protected T createRecord(T model) {
+		return saveRecord(model);
+	}
+	
+	/**
+	 * Remove um regitrso do banco de dados
+	 * 
+	 * @param modelType tipo do registro
+	 * @param id identificador do registro
+	 */
+	protected void removeRecord(final Class<T> modelType, final Long id) {
+		repository.remove(modelType, id);
+	}
+
+	/**
+	 * Cria um novo registro.
+	 * 
+	 * @return novo registro
+	 */
+	protected T instanceRecord() {
 		try {
 			final Constructor<T> constructor = modelType.getConstructor();
 			return constructor.newInstance();
@@ -274,19 +359,59 @@ public abstract class CrudController<T extends Model> {
 		}
 	}
 
-	protected void retrieve(final Long id) {
-		final T response = repository.byId(modelType, id);
+	/**
+	 * Remove um registro do banco de dados e serializa reposta.
+	 * 
+	 * @param model registro a ser removido
+	 */
+	protected void removeAndSerializeResource(final Class<T> modelType, final Long id) {
+		removeRecord(modelType, id);
+		result.use(http()).setStatusCode(200);
+	}
+
+	/**
+	 * Recupera um registro do banco de dados e serializa.
+	 * 
+	 * @param id identificador do registro
+	 */
+	protected void retrieveAndSerializeRecord(final Long id) {
+		final T response = retrieveRecord(id);
 		serialize(response);
 	}
 
+	/**
+	 * Recupera um registro do banco de dados.
+	 * 
+	 * @param id identificador do registro
+	 * @return registro recuperado
+	 */
+	protected T retrieveRecord(final Long id) {
+		return repository.byId(modelType, id);
+	}
+
+	/**
+	 * Analiza os dados da requisição e os transforma em uma coleção de Predicados.
+	 * 
+	 * @return coleção de predicados
+	 */
 	protected Collection<Predicate> predicates() {
 		return queryParser.parse(request, modelType);
 	}
 
+	/**
+	 * Analiza os dados da requisição e os transforma nos dados de paginação.
+	 * 
+	 * @return dados de paginação
+	 */
 	protected Page paginate() {
 		return queryParser.paginate(request, modelType);
 	}
 
+	/**
+	 * Analisa os dados da requisição e recupera a ordem.
+	 * 
+	 * @return ordem
+	 */
 	protected List<Order> orders() {
 		return queryParser.order(request, modelType);
 	}
