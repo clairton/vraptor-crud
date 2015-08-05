@@ -14,34 +14,31 @@ import javax.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import br.com.caelum.vraptor.serialization.Serializee;
-import br.com.caelum.vraptor.serialization.gson.Exclusions;
-import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
-import br.com.caelum.vraptor.serialization.gson.RegisterType;
-
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
+import br.com.caelum.vraptor.serialization.Serializee;
+import br.com.caelum.vraptor.serialization.gson.Exclusions;
+import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
+import br.com.caelum.vraptor.serialization.gson.RegisterType;
+
 @Specializes
-public class GsonBuilderWrapper  extends br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper{
+public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper {
 	private final Logger logger = LogManager.getLogger(GsonBuilderWrapper.class);
 	private final Iterable<JsonSerializer<?>> jsonSerializers;
 	private final Iterable<JsonDeserializer<?>> jsonDeserializers;
 	private List<ExclusionStrategy> exclusions;
 
 	@Inject
-	public GsonBuilderWrapper(final @Any Instance<JsonSerializer<?>> jsonSerializers,
-			final @Any Instance<JsonDeserializer<?>> jsonDeserializers,
-			final Serializee serializee) {
+	public GsonBuilderWrapper(final @Any Instance<JsonSerializer<?>> jsonSerializers, final @Any Instance<JsonDeserializer<?>> jsonDeserializers, final Serializee serializee) {
 		super(jsonSerializers, jsonDeserializers, serializee);
 		this.jsonSerializers = jsonSerializers;
 		this.jsonDeserializers = jsonDeserializers;
 		ExclusionStrategy exclusion = new Exclusions(serializee);
 		exclusions = singletonList(exclusion);
 	}
-
 
 	@Override
 	public Gson create() {
@@ -72,14 +69,14 @@ public class GsonBuilderWrapper  extends br.com.caelum.vraptor.serialization.gso
 
 	protected Class<?> getAdapterType(final Object adapter) {
 		final Class<?> klazz;
-		if(adapter.getClass().getName().contains("$Proxy$")){
+		if (adapter.getClass().getName().contains("$Proxy$")) {
 			final String[] split = adapter.getClass().getName().split("\\$Proxy\\$");
 			try {
 				klazz = Class.forName(split[0]);
 			} catch (final ClassNotFoundException e) {
 				throw new RuntimeException(e);
 			}
-		}else{
+		} else {
 			klazz = adapter.getClass();
 		}
 		final Type[] genericInterfaces = klazz.getGenericInterfaces();
@@ -92,5 +89,4 @@ public class GsonBuilderWrapper  extends br.com.caelum.vraptor.serialization.gso
 			return (Class<?>) actualType;
 		}
 	}
-
 }

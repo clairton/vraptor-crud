@@ -80,11 +80,9 @@ public abstract class CrudController<T extends Model> {
 	 * @param queryParser
 	 *            instancia de quey parser
 	 */
-	public CrudController(final @NotNull Class<T> modelType,
-			final @NotNull Repository repository, final @NotNull Result result,
-			final @Language @NotNull Inflector inflector,
-			final @NotNull ServletRequest request,
-			final @NotNull QueryParser queryParser) {
+	public CrudController(final @NotNull Class<T> modelType, final @NotNull Repository repository,
+			final @NotNull Result result, final @Language @NotNull Inflector inflector,
+			final @NotNull ServletRequest request, final @NotNull QueryParser queryParser) {
 		this.repository = repository;
 		this.result = result;
 		this.modelType = modelType;
@@ -241,11 +239,9 @@ public abstract class CrudController<T extends Model> {
 	 */
 	protected String resourceName() {
 		if (modelType != null) {
-			final StringBuilder builder = new StringBuilder();
 			final String simpleName = modelType.getSimpleName();
-			builder.append(simpleName.substring(0, 1).toLowerCase());
-			builder.append(simpleName.substring(1));
-			return builder.toString();
+			final String resource = inflector.uncapitalize(simpleName);
+			return resource;
 		} else {
 			return null;
 		}
@@ -287,7 +283,8 @@ public abstract class CrudController<T extends Model> {
 	}
 
 	/**
-	 * Busca pelos registros aplicandos filtros e paginação, depois serializa a reposta.
+	 * Busca pelos registros aplicandos filtros e paginação, depois serializa a
+	 * reposta.
 	 */
 	protected void findAndSerializeRecord() {
 		final PaginatedCollection<T, Meta> collection = find();
@@ -305,7 +302,8 @@ public abstract class CrudController<T extends Model> {
 	/**
 	 * Salva um registro no banco de dados.
 	 * 
-	 * @param model registro a ser salvo
+	 * @param model
+	 *            registro a ser salvo
 	 * 
 	 * @return registro salvo
 	 */
@@ -316,30 +314,34 @@ public abstract class CrudController<T extends Model> {
 	/**
 	 * Atualiza um registro no banco de dados.
 	 * 
-	 * @param model registro a ser atualizado
+	 * @param model
+	 *            registro a ser atualizado
 	 * 
 	 * @return registro atualizado
 	 */
 	protected T updateRecord(T model) {
 		return saveRecord(model);
 	}
-	
+
 	/**
 	 * Cria um registro no banco de dados.
 	 * 
-	 * @param model registro a ser criado
+	 * @param model
+	 *            registro a ser criado
 	 * 
 	 * @return registro criado
 	 */
 	protected T createRecord(T model) {
 		return saveRecord(model);
 	}
-	
+
 	/**
 	 * Remove um regitrso do banco de dados
 	 * 
-	 * @param modelType tipo do registro
-	 * @param id identificador do registro
+	 * @param modelType
+	 *            tipo do registro
+	 * @param id
+	 *            identificador do registro
 	 */
 	protected void removeRecord(final Class<T> modelType, final Long id) {
 		repository.remove(modelType, id);
@@ -362,7 +364,8 @@ public abstract class CrudController<T extends Model> {
 	/**
 	 * Remove um registro do banco de dados e serializa reposta.
 	 * 
-	 * @param model registro a ser removido
+	 * @param model
+	 *            registro a ser removido
 	 */
 	protected void removeAndSerializeResource(final Class<T> modelType, final Long id) {
 		removeRecord(modelType, id);
@@ -372,7 +375,8 @@ public abstract class CrudController<T extends Model> {
 	/**
 	 * Recupera um registro do banco de dados e serializa.
 	 * 
-	 * @param id identificador do registro
+	 * @param id
+	 *            identificador do registro
 	 */
 	protected void retrieveAndSerializeRecord(final Long id) {
 		final T response = retrieveRecord(id);
@@ -382,7 +386,8 @@ public abstract class CrudController<T extends Model> {
 	/**
 	 * Recupera um registro do banco de dados.
 	 * 
-	 * @param id identificador do registro
+	 * @param id
+	 *            identificador do registro
 	 * @return registro recuperado
 	 */
 	protected T retrieveRecord(final Long id) {
@@ -390,7 +395,8 @@ public abstract class CrudController<T extends Model> {
 	}
 
 	/**
-	 * Analiza os dados da requisição e os transforma em uma coleção de Predicados.
+	 * Analiza os dados da requisição e os transforma em uma coleção de
+	 * Predicados.
 	 * 
 	 * @return coleção de predicados
 	 */
