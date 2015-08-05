@@ -230,9 +230,7 @@ public abstract class CrudController<T extends Model> {
 	 *            coleção a ser serializada
 	 */
 	protected void serialize(final PaginatedCollection<T, Meta> collection) {
-		final String plural = inflector.pluralize(modelType.getSimpleName());
-		final String tag = inflector.uncapitalize(plural);
-		result.use(json()).from(collection, tag).serialize();
+		result.use(json()).from(collection).serialize();
 	}
 
 	/**

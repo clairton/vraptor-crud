@@ -25,6 +25,7 @@ import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
 import br.com.caelum.vraptor.serialization.gson.RegisterType;
 
 @Specializes
+//TODO a partir da versão 4.2 do vraptor a implementação é nativa, eliminar essa classes
 public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper {
 	private final Logger logger = LogManager.getLogger(GsonBuilderWrapper.class);
 	private final Iterable<JsonSerializer<?>> jsonSerializers;
