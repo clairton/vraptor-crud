@@ -2,6 +2,8 @@ package br.eti.clairton.vraptor.crud.controller;
 
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
+import static br.eti.clairton.inflector.Inflector.getForLocale;
+import static br.eti.clairton.inflector.Locale.pt_BR;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
@@ -86,7 +88,8 @@ public abstract class CrudController<T extends Model> {
 		this.repository = repository;
 		this.result = result;
 		this.modelType = modelType;
-		this.inflector = inflector;
+		//TODO why?
+		this.inflector = inflector != null ? inflector : getForLocale(pt_BR);
 		this.request = request;
 		this.queryParser = queryParser;
 		this.resourceName = resourceName();

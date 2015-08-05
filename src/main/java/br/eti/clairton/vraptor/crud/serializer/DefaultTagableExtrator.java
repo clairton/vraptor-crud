@@ -7,7 +7,8 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import br.eti.clairton.jpa.serializer.model.Model;
+import br.eti.clairton.jpa.serializer.Tagable;
+import br.eti.clairton.repository.Model;
 
 public class DefaultTagableExtrator implements TagableExtractor {
 	private final Instance<br.eti.clairton.jpa.serializer.Tagable<?>> instances;
@@ -19,29 +20,29 @@ public class DefaultTagableExtrator implements TagableExtractor {
 	}
 
 	@Override
-	public <T> String extract(final T object) {
-		final Annotation qualifier = getType(object);
+	public String extract(final Object object) {
+		final Annotation qualifier = getType(object.getClass());
 		final Instance<br.eti.clairton.jpa.serializer.Tagable<?>> instance = instances.select(qualifier);
-		final Tagable<T> tagable;
+		final br.eti.clairton.jpa.serializer.Tagable<?> tagable;
 		if (!instance.isUnsatisfied()) {
-			@SuppressWarnings("unchecked")
-			tagable = (Tagable<T>) instances.select(qualifier).get();
+			tagable = instances.select(qualifier).get();
 		} else {
-			@SuppressWarnings("unchecked")
-			tagable = (Tagable<T>) instances.select(getType(Model.class)).get();
+			tagable = instances.select(getType(Model.class)).get();
 		}
+		@SuppressWarnings("unchecked")
+		final br.eti.clairton.jpa.serializer.Tagable<Object> tagableTyped = (Tagable<Object>) tagable;
 		final String alias;
 		if (Collection.class.isInstance(object)) {
 			@SuppressWarnings("unchecked")
-			final Collection<T> collection = (Collection<T>) object;
-			alias = tagable.getRootTagCollection(collection);
+			final Collection<Object> collection = (Collection<Object>) object;
+			alias = tagableTyped.getRootTagCollection(collection);
 		} else {
-			alias = tagable.getRootTag(object);
+			alias = tagableTyped.getRootTag(object);
 		}
 		return alias;
 	}
 
-	private <T> Annotation getType(final T object) {
+	private <T> Annotation getType(final Class<T> type) {
 		return new TagableTo() {
 
 			@Override
@@ -51,7 +52,7 @@ public class DefaultTagableExtrator implements TagableExtractor {
 
 			@Override
 			public Class<?> value() {
-				return object.getClass();
+				return type;
 			}
 		};
 	}

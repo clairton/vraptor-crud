@@ -5,7 +5,7 @@ import static br.eti.clairton.inflector.Locale.pt_BR;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
+import javax.enterprise.inject.Default;
 import javax.validation.constraints.NotNull;
 
 import com.google.gson.JsonSerializer;
@@ -19,11 +19,12 @@ import br.eti.clairton.repository.Model;
  *
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
-//@TagableTo(Model.class)
+@TagableTo(Model.class)
+@Default
 public class ModelSerializer extends JpaSerializer<Model>implements JsonSerializer<Model> {
 	private final br.eti.clairton.jpa.serializer.Tagable<Model> tagable;
 
-	@Inject
+	// @Inject
 	public ModelSerializer(@NotNull final Inflector inflector) {
 		this.tagable = new Tagable<>(inflector);
 	}
