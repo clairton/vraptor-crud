@@ -81,6 +81,9 @@ public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson
 			klazz = adapter.getClass();
 		}
 		final Type[] genericInterfaces = klazz.getGenericInterfaces();
+		if(genericInterfaces.length == 0){
+			System.err.println();
+		}
 		final ParameterizedType type = (ParameterizedType) genericInterfaces[0];
 		final Type actualType = type.getActualTypeArguments()[0];
 

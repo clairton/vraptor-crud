@@ -14,7 +14,7 @@ public class DefaultTagableExtrator implements TagableExtractor {
 	private final Instance<br.eti.clairton.jpa.serializer.Tagable<?>> instances;
 
 	@Inject
-	public DefaultTagableExtrator(@Any Instance<br.eti.clairton.jpa.serializer.Tagable<?>> instances) {
+	public DefaultTagableExtrator(final @Any Instance<br.eti.clairton.jpa.serializer.Tagable<?>> instances) {
 		super();
 		this.instances = instances;
 	}
