@@ -4,12 +4,14 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import br.eti.clairton.jpa.serializer.Tagable;
 import br.eti.clairton.repository.Model;
 
+@Default
 public class DefaultTagableExtrator implements TagableExtractor {
 	private final Instance<br.eti.clairton.jpa.serializer.Tagable<?>> instances;
 
