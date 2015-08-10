@@ -27,8 +27,7 @@ public class GsonJSONSerialization extends br.com.caelum.vraptor.serialization.g
 	}
 
 	@Inject
-	public GsonJSONSerialization(HttpServletResponse response, TypeNameExtractor extractor,
-			GsonSerializerBuilder builder, Environment environment, TagableExtractor tagableExtractor) {
+	public GsonJSONSerialization(final HttpServletResponse response, final TypeNameExtractor extractor, final GsonSerializerBuilder builder, final Environment environment, final TagableExtractor tagableExtractor) {
 		super(response, extractor, builder, environment);
 		this.extractor = extractor;
 		this.builder = builder;

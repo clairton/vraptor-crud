@@ -21,16 +21,7 @@ public class DefaultTagableExtrator implements TagableExtractor {
 
 	@Override
 	public String extract(final Object object) {
-		final Annotation qualifier = getType(object.getClass());
-		final Instance<br.eti.clairton.jpa.serializer.Tagable<?>> instance = instances.select(qualifier);
-		final br.eti.clairton.jpa.serializer.Tagable<?> tagable;
-		if (!instance.isUnsatisfied()) {
-			tagable = instances.select(qualifier).get();
-		} else {
-			tagable = instances.select(getType(Model.class)).get();
-		}
-		@SuppressWarnings("unchecked")
-		final br.eti.clairton.jpa.serializer.Tagable<Object> tagableTyped = (Tagable<Object>) tagable;
+		final br.eti.clairton.jpa.serializer.Tagable<Object> tagableTyped = getTagable(object);
 		final String alias;
 		if (Collection.class.isInstance(object)) {
 			@SuppressWarnings("unchecked")
@@ -40,6 +31,20 @@ public class DefaultTagableExtrator implements TagableExtractor {
 			alias = tagableTyped.getRootTag(object);
 		}
 		return alias;
+	}
+	
+	protected Tagable<Object> getTagable(final Object object){
+		final Annotation qualifier = getType(object.getClass());
+		final Instance<br.eti.clairton.jpa.serializer.Tagable<?>> instance = instances.select(qualifier);
+		final br.eti.clairton.jpa.serializer.Tagable<?> tagable;
+		if (!instance.isUnsatisfied()) {
+			tagable = instances.select(qualifier).get();
+		} else {
+			tagable = instances.select(getType(Model.class)).get();
+		}
+		@SuppressWarnings("unchecked")
+		final Tagable<Object> t = (Tagable<Object>) tagable;
+		return t;
 	}
 
 	private <T> Annotation getType(final Class<T> type) {
