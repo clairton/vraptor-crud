@@ -4,21 +4,19 @@ import static br.eti.clairton.inflector.Inflector.getForLocale;
 import static br.eti.clairton.inflector.Locale.pt_BR;
 import static javax.enterprise.inject.spi.CDI.current;
 
-import java.lang.reflect.Constructor;
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 
-import javax.enterprise.inject.Instance;
 import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.jpa.serializer.GsonJpaSerializer;
 import br.eti.clairton.repository.Model;
-import br.eti.clairton.vraptor.crud.controller.CrudController;
+import br.eti.clairton.security.Resource;
 
 public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSerializer<T> implements JsonSerializer<T>, JsonDeserializer<T>, Resourceable {
 	private static final long serialVersionUID = 1L;
@@ -52,28 +50,19 @@ public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSe
 	
 	@Override
 	public String getResource() {
-		return getResourceController(getControllerMethod());
-	}
-	
-
-	final private ControllerMethod getControllerMethod() {
-		final Class<ControllerMethod> type = ControllerMethod.class;
-		final Instance<ControllerMethod> instance = current().select(type);
-		final ControllerMethod controllerMethod = instance.get();
-		return controllerMethod;
+		return current().select(String.class, RQ).get();
 	}
 
-	final private String getResourceController(final ControllerMethod cm) {
-		try {
-			final Class<?> type = cm.getController().getType();
-			final Constructor<?> constructor = type.getDeclaredConstructor();
-			final Boolean accessible = constructor.isAccessible();
-			constructor.setAccessible(Boolean.TRUE);
-			final CrudController<?> i = (CrudController<?>) constructor.newInstance();
-			constructor.setAccessible(accessible);
-			return i.getResourceName();
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
+	private static final Resource RQ = new Resource() {
+
+		@Override
+		public Class<? extends Annotation> annotationType() {
+			return Resource.class;
 		}
-	}
+
+		@Override
+		public String value() {
+			return "";
+		}
+	};
 }
