@@ -64,6 +64,10 @@ public class CrudControllerTest {
 		public String getRootTag(final Model src) {
 			return tag;
 		}
+		
+		public String getResource() {
+			return "coracao";
+		};
 	};
 	private final String nome = "Nome da Aplicação Número: " +  new Date().getTime();
 	private final Repository repository = new Repository(null, null, null, null){
@@ -151,7 +155,7 @@ public class CrudControllerTest {
 		assertEquals("{\"xptos\":[{\"recursos\":[],\"nome\":\""+nome+"\"}]}", result.serializedResult());
 	}
 	
-	//@Test
+	@Test
 	public void testEmptyCollection() throws Exception {
 		final Repository repository = new Repository(null, null, null, null){
 			private static final long serialVersionUID = 1L;
@@ -179,6 +183,6 @@ public class CrudControllerTest {
 			}
 		};
 		controller.index();
-		assertEquals("{\"xptos\":[]}", result.serializedResult());
+		assertEquals("{\"coracoes\":[]}", result.serializedResult());
 	}
 }
