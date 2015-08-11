@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.enterprise.inject.Instance;
@@ -66,8 +65,8 @@ public class CrudControllerTest {
 			return tag;
 		}
 	};
-	private String nome = "Nome da Aplicação Número: " +  new Date().getTime();
-	private Repository repository = new Repository(null, null, null, null){
+	private final String nome = "Nome da Aplicação Número: " +  new Date().getTime();
+	private final Repository repository = new Repository(null, null, null, null){
 		private static final long serialVersionUID = 1L;
 		private final Aplicacao aplicacao = new Aplicacao(nome);
 		private final PaginatedCollection<Model, Meta> collection = new PaginatedMetaList<>(Arrays.asList(aplicacao), new Meta(1l, 100l));
@@ -118,11 +117,9 @@ public class CrudControllerTest {
 		final TypeNameExtractor extractor = new DefaultTypeNameExtractor();
 		final TagableExtractor tagableExtractor = new DefaultTagableExtrator(new MockInstanceImpl<>(new ArrayList<Tagable<?>>())){
 			@Override
-			public String extract(final Object object) {
-				if(Collection.class.isInstance(object)){
-					return inflector.pluralize(tag);
-				}
-				return tag;
+			@SuppressWarnings("unchecked")
+			protected Tagable<Object> getTagable(final Object object) {
+				return (Tagable<Object>) serializer;
 			}
 		};
 		final GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, environment, tagableExtractor);
@@ -152,5 +149,36 @@ public class CrudControllerTest {
 	public void testCollection() throws Exception {
 		controller.index();
 		assertEquals("{\"xptos\":[{\"recursos\":[],\"nome\":\""+nome+"\"}]}", result.serializedResult());
+	}
+	
+	//@Test
+	public void testEmptyCollection() throws Exception {
+		final Repository repository = new Repository(null, null, null, null){
+			private static final long serialVersionUID = 1L;
+			private final PaginatedCollection<Model, Meta> collection = new PaginatedMetaList<>(new ArrayList<>(), new Meta(1l, 100l));
+		
+			
+			@SuppressWarnings("unchecked")
+			public <T extends Model> br.eti.clairton.paginated.collection.PaginatedCollection<T,Meta> collection(Integer page, Integer perPage) {
+				return (PaginatedCollection<T, Meta>) collection;
+			};
+			
+			public <T extends Model> Repository from(java.lang.Class<T> type) {
+				return this;
+			};
+			
+			public Repository distinct() {
+				return this;
+			};
+		};
+
+		controller = new AplicacaoController(repository, result, inflector, request, Mockito.mock(QueryParser.class), response){
+			@Override
+			protected Page paginate() {
+				return new Page(1, 100);
+			}
+		};
+		controller.index();
+		assertEquals("{\"xptos\":[]}", result.serializedResult());
 	}
 }

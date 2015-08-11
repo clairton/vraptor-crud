@@ -11,7 +11,7 @@ public class Tagable<T> extends br.eti.clairton.jpa.serializer.Tagable<T> {
 	}
 	
 	@Override
-	protected String pluralize(final String tag){
+	public String pluralize(final String tag){
 		return inflector.pluralize(tag);
 	}
 }

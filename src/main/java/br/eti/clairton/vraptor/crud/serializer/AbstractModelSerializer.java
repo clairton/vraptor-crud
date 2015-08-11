@@ -21,7 +21,14 @@ public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSe
 
 	public AbstractModelSerializer(@NotNull final Inflector inflector, @NotNull EntityManager em) {
 		super(em);
-		this.tagable = new Tagable<>(inflector);
+		this.tagable = new Tagable<T>(inflector){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getRootTag(final T src) {
+				return AbstractModelSerializer.this.getRootTag(src);
+			}
+		};
 	}
 
 	public AbstractModelSerializer() {
@@ -32,5 +39,4 @@ public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSe
 	public String getRootTagCollection(final Collection<T> collection) {
 		return tagable.getRootTagCollection(collection);
 	}
-
 }
