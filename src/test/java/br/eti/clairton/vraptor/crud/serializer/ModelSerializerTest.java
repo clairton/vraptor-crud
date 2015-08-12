@@ -11,29 +11,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
-import br.eti.clairton.cdi.test.CdiJUnit4Runner;
-import br.eti.clairton.vraptor.crud.model.Aplicacao;
-import br.eti.clairton.vraptor.crud.model.Recurso;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-@RunWith(CdiJUnit4Runner.class)
+import br.eti.clairton.inflector.Inflector;
+import br.eti.clairton.inflector.Locale;
+import br.eti.clairton.repository.Model;
+import br.eti.clairton.vraptor.crud.model.Aplicacao;
+import br.eti.clairton.vraptor.crud.model.Recurso;
+import net.vidageek.mirror.dsl.Mirror;
+
 public class ModelSerializerTest {
-	private @Inject Mirror mirror;
-	private @Inject GsonBuilderWrapper builder;
+	private final Mirror mirror = new Mirror();
+
+	private final Inflector inflector = Inflector.getForLocale(Locale.pt_BR);
+
 	private Gson gson;
+		
 
 	@Before
 	public void init() {
+		final GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(OutroModel.class, new OutroModelSerializer(inflector, null));
+		builder.registerTypeHierarchyAdapter(Model.class, new ModelSerializer(inflector, null));
 		gson = builder.create();
 	}
 
