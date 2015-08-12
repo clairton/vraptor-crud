@@ -23,9 +23,9 @@ import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.gson.Exclusions;
 import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
 import br.com.caelum.vraptor.serialization.gson.RegisterType;
+import br.eti.clairton.iterablebypriority.Iterables;
 
 @Specializes
-//TODO a partir da versão 4.2 do vraptor a implementação é nativa, eliminar essa classes
 public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper {
 	private final Logger logger = LogManager.getLogger(GsonBuilderWrapper.class);
 	private final Iterable<JsonSerializer<?>> jsonSerializers;
@@ -35,8 +35,8 @@ public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson
 	@Inject
 	public GsonBuilderWrapper(final @Any Instance<JsonSerializer<?>> jsonSerializers, final @Any Instance<JsonDeserializer<?>> jsonDeserializers, final Serializee serializee) {
 		super(jsonSerializers, jsonDeserializers, serializee);
-		this.jsonSerializers = jsonSerializers;
-		this.jsonDeserializers = jsonDeserializers;
+		this.jsonSerializers = Iterables.sort(jsonSerializers);
+		this.jsonDeserializers = Iterables.sort(jsonDeserializers);
 		ExclusionStrategy exclusion = new Exclusions(serializee);
 		exclusions = singletonList(exclusion);
 	}
@@ -81,9 +81,6 @@ public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson
 			klazz = adapter.getClass();
 		}
 		final Type[] genericInterfaces = klazz.getGenericInterfaces();
-		if(genericInterfaces.length == 0){
-			System.err.println();
-		}
 		final ParameterizedType type = (ParameterizedType) genericInterfaces[0];
 		final Type actualType = type.getActualTypeArguments()[0];
 
