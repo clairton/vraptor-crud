@@ -16,6 +16,9 @@ import org.junit.runner.RunWith;
 
 import br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
+import br.eti.clairton.vraptor.crud.model.ModelManyToMany;
+import br.eti.clairton.vraptor.crud.model.ModelOneToOne;
+import br.eti.clairton.vraptor.crud.model.OutroModel;
 import br.eti.clairton.vraptor.crud.model.Recurso;
 
 import com.google.gson.Gson;
@@ -93,10 +96,8 @@ public class ModelDeserializerTest {
 		final ModelManyToMany object = new ModelManyToMany();
 		final String json = "{'id': '1111', 'aplicacoes': [444,555]}";
 		mirror.on(object).set().field("id").withValue(0l);
-		final ModelManyToMany result = gson.fromJson(json,
-				ModelManyToMany.class);
+		final ModelManyToMany result = gson.fromJson(json, ModelManyToMany.class);
 		assertEquals(Long.valueOf(444l), result.getAplicacoes().get(0).getId());
 		assertEquals(Long.valueOf(555l), result.getAplicacoes().get(1).getId());
 	}
-
 }

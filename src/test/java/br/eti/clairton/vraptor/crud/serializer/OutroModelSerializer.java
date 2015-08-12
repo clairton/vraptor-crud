@@ -10,6 +10,7 @@ import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
 import br.com.caelum.vraptor.serialization.gson.RegisterType;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.jpa.serializer.Mode;
+import br.eti.clairton.vraptor.crud.model.OutroModel;
 
 @RegisterStrategy(RegisterType.SINGLE)
 public class OutroModelSerializer extends AbstractModelSerializer<OutroModel> implements JsonSerializer<OutroModel>, JsonDeserializer<OutroModel> {
