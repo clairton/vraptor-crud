@@ -46,6 +46,7 @@ import br.eti.clairton.repository.vraptor.QueryParser;
 import br.eti.clairton.vraptor.crud.GsonBuilderWrapper;
 import br.eti.clairton.vraptor.crud.GsonJSONSerialization;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
+import br.eti.clairton.vraptor.crud.model.Recurso;
 import br.eti.clairton.vraptor.crud.serializer.DefaultTagableExtrator;
 import br.eti.clairton.vraptor.crud.serializer.ModelSerializer;
 import br.eti.clairton.vraptor.crud.serializer.TagableExtractor;
@@ -59,6 +60,9 @@ public class CrudControllerTest {
 
 	private final JsonSerializer<Model> serializer = new ModelSerializer(inflector, Mockito.mock(EntityManager.class)){
 		private static final long serialVersionUID = 1L;
+		{
+			record("recursos");
+		}
 
 		@Override
 		public String getRootTag(final Model src) {
@@ -69,10 +73,28 @@ public class CrudControllerTest {
 			return "coracao";
 		};
 	};
+
+	private final JsonSerializer<Model> serializerRecurso = new ModelSerializer(inflector, Mockito.mock(EntityManager.class)){
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public String getRootTag(final Model src) {
+			return "recurso";
+		}
+		
+		public String getRootTagCollection(java.util.Collection<Model> collection) {
+			return "recursos";
+		};
+		
+		public String getResource() {
+			return "recurso";
+		};
+	};
 	private final String nome = "Nome da Aplicação Número: " +  new Date().getTime();
 	private final Repository repository = new Repository(null, null, null, null){
 		private static final long serialVersionUID = 1L;
-		private final Aplicacao aplicacao = new Aplicacao(nome);
+		private final Recurso recurso = new Recurso("abc");
+		private final Aplicacao aplicacao = new Aplicacao(nome, recurso);
 		private final PaginatedCollection<Model, Meta> collection = new PaginatedMetaList<>(Arrays.asList(aplicacao), new Meta(1l, 100l));
 		
 		@SuppressWarnings("unchecked")
@@ -114,6 +136,7 @@ public class CrudControllerTest {
 			@Override
 			public Gson create() {
 				getGsonBuilder().registerTypeAdapter(Aplicacao.class, serializer);
+				getGsonBuilder().registerTypeAdapter(Recurso.class, serializerRecurso);
 				return getGsonBuilder().create();
 			}
 		};
@@ -146,13 +169,13 @@ public class CrudControllerTest {
 	@Test
 	public void testSingle() throws Exception {
 		controller.edit(id);
-		assertEquals("{\"xpto\":{\"recursos\":[],\"nome\":\""+nome+"\"}}", result.serializedResult());
+		assertEquals("{\"xpto\":{\"recursos\":[{\"nome\":\"abc\"}],\"nome\":\""+nome+"\"}}", result.serializedResult());
 	}
 	
 	@Test
 	public void testCollection() throws Exception {
 		controller.index();
-		assertEquals("{\"xptos\":[{\"recursos\":[],\"nome\":\""+nome+"\"}]}", result.serializedResult());
+		assertEquals("{\"xptos\":[{\"recursos\":[{\"nome\":\"abc\"}],\"nome\":\""+nome+"\"}]}", result.serializedResult());
 	}
 	
 	@Test

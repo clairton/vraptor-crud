@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.eti.clairton</groupId>
 	<artifactId>vraptor-crud</artifactId>
-	<version>0.7.1</version>
+	<version>0.7.2</version>
 	<url>https://github.com/clairton/vraptor-crud</url>
 	<scm>
 		<connection>scm:git:git@github.com:clairton/vraptor-crud.git</connection>
@@ -71,7 +71,7 @@
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>repository</artifactId>
-			<version>0.4.0</version>
+			<version>0.5.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

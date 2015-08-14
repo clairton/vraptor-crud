@@ -28,9 +28,13 @@ public class Recurso extends br.eti.clairton.repository.Model {
 		this(null, null);
 	}
 
-	public Recurso(final Aplicacao aplicacao, final String nome) {
+	public Recurso(final String nome) {
 		super();
 		this.nome = nome;
+	}
+
+	public Recurso(final Aplicacao aplicacao, final String nome) {
+		this(nome);
 		this.aplicacao = aplicacao;
 	}
 
