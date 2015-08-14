@@ -18,7 +18,7 @@ import br.eti.clairton.jpa.serializer.GsonJpaSerializer;
 import br.eti.clairton.repository.Model;
 import br.eti.clairton.security.Resource;
 
-public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSerializer<T> implements JsonSerializer<T>, JsonDeserializer<T>, Resourceable {
+public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSerializer<T> implements JsonSerializer<T>, JsonDeserializer<T>, Resourceable<T> {
 	private static final long serialVersionUID = 1L;
 	private final br.eti.clairton.jpa.serializer.Tagable<T> tagable;
 
@@ -33,8 +33,13 @@ public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSe
 			}
 
 			@Override
-			public String getResource() {
-				return  AbstractModelSerializer.this.getResource();
+			public String getResource(final T src) {
+				return  AbstractModelSerializer.this.getResource(src);
+			}
+
+			@Override
+			public String getResource(final Collection<T> src) {
+				return  AbstractModelSerializer.this.getResource(src);
 			}
 		};
 	}
@@ -49,7 +54,12 @@ public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSe
 	}
 	
 	@Override
-	public String getResource() {
+	public String getResource(final T src) {
+		return current().select(String.class, RQ).get();
+	}
+	
+	@Override
+	public String getResource(final Collection<T> src) {
 		return current().select(String.class, RQ).get();
 	}
 

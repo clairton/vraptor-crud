@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.enterprise.inject.Instance;
@@ -69,7 +70,13 @@ public class CrudControllerTest {
 			return tag;
 		}
 		
-		public String getResource() {
+		@Override
+		public String getResource(final Model src) {
+			return "coracao";
+		};
+		
+		@Override
+		public String getResource(final Collection<Model> src) {
 			return "coracao";
 		};
 	};
@@ -86,7 +93,13 @@ public class CrudControllerTest {
 			return "recursos";
 		};
 		
-		public String getResource() {
+		@Override
+		public String getResource(final Model src) {
+			return "recurso";
+		};
+		
+		@Override
+		public String getResource(final Collection<Model> src) {
 			return "recurso";
 		};
 	};

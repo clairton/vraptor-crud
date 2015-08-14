@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 import org.junit.Test;
@@ -19,7 +20,12 @@ public class TagableTest {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public String getResource() {
+		public String getResource(final String src) {
+			return resource;
+		}
+
+		@Override
+		public String getResource(final Collection<String> src) {
 			return resource;
 		}
 	};
