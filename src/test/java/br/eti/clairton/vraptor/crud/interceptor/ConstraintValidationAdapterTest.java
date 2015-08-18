@@ -29,19 +29,21 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.util.test.MockResult;
+import br.eti.clairton.inflector.Inflector;
+import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
+import br.eti.clairton.vraptor.crud.model.Recurso;
 
 public class ConstraintValidationAdapterTest {
-	private final ConstraintValidationAdapter adapter = new ConstraintValidationAdapter();
-	private final Validator validator = buildDefaultValidatorFactory()
-			.getValidator();
+	private final Inflector inflector = Inflector.getForLocale(Locale.pt_BR);
+	private final ConstraintValidationAdapter adapter = new ConstraintValidationAdapter(inflector);
+	private final Validator validator = buildDefaultValidatorFactory().getValidator();
 
 	@Test
 	public void testSerialize() throws Throwable {
 		final MockResult result = new MockResult();
 		final Logger logger = LogManager.getLogger();
-		final ExceptionVerifierInterceptor interceptor = new ExceptionVerifierInterceptor(
-				result, logger, adapter);
+		final ExceptionVerifierInterceptor interceptor = new ExceptionVerifierInterceptor(result, logger, adapter);
 		final InvocationContext invocationContext = mock(InvocationContext.class);
 		final Throwable e = new ConstraintViolationException(getViolations());
 		when(invocationContext.proceed()).thenThrow(e);
@@ -57,11 +59,27 @@ public class ConstraintValidationAdapterTest {
 	@Test
 	public void testValidacaoDeClass() {
 		final TestClass bean = new TestClass();
-		final Set<ConstraintViolation<TestClass>> violations = validator
-				.validate(bean);
+		final Set<ConstraintViolation<TestClass>> violations = validator.validate(bean);
 		final Map<String, List<String>> errors = adapter.to(violations);
 		assertTrue(errors.containsKey("testClass"));
 		assertEquals("xpto", errors.get("testClass").get(0));
+	}
+
+	@Test
+	public void testValidacaoOneToManyNested() {
+		final Aplicacao bean = new Aplicacao("xpto");
+		bean.adicionar(new Recurso(bean, null));
+		final Set<ConstraintViolation<Aplicacao>> violations = validator.validate(bean);
+		final Map<String, List<String>> errors = adapter.to(violations);
+		assertTrue(errors.containsKey("recursos.nome"));
+	}
+
+	@Test
+	public void testValidacaoManyToOneNested() {
+		final Recurso bean = new Recurso(new Aplicacao(null), "xpto");
+		final Set<ConstraintViolation<Recurso>> violations = validator.validate(bean);
+		final Map<String, List<String>> errors = adapter.to(violations);
+		assertTrue(errors.containsKey("aplicacao.nome"));
 	}
 
 	private Set<ConstraintViolation<Aplicacao>> getViolations() {
@@ -86,17 +104,15 @@ public class ConstraintValidationAdapterTest {
 		Class<? extends Payload>[] payload() default {};
 	}
 
-	public static class TestCheckValidator implements
-			ConstraintValidator<TestCheck, TestClass> {
+	public static class TestCheckValidator implements ConstraintValidator<TestCheck, TestClass> {
 
 		@Override
-		public void initialize(TestCheck constraintAnnotation) {
+		public void initialize(final TestCheck constraintAnnotation) {
 
 		}
 
 		@Override
-		public boolean isValid(TestClass value,
-				ConstraintValidatorContext context) {
+		public boolean isValid(final TestClass value, final ConstraintValidatorContext context) {
 			return false;
 		}
 

@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,7 +17,7 @@ public class Recurso extends br.eti.clairton.repository.Model {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@NotNull
-	private Aplicacao aplicacao;
+	private @Valid Aplicacao aplicacao;
 
 	@NotNull
 	@Size(min = 1, max = 50)
