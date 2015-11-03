@@ -59,8 +59,7 @@ public class SessionController implements Serializable {
 	@Post
 	@ExceptionVerifier
 	@Consumes(value = "application/json")
-	public <T> void create(@NotNull final String user,
-			@NotNull final String password) throws CredentialNotFoundException {
+	public <T> void create(@NotNull final String user, @NotNull final String password) throws CredentialNotFoundException {
 		final T token = locksmith.create(user, password);
 		request.setParameter("Authorization", "Bearer " + token);
 		if (token instanceof String) {

@@ -109,6 +109,7 @@ public abstract class CrudController<T extends Model> {
 	public void create(final T model) {
 		logger.debug("Salvando registro");
 		createAndSerializeRecord(model);
+		result.use(http()).setStatusCode(201);
 	}
 
 	/**
@@ -370,7 +371,7 @@ public abstract class CrudController<T extends Model> {
 	 */
 	protected void removeAndSerializeResource(final Class<T> modelType, final Long id) {
 		removeRecord(modelType, id);
-		result.use(http()).setStatusCode(200);
+		result.use(http()).setStatusCode(204);
 	}
 
 	/**

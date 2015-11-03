@@ -270,10 +270,9 @@ public class CrudControllerIntegrationTest {
 		final String url = "/recursos/" + recursoId;
 		final UserFlow userFlow = navigate().to(url, method, new Parameters());
 		final VRaptorTestResult result = userFlow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		assertEquals(204, result.getResponse().getStatus());
 		assertEquals("", result.getResponseBody());
-		assertEquals(404, navigate().get(url).execute().getResponse()
-				.getStatus());
+		assertEquals(404, navigate().get(url).execute().getResponse().getStatus());
 	}
 
 	@Test
@@ -282,8 +281,7 @@ public class CrudControllerIntegrationTest {
 		final Aplicacao atualizar = entityManager.find(type, id);
 		final String nome = "abc" + new Date().getTime();
 		mirror.on(atualizar).set().field("nome").withValue(nome);
-		json = "{'aplicacao':{'nome':'" + nome + "', 'id':'" + id
-				+ "'},recursos:[{'nome':'outroRecurso'}]}";
+		json = "{'aplicacao':{'nome':'" + nome + "', 'id':'" + id + "'},recursos:[{'nome':'outroRecurso'}]}";
 		final String url = "/aplicacoes/" + id;
 		final HttpMethod method = HttpMethod.PUT;
 		final UserFlow flow = navigate().to(url, method, parameters);
