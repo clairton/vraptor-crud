@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
+import br.eti.clairton.vraptor.crud.cache.NoCache;
 
 /***
  * Serve para conseguir recuperar os arquivos estaticos.
@@ -17,6 +18,7 @@ import br.com.caelum.vraptor.Path;
  */
 @Controller
 @Path(value = "", priority = 1)
+@NoCache
 public class StaticFilesController {
 	private Logger logger;
 	
