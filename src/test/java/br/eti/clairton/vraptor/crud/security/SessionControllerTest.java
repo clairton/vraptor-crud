@@ -43,8 +43,7 @@ public class SessionControllerTest {
 	private Parameters parameters = new Parameters() {
 		@Override
 		public void fill(final MockHttpServletRequest request) {
-			final String json = String.format(
-					"{'user': '%s', 'password': '%s'}", user, password);
+			final String json = String.format("{'user': '%s', 'password': '%s'}", user, password);
 			mirror.on(request).set().field("content")
 					.withValue(json.getBytes());
 			mirror.on(request).set().field("contentType")
@@ -58,9 +57,7 @@ public class SessionControllerTest {
 		final UserFlow userFlow = navigate().to(url, POST, parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(401, result.getResponse().getStatus());
-		assertEquals(
-				"{\"errors\":{\"error\":[\"Usuário/Senha não existe(m)!\"]}}",
-				result.getResponseBody());
+		assertEquals("{\"errors\":{\"error\":[\"Usuário/Senha não existe(m)!\"]}}", result.getResponseBody());
 
 	}
 
@@ -70,9 +67,7 @@ public class SessionControllerTest {
 		final UserFlow userFlow = navigate().to(url, POST, parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(401, result.getResponse().getStatus());
-		assertEquals(
-				"{\"errors\":{\"error\":[\"Usuário/Senha não existe(m)!\"]}}",
-				result.getResponseBody());
+		assertEquals("{\"errors\":{\"error\":[\"Usuário/Senha não existe(m)!\"]}}", result.getResponseBody());
 	}
 
 	@Test

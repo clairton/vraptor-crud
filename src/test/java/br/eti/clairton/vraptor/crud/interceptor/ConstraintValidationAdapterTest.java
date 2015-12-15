@@ -24,8 +24,6 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Payload;
 import javax.validation.Validator;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -42,8 +40,7 @@ public class ConstraintValidationAdapterTest {
 	@Test
 	public void testSerialize() throws Throwable {
 		final MockResult result = new MockResult();
-		final Logger logger = LogManager.getLogger();
-		final ExceptionVerifierInterceptor interceptor = new ExceptionVerifierInterceptor(result, logger, adapter);
+		final ExceptionVerifierInterceptor interceptor = new ExceptionVerifierInterceptor(result, adapter, "");
 		final InvocationContext invocationContext = mock(InvocationContext.class);
 		final Throwable e = new ConstraintViolationException(getViolations());
 		when(invocationContext.proceed()).thenThrow(e);

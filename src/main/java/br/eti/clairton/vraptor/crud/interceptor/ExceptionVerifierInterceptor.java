@@ -19,9 +19,12 @@ import javax.persistence.OptimisticLockException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.ConstraintViolationException;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.environment.Property;
+import br.eti.clairton.security.PasswordExpiredException;
 import br.eti.clairton.security.UnauthenticatedException;
 import br.eti.clairton.security.UnauthorizedException;
 import br.eti.clairton.vraptor.crud.controller.NotNewableExeception;
@@ -35,11 +38,13 @@ import br.eti.clairton.vraptor.crud.controller.NotNewableExeception;
 @Interceptor
 @ExceptionVerifier
 public class ExceptionVerifierInterceptor {
+	private static final Logger logger = LogManager.getLogger(ExceptionVerifierInterceptor.class);
+
 	private final Result result;
 
-	private final Logger logger;
-
 	private final ConstraintValidationAdapter adapter;
+	
+	private final String changePassword;
 
 	/**
 	 * Construtor padrão.
@@ -52,11 +57,12 @@ public class ExceptionVerifierInterceptor {
 	 *            instancia de {@link ConstraintValidationAdapter}
 	 */
 	@Inject
-	public ExceptionVerifierInterceptor(final Result result,
-			final Logger logger, final ConstraintValidationAdapter adapter) {
+	public ExceptionVerifierInterceptor(final Result result, 
+										final ConstraintValidationAdapter adapter, 
+										final @Property("url.changePassword") String changePassword) {
 		this.result = result;
-		this.logger = logger;
 		this.adapter = adapter;
+		this.changePassword = changePassword;
 	}
 
 	/**
@@ -88,7 +94,12 @@ public class ExceptionVerifierInterceptor {
 			logger.debug("Unauthenticated: {}", e.getMessage());
 			status = 401;
 			errors = asMessage(e.getMessage());
-		} catch (final ConstraintViolationException e) {
+		} catch (final PasswordExpiredException e) {
+			logger.debug("PasswordExpired: {}", e.getMessage());
+			status = 302;
+			result.redirectTo(changePassword);
+			errors = asMessage(e.getMessage());
+		}  catch (final ConstraintViolationException e) {
 			logger.debug("ConstraintViolation: {}", e.getMessage());
 			@SuppressWarnings("rawtypes")
 			final Set violations = e.getConstraintViolations();

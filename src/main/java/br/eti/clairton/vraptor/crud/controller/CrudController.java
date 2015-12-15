@@ -101,11 +101,11 @@ public abstract class CrudController<T extends Model> {
 	 * @param model
 	 *            novo registro
 	 */
-	@Consumes(value = "application/json", options = WithRoot.class)
 	@Post
 	@Protected
 	@Authenticated
 	@ExceptionVerifier
+	@Consumes(value = "application/json", options = WithRoot.class)
 	public void create(final T model) {
 		logger.debug("Salvando registro");
 		createAndSerializeRecord(model);
@@ -134,8 +134,8 @@ public abstract class CrudController<T extends Model> {
 	@Get("new")
 	@Protected
 	@Authenticated
-	@ExceptionVerifier
 	@Operation("new")
+	@ExceptionVerifier
 	public void new_() {
 		logger.debug("Criando registro");
 		instanceAndSerializeRecord();

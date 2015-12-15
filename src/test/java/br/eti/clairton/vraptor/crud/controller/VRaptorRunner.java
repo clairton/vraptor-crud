@@ -3,6 +3,7 @@ package br.eti.clairton.vraptor.crud.controller;
 import static javax.enterprise.inject.spi.CDI.current;
 
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.model.InitializationError;
 
 import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
 import br.com.caelum.vraptor.test.container.CdiContainer;
@@ -13,8 +14,7 @@ public class VRaptorRunner extends BlockJUnit4ClassRunner {
 
 	private static CdiContainer cdiContainer;
 
-	public VRaptorRunner(final Class<?> klass)
-			throws org.junit.runners.model.InitializationError {
+	public VRaptorRunner(final Class<?> klass)throws InitializationError {
 		super(klass);
 		start();
 	}
@@ -32,10 +32,8 @@ public class VRaptorRunner extends BlockJUnit4ClassRunner {
 	}
 
 	public static UserFlow navigate() {
-		CDIBasedContainer cdiBasedContainer = current().select(
-				CDIBasedContainer.class).get();
-		final VRaptorNavigation navigation = cdiBasedContainer
-				.instanceFor(VRaptorNavigation.class);
+		CDIBasedContainer cdiBasedContainer = current().select(CDIBasedContainer.class).get();
+		final VRaptorNavigation navigation = cdiBasedContainer.instanceFor(VRaptorNavigation.class);
 		navigation.setContainer(cdiContainer);
 		return navigation.start().withoutJsp();
 	}

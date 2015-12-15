@@ -23,8 +23,6 @@ import javax.persistence.OptimisticLockException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +39,6 @@ public class ExceptionVerifierInterceptorTest {
 	private ExceptionVerifierInterceptor interceptor;
 	private InvocationContext context;
 	private ConstraintValidationAdapter adapter;
-	private Logger logger = LogManager.getLogger("Test");
 	private Result result;
 	private HttpResult httpResult;
 	private JSONSerialization jsonResult;
@@ -57,7 +54,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(result.use(json())).thenReturn(jsonResult);
 		final Serializer serializer = mock(Serializer.class);
 		when(jsonResult.from(anyObject(), anyString())).thenReturn(serializer);
-		interceptor = new ExceptionVerifierInterceptor(result, logger, adapter);
+		interceptor = new ExceptionVerifierInterceptor(result, adapter, "");
 	}
 
 	@Test

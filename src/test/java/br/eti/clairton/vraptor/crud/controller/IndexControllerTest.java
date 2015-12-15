@@ -48,8 +48,7 @@ public class IndexControllerTest {
 
 	@Test
 	public void testFonts() {
-		final UserFlow userFlow = navigate().get(
-				"/fonts/glyphicons-halflings-regular.svg");
+		final UserFlow userFlow = navigate().get("/fonts/glyphicons-halflings-regular.svg");
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 	}
