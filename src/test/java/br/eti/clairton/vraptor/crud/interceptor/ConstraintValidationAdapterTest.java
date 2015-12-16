@@ -40,7 +40,7 @@ public class ConstraintValidationAdapterTest {
 	@Test
 	public void testSerialize() throws Throwable {
 		final MockResult result = new MockResult();
-		final ExceptionVerifierInterceptor interceptor = new ExceptionVerifierInterceptor(result, adapter, "");
+		final ExceptionVerifierInterceptor interceptor = new ExceptionVerifierInterceptor(result, adapter);
 		final InvocationContext invocationContext = mock(InvocationContext.class);
 		final Throwable e = new ConstraintViolationException(getViolations());
 		when(invocationContext.proceed()).thenThrow(e);

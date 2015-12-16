@@ -54,7 +54,7 @@ public class ExceptionVerifierInterceptorTest {
 		when(result.use(json())).thenReturn(jsonResult);
 		final Serializer serializer = mock(Serializer.class);
 		when(jsonResult.from(anyObject(), anyString())).thenReturn(serializer);
-		interceptor = new ExceptionVerifierInterceptor(result, adapter, "");
+		interceptor = new ExceptionVerifierInterceptor(result, adapter);
 	}
 
 	@Test
