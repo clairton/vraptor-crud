@@ -153,7 +153,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void edit(final Long id) {
 		logger.debug("Editando registro");
-		retrieveAndSerializeRecord(id);
+		retrieveAndSerializeRecordToEdit(id);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public abstract class CrudController<T extends Model> {
 	@ExceptionVerifier
 	public void show(final Long id) {
 		logger.debug("Mostrando registro");
-		retrieveAndSerializeRecord(id);
+		retrieveAndSerializeRecordToShow(id);
 	}
 
 	/**
@@ -384,7 +384,51 @@ public abstract class CrudController<T extends Model> {
 		final T response = retrieveRecord(id);
 		serialize(response);
 	}
+	
+	/**
+	 * Recupera um registro para editar do banco de dados e serializa.
+	 * 
+	 * @param id
+	 *            identificador do registro
+	 */
+	protected void retrieveAndSerializeRecordToEdit(final Long id) {
+		final T response = retrieveRecordToEdit(id);
+		serialize(response);
+	}
+	
+	/**
+	 * Recupera um registro para mostrar do banco de dados e serializa.
+	 * 
+	 * @param id
+	 *            identificador do registro
+	 */
+	protected void retrieveAndSerializeRecordToShow(final Long id) {
+		final T response = retrieveRecordToShow(id);
+		serialize(response);
+	}
 
+	/**
+	 * Recupera um registro do banco de dados para mostrar.
+	 * 
+	 * @param id
+	 *            identificador do registro
+	 * @return registro recuperado
+	 */
+	protected T retrieveRecordToShow(final Long id) {
+		return retrieveRecord(id);
+	}
+	
+	/**
+	 * Recupera um registro do banco de dados.
+	 * 
+	 * @param id
+	 *            identificador do registro
+	 * @return registro recuperado
+	 */
+	protected T retrieveRecordToEdit(final Long id) {
+		return retrieveRecord(id);
+	}
+	
 	/**
 	 * Recupera um registro do banco de dados.
 	 * 
