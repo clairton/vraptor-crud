@@ -57,7 +57,7 @@ public class SessionControllerTest {
 		final UserFlow userFlow = navigate().to(url, POST, parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(401, result.getResponse().getStatus());
-		assertEquals("{\"errors\":{\"error\":[\"Usuário/Senha não existe(m)!\"]}}", result.getResponseBody());
+		assertEquals("{\"errors\":[{\"error\":[\"Usuário/Senha não existe(m)!\"]}]}", result.getResponseBody());
 
 	}
 
@@ -67,7 +67,7 @@ public class SessionControllerTest {
 		final UserFlow userFlow = navigate().to(url, POST, parameters);
 		final VRaptorTestResult result = userFlow.execute();
 		assertEquals(401, result.getResponse().getStatus());
-		assertEquals("{\"errors\":{\"error\":[\"Usuário/Senha não existe(m)!\"]}}", result.getResponseBody());
+		assertEquals("{\"errors\":[{\"error\":[\"Usuário/Senha não existe(m)!\"]}]}", result.getResponseBody());
 	}
 
 	@Test
