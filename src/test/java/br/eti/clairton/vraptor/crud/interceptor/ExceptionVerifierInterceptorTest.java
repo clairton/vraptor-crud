@@ -124,13 +124,13 @@ public class ExceptionVerifierInterceptorTest {
 		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));
 	}
 
-	private List<Map<String, List<String>>> wrap(final String message) {
-		return Arrays.asList(new HashMap<String, List<String>>() {
+	private Map<String, List<String>> wrap(final String message) {
+		return new HashMap<String, List<String>>() {
 			private static final long serialVersionUID = 1L;
 
 			{
 				put("error", Arrays.asList(message));
 			}
-		});
+		};
 	}
 }

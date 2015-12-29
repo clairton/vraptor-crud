@@ -132,7 +132,7 @@ public class ExceptionVerifierInterceptor {
 		 */
 		// if (!result.used()) {
 		result.use(http()).setStatusCode(status);
-		result.use(json()).from(Arrays.asList(errors), "errors").serialize();
+		result.use(json()).from(errors, "errors").serialize();
 		// }
 		return null;
 	}
