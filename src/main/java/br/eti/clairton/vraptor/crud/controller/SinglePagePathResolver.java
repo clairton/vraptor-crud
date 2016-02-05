@@ -3,7 +3,6 @@ package br.eti.clairton.vraptor.crud.controller;
 import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 
-import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.FormatResolver;
 import br.com.caelum.vraptor.view.DefaultPathResolver;
 
@@ -25,12 +24,12 @@ public class SinglePagePathResolver extends DefaultPathResolver {
 	public SinglePagePathResolver(final FormatResolver resolver) {
 		super(resolver);
 	}
-
-	/**
-	 * Sempre deve retorna "index.html", pq em uma SPA não há navegação.
-	 */
-	@Override
-	public String pathFor(final ControllerMethod method) {
-		return "index.html";
-	}
+	
+	protected String getPrefix() {
+        return "/WEB-INF";
+    }
+	
+	protected String getExtension() {
+        return "html";
+    }
 }
