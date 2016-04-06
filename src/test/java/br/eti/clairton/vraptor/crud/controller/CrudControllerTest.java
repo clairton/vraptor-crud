@@ -104,23 +104,23 @@ public class CrudControllerTest {
 		};
 	};
 	private final String nome = "Nome da Aplicação Número: " +  new Date().getTime();
-	private final Repository repository = new Repository(null, null, null){
+	private final Repository repository = new Repository(null){
 		private static final long serialVersionUID = 1L;
 		private final Recurso recurso = new Recurso("abc");
 		private final Aplicacao aplicacao = new Aplicacao(nome, recurso);
 		private final PaginatedCollection<Model, Meta> collection = new PaginatedMetaList<>(Arrays.asList(aplicacao), new Meta(1l, 100l));
 		
 		@SuppressWarnings("unchecked")
-		public <T extends Model, Y> T byId(@NotNull final Class<T> klass, @NotNull final Y id) throws NoResultException {
+		public <T, Y> T byId(@NotNull final Class<T> klass, @NotNull final Y id) throws NoResultException {
 			return (T) aplicacao;
 		}
 		
 		@SuppressWarnings("unchecked")
-		public <T extends Model> br.eti.clairton.paginated.collection.PaginatedCollection<T,Meta> collection(Integer page, Integer perPage) {
+		public <T> br.eti.clairton.paginated.collection.PaginatedCollection<T,Meta> collection(Integer page, Integer perPage) {
 			return (PaginatedCollection<T, Meta>) collection;
 		};
 		
-		public <T extends Model> Repository from(java.lang.Class<T> type) {
+		public <T> Repository from(java.lang.Class<T> type) {
 			return this;
 		};
 		
@@ -193,17 +193,17 @@ public class CrudControllerTest {
 	
 	@Test
 	public void testEmptyCollection() throws Exception {
-		final Repository repository = new Repository(null, null, null){
+		final Repository repository = new Repository(null){
 			private static final long serialVersionUID = 1L;
 			private final PaginatedCollection<Model, Meta> collection = new PaginatedMetaList<>(new ArrayList<>(), new Meta(1l, 100l));
 		
 			
 			@SuppressWarnings("unchecked")
-			public <T extends Model> br.eti.clairton.paginated.collection.PaginatedCollection<T,Meta> collection(Integer page, Integer perPage) {
+			public <T> br.eti.clairton.paginated.collection.PaginatedCollection<T,Meta> collection(Integer page, Integer perPage) {
 				return (PaginatedCollection<T, Meta>) collection;
 			};
 			
-			public <T extends Model> Repository from(java.lang.Class<T> type) {
+			public <T> Repository from(java.lang.Class<T> type) {
 				return this;
 			};
 			
