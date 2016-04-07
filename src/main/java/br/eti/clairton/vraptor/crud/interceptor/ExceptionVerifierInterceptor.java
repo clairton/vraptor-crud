@@ -2,9 +2,9 @@ package br.eti.clairton.vraptor.crud.interceptor;
 
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
+import static java.util.Arrays.asList;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +24,10 @@ import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Result;
 import br.eti.clairton.security.PasswordExpiredException;
+import br.eti.clairton.security.PasswordPolicyException;
 import br.eti.clairton.security.UnauthenticatedException;
 import br.eti.clairton.security.UnauthorizedException;
-import br.eti.clairton.vraptor.crud.controller.NotNewableExeception;
+import br.eti.clairton.vraptor.crud.controller.NotInstanceableExeception;
 
 /**
  * Verifica o encaminhando diante das exceções lançadas para os metodos
@@ -70,8 +71,7 @@ public class ExceptionVerifierInterceptor {
 	 *             ela é propagada
 	 */
 	@AroundInvoke
-	public Object invoke(final InvocationContext invocationContext)
-			throws Throwable {
+	public Object invoke(final InvocationContext invocationContext) throws Throwable {
 		Object errors;
 		Integer status;
 		try {
@@ -116,7 +116,12 @@ public class ExceptionVerifierInterceptor {
 				m = e.getMessage();
 			}
 			errors = asMessage(m);
-		} catch (final NotNewableExeception e) {
+		} catch (final PasswordPolicyException e) {
+			final String m = "A senha informada não atende a politica de segurança!!";
+			logger.debug("PasswordPolicyException: " + m, e);
+			status = 401;
+			errors = asMessage(m);
+		} catch (final NotInstanceableExeception e) {
 			logger.debug("NotNewableExeception: {}", e.getMessage());
 			errors = asMessage(e.getCause().getMessage());
 			status = 422;
@@ -139,7 +144,7 @@ public class ExceptionVerifierInterceptor {
 
 	private Map<String, List<String>> asMessage(final String message) {
 		final Map<String, List<String>> messages = new HashMap<String, List<String>>();
-		messages.put("error", Arrays.asList(message));
+		messages.put("error", asList(message));
 		return messages;
 	}
 }

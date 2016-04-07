@@ -32,7 +32,7 @@ import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.view.HttpResult;
 import br.eti.clairton.security.UnauthenticatedException;
 import br.eti.clairton.security.UnauthorizedException;
-import br.eti.clairton.vraptor.crud.controller.NotNewableExeception;
+import br.eti.clairton.vraptor.crud.controller.NotInstanceableExeception;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 
 public class ExceptionVerifierInterceptorTest {
@@ -118,7 +118,7 @@ public class ExceptionVerifierInterceptorTest {
 	@Test
 	public void testVerifyNotNewableExeception() throws Throwable {
 		Throwable exception = new Exception("abc");
-		when(context.proceed()).thenThrow(new NotNewableExeception(exception));
+		when(context.proceed()).thenThrow(new NotInstanceableExeception(exception));
 		interceptor.invoke(context);
 		verify(httpResult).setStatusCode(422);
 		verify(jsonResult).from(eq(wrap(exception.getMessage())), eq("errors"));

@@ -5,7 +5,7 @@ package br.eti.clairton.vraptor.crud.controller;
  * 
  * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
  */
-public class NotNewableExeception extends RuntimeException {
+public class NotInstanceableExeception extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -14,7 +14,7 @@ public class NotNewableExeception extends RuntimeException {
 	 * @param cause
 	 *            causa
 	 */
-	public NotNewableExeception(final Throwable cause) {
+	public NotInstanceableExeception(final Throwable cause) {
 		super(cause);
 	}
 }

@@ -128,7 +128,7 @@ public abstract class CrudController<T extends Model> {
 	/**
 	 * Cria um recurso novo.
 	 * 
-	 * @throws NotNewableExeception
+	 * @throws NotInstanceableExeception
 	 *             caso não consiga criar uma nova instancia
 	 */
 	@Get("new")
@@ -359,7 +359,7 @@ public abstract class CrudController<T extends Model> {
 			final Constructor<T> constructor = modelType.getConstructor();
 			return constructor.newInstance();
 		} catch (final Exception e) {
-			throw new NotNewableExeception(e);
+			throw new NotInstanceableExeception(e);
 		}
 	}
 
