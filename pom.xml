@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.eti.clairton</groupId>
 	<artifactId>vraptor-crud</artifactId>
-	<version>1.4.0</version>
+	<version>1.5.0</version>
 	<url>https://github.com/clairton/vraptor-crud</url>
 	<scm>
 		<connection>scm:git:git@github.com:clairton/vraptor-crud.git</connection>
@@ -14,6 +14,12 @@
 		<deltaspike.version>1.3.0</deltaspike.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>br.eti.clairton</groupId>
+			<artifactId>vraptor-cors</artifactId>
+			<version>0.1.0</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>inflector</artifactId>
