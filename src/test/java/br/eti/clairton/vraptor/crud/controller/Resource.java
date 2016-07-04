@@ -18,8 +18,6 @@ import javax.persistence.Persistence;
 import javax.persistence.metamodel.Metamodel;
 import javax.servlet.http.HttpServletRequest;
 
-import net.vidageek.mirror.dsl.Mirror;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mockito.Mockito;
@@ -35,9 +33,12 @@ import br.eti.clairton.security.Lock;
 import br.eti.clairton.security.LockInMemory;
 import br.eti.clairton.security.Locksmith;
 import br.eti.clairton.security.LocksmithInMemory;
+import br.eti.clairton.security.Service;
+import br.eti.clairton.security.ServiceInMemory;
 import br.eti.clairton.security.Token;
 import br.eti.clairton.security.UnauthenticatedException;
 import br.eti.clairton.security.User;
+import net.vidageek.mirror.dsl.Mirror;
 
 /**
  * Produz os recursos.
@@ -160,6 +161,11 @@ public class Resource {
 	@Produces
 	public Locksmith getLocksmith(@Default Lock lock) {
 		return new LocksmithInMemory(lock);
+	}
+
+	@Produces
+	public Service getService(@Default Lock lock) {
+		return new ServiceInMemory(lock);
 	}
 
 	@Produces

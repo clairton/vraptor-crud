@@ -12,14 +12,14 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.serialization.gson.WithRoot;
-import br.eti.clairton.security.Lock;
+import br.eti.clairton.security.Service;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 
 
 @Controller
 @Path("passwords")
 public class PasswordController {
-	private final Lock lock;
+	private final Service service;
 
 	private final Result result;
 
@@ -29,9 +29,9 @@ public class PasswordController {
 	}
 	
 	@Inject
-	public PasswordController(final Lock lock, final Result result) {
+	public PasswordController(final Service service, final Result result) {
 		super();
-		this.lock = lock;
+		this.service = service;
 		this.result = result;
 	}
 	
@@ -41,7 +41,7 @@ public class PasswordController {
 	public void update(@NotNull @Size(min = 1) final String user, 
 						@NotNull @Size(min = 1) final String currentPassword, 
 						@NotNull @Size(min = 1) final String newPassword){
-		lock.update(user, currentPassword, newPassword);
+		service.update(user, currentPassword, newPassword);
 		result.use(http()).setStatusCode(204);
 	}
 }
