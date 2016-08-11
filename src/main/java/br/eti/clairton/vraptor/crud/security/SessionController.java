@@ -34,7 +34,7 @@ public class SessionController implements Serializable {
 	 * CDI eye only.
 	 */
 	@Deprecated
-	protected SessionController() {
+	public SessionController() {
 		this(null, null, null, null);
 	}
 
