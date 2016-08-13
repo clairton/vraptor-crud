@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Patch;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
 import br.com.caelum.vraptor.Result;
@@ -196,6 +197,7 @@ public abstract class CrudController<T extends Model> {
 	 */
 	@Consumes(value = "application/json", options = WithRoot.class)
 	@Put("{model.id}")
+	@Patch("{model.id}")
 	@Protected
 	@Authenticated
 	@ExceptionVerifier
