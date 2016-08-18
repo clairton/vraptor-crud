@@ -276,7 +276,7 @@ public class CrudControllerIntegrationTest {
 	}
 
 	@Test
-	public void testUpdate() {
+	public void testUpdateWithPut() {
 		final Class<Aplicacao> type = Aplicacao.class;
 		final Aplicacao atualizar = entityManager.find(type, id);
 		final String nome = "abc" + new Date().getTime();
@@ -284,6 +284,23 @@ public class CrudControllerIntegrationTest {
 		json = "{'aplicacao':{'nome':'" + nome + "', 'id':'" + id + "'},recursos:[{'nome':'outroRecurso'}]}";
 		final String url = "/aplicacoes/" + id;
 		final HttpMethod method = HttpMethod.PUT;
+		final UserFlow flow = navigate().to(url, method, parameters);
+		final VRaptorTestResult result = flow.execute();
+		assertEquals(200, result.getResponse().getStatus());
+		assertAplicacao(atualizar, result.getResponseBody());
+		final Aplicacao resultado = entityManager.find(type, id);
+		assertEquals(nome, resultado.getNome());
+	}
+
+	@Test
+	public void testUpdateWithPatch() {
+		final Class<Aplicacao> type = Aplicacao.class;
+		final Aplicacao atualizar = entityManager.find(type, id);
+		final String nome = "def" + new Date().getTime();
+		mirror.on(atualizar).set().field("nome").withValue(nome);
+		json = "{'aplicacao':{'nome':'" + nome + "', 'id':'" + id + "'},recursos:[{'nome':'outroRecursoDiferente'}]}";
+		final String url = "/aplicacoes/" + id;
+		final HttpMethod method = HttpMethod.PATCH;
 		final UserFlow flow = navigate().to(url, method, parameters);
 		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
