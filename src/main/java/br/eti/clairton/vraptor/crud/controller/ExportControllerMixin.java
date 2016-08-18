@@ -13,13 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.vraptor.Get;
 import br.eti.clairton.paginated.collection.Meta;
 import br.eti.clairton.paginated.collection.PaginatedCollection;
-import br.eti.clairton.repository.Model;
 import br.eti.clairton.security.Authenticated;
 import br.eti.clairton.security.Operation;
 import br.eti.clairton.security.Protected;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 
-public interface ExportControllerMixin<T extends Model> {
+public interface ExportControllerMixin<T> {
 
 	/**
 	 * Exporta os recursos.<br/>

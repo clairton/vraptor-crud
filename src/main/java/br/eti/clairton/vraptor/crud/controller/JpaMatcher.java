@@ -1,5 +1,7 @@
 package br.eti.clairton.vraptor.crud.controller;
 
+import static java.lang.Boolean.FALSE;
+
 import java.lang.reflect.Field;
 
 import javax.persistence.metamodel.Attribute;
@@ -24,8 +26,8 @@ public class JpaMatcher implements Matcher<Field> {
 			final ManagedType<?> managed = meta.managedType(type);
 			final Attribute<?, ?> attribute = managed.getAttribute(element.getName());
 			return SingularAttribute.class.isInstance(attribute);
-		} catch (IllegalArgumentException e) {
-			return Boolean.FALSE;
+		} catch (final IllegalArgumentException e) {
+			return FALSE;
 		}
 	}
 }

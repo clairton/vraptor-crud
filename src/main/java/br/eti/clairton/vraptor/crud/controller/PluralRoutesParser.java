@@ -1,5 +1,8 @@
 package br.eti.clairton.vraptor.crud.controller;
 
+import static br.com.caelum.vraptor.util.StringUtils.lowercaseFirst;
+import static java.lang.Boolean.FALSE;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +16,6 @@ import br.com.caelum.vraptor.controller.BeanClass;
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
-import br.com.caelum.vraptor.util.StringUtils;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 
@@ -79,7 +81,7 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 	protected String extractControllerNameFrom(final Class<?> type) {
 		final String prefix = extractPrefix(type);
 		if (prefix == null || prefix.isEmpty()) {
-			String baseName = StringUtils.lowercaseFirst(type.getSimpleName());
+			String baseName = lowercaseFirst(type.getSimpleName());
 			if (baseName.endsWith("Controller")) {
 				baseName = baseName.substring(0, baseName.lastIndexOf("Controller"));
 			}
@@ -96,7 +98,7 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 	@Override
 	protected boolean isEligible(Method javaMethod) {
 		if (javaMethod.isAnnotationPresent(Ignore.class)) {
-			return Boolean.FALSE;
+			return FALSE;
 		} else {
 			return super.isEligible(javaMethod);
 		}

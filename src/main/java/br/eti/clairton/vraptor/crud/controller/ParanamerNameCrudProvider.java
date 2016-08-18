@@ -1,6 +1,7 @@
 package br.eti.clairton.vraptor.crud.controller;
 
 import static javax.enterprise.inject.spi.CDI.current;
+import static org.apache.logging.log4j.LogManager.getLogger;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -14,16 +15,14 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Specializes;
 import javax.enterprise.inject.spi.BeanManager;
 
-import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.set.dsl.SetterHandler;
-
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
 import br.eti.clairton.repository.Model;
+import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.set.dsl.SetterHandler;
 
 /**
  * Adequa os parametros dos metodos herdados do {@link CrudController}.
@@ -32,9 +31,9 @@ import br.eti.clairton.repository.Model;
  */
 @Specializes
 public class ParanamerNameCrudProvider extends ParanamerNameProvider {
-	private final Mirror mirror = new Mirror();
+	private static final Mirror mirror = new Mirror();
 
-	private final Logger logger = LogManager.getLogger();
+	private static final Logger logger = getLogger(ParanamerNameCrudProvider.class);
 
 	/**
 	 * Altera o nome do parametro que pode ser recebido nos metodos do

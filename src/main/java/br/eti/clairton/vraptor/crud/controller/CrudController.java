@@ -28,7 +28,6 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.paginated.collection.Meta;
 import br.eti.clairton.paginated.collection.PaginatedCollection;
-import br.eti.clairton.repository.Model;
 import br.eti.clairton.repository.Order;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
@@ -48,7 +47,7 @@ import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
  * @param <T>
  *            tipo do modelo
  */
-public abstract class CrudController<T extends Model> {
+public abstract class CrudController<T> {
 	private final Logger logger = LogManager.getLogger(CrudController.class);
 
 	private final Repository repository;

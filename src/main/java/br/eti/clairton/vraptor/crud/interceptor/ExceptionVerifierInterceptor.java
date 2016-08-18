@@ -3,6 +3,7 @@ package br.eti.clairton.vraptor.crud.interceptor;
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
 import static java.util.Arrays.asList;
+import static org.apache.logging.log4j.LogManager.getLogger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -19,7 +20,6 @@ import javax.persistence.OptimisticLockException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.ConstraintViolationException;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Result;
@@ -39,7 +39,7 @@ import br.eti.clairton.vraptor.crud.controller.NotInstanceableExeception;
 @Interceptor
 @ExceptionVerifier
 public class ExceptionVerifierInterceptor {
-	private static final Logger logger = LogManager.getLogger(ExceptionVerifierInterceptor.class);
+	private static final Logger logger = getLogger(ExceptionVerifierInterceptor.class);
 
 	private final Result result;
 

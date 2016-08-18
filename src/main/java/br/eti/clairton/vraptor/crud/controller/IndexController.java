@@ -26,6 +26,5 @@ public class IndexController {
 	@Get
 	public void index(){
 		result.forwardTo("index.html");
-	}
-	
+	}	
 }
