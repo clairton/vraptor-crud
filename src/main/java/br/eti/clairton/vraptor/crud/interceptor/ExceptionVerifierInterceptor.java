@@ -23,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Result;
+import br.eti.clairton.security.InvalidUserException;
 import br.eti.clairton.security.PasswordExpiredException;
 import br.eti.clairton.security.PasswordPolicyException;
 import br.eti.clairton.security.UnauthenticatedException;
@@ -101,6 +102,11 @@ public class ExceptionVerifierInterceptor {
 			@SuppressWarnings("unchecked")
 			final Object b = adapter.to(violations);
 			errors = b;
+			status = 422;
+		} catch (final InvalidUserException e) {
+			logger.debug("InvalidUserException: {}", e.getMessage());
+			final String m = "Usuário não pode ser criado pois esta invalido!!";
+			errors = asMessage(m);
 			status = 422;
 		} catch (final OptimisticLockException e) {
 			logger.debug("OptimisticLock: {}", e.getMessage());
