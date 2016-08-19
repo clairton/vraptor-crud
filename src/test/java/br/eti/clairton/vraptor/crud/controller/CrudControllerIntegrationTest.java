@@ -1,6 +1,5 @@
 package br.eti.clairton.vraptor.crud.controller;
 
-import static br.eti.clairton.vraptor.crud.controller.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -18,14 +17,16 @@ import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.transaction.TransactionManager;
 
-import net.vidageek.mirror.dsl.Mirror;
-
+import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+import com.google.gson.Gson;
+
 import br.com.caelum.vraptor.controller.HttpMethod;
+import br.com.caelum.vraptor.test.VRaptorIntegration;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
@@ -34,11 +35,10 @@ import br.eti.clairton.inflector.Locale;
 import br.eti.clairton.repository.vraptor.Param;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
+import net.vidageek.mirror.dsl.Mirror;
 
-import com.google.gson.Gson;
-
-@RunWith(VRaptorRunner.class)
-public class CrudControllerIntegrationTest {
+@RunWith(CdiTestRunner.class)
+public class CrudControllerIntegrationTest extends VRaptorIntegration{
 	private final Gson gson = new Gson();
 
 	private @Inject Mirror mirror;
@@ -88,10 +88,10 @@ public class CrudControllerIntegrationTest {
 
 	@Test
 	public void testCreate() {
-		json = "{'aplicacao':{'nome':'teste'}}";
+		json = "{aplicacao:{nome:'teste'}}";
 		final UserFlow userFlow = navigate().post("/aplicacoes", parameters);
 		final VRaptorTestResult result = userFlow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		final Long id = assertAplicacao(new Aplicacao("teste"), result.getResponseBody());
 		assertEquals(200, navigate().get("/aplicacoes/" + id).execute().getResponse().getStatus());
 	}
