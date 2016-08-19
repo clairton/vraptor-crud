@@ -23,8 +23,8 @@ import br.eti.clairton.paginated.collection.PaginatedCollection;
 import br.eti.clairton.repository.Order;
 import br.eti.clairton.repository.Predicate;
 import br.eti.clairton.repository.Repository;
-import br.eti.clairton.repository.vraptor.Page;
-import br.eti.clairton.repository.vraptor.QueryParser;
+import br.eti.clairton.repository.http.Page;
+import br.eti.clairton.repository.http.QueryParser;
 import br.eti.clairton.security.Authenticated;
 import br.eti.clairton.security.Protected;
 import br.eti.clairton.security.Resource;
@@ -241,7 +241,7 @@ public abstract class RetrieveController<T> {
 	 * @return coleção de predicados
 	 */
 	protected Collection<Predicate> predicates() {
-		return queryParser.parse(request, modelType);
+		return queryParser.parse(request.getParameterMap(), modelType);
 	}
 
 	/**
@@ -250,7 +250,7 @@ public abstract class RetrieveController<T> {
 	 * @return dados de paginação
 	 */
 	protected Page paginate() {
-		return queryParser.paginate(request, modelType);
+		return queryParser.paginate(request.getParameterMap(), modelType);
 	}
 
 	/**
@@ -259,6 +259,6 @@ public abstract class RetrieveController<T> {
 	 * @return ordem
 	 */
 	protected List<Order> orders() {
-		return queryParser.order(request, modelType);
+		return queryParser.order(request.getParameterMap(), modelType);
 	}
 }

@@ -32,7 +32,7 @@ import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Locale;
-import br.eti.clairton.repository.vraptor.Param;
+import br.eti.clairton.repository.http.Param;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
 import net.vidageek.mirror.dsl.Mirror;

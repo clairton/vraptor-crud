@@ -10,7 +10,7 @@ import br.com.caelum.vraptor.Result;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.repository.tenant.Tenant;
-import br.eti.clairton.repository.vraptor.QueryParser;
+import br.eti.clairton.repository.http.QueryParser;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 
 @Controller
@@ -24,12 +24,14 @@ public class AplicacaoController extends CrudController<Aplicacao> implements
 	}
 
 	@Inject
-	public AplicacaoController(@Tenant final Repository repository,
-			final Result result, @Default final Inflector inflector,
-			final ServletRequest request, final QueryParser queryParser,
+	public AplicacaoController(
+			@Tenant final Repository repository,
+			final Result result, 
+			@Default final Inflector inflector,
+			final ServletRequest request, 
+			final QueryParser queryParser,
 			HttpServletResponse response) {
-		super(Aplicacao.class, repository, result, inflector, request,
-				queryParser);
+		super(Aplicacao.class, repository, result, inflector, request, queryParser);
 		this.response = response;
 	}
 

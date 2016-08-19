@@ -22,7 +22,7 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
 import br.eti.clairton.repository.Model;
 import br.eti.clairton.repository.Repository;
-import br.eti.clairton.repository.vraptor.QueryParser;
+import br.eti.clairton.repository.http.QueryParser;
 import br.eti.clairton.security.Authenticated;
 import br.eti.clairton.security.Operation;
 import br.eti.clairton.security.Protected;
