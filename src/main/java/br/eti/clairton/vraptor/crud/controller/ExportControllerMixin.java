@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,7 +28,7 @@ public interface ExportControllerMixin<T> {
 	@Ignore
 	default void export(String format) {
 		final Collection<T> collection = find();
-		final String path = getService().toFile(collection, new HashMap<>(), "." + format);
+		final String path = getService().toFile(collection, getParameters(), "." + format);
 		final File file = getService().toFile(path);
 		try {
 			getResponse().setContentLength((int) file.length());
@@ -74,6 +75,11 @@ public interface ExportControllerMixin<T> {
 	@Operation("export")
 	default void pdf() {
 		export("pdf");
+	}
+	
+	@Ignore
+	default Map<String, Object> getParameters(){
+		return new HashMap<>();
 	}
 
 	@Ignore
