@@ -93,7 +93,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		final VRaptorTestResult result = userFlow.execute();
 		result.wasStatus(200);
 		final Long id = assertAplicacao(new Aplicacao("teste"), result.getResponseBody());
-		assertEquals(200, navigate().get("/aplicacoes/" + id).execute().getResponse().getStatus());
+		navigate().get("/aplicacoes/" + id).execute().wasStatus(200);
 	}
 
 	@Test
@@ -101,7 +101,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		json = "";
 		final UserFlow userFlow = navigate().get("/aplicacoes/new", parameters);
 		final VRaptorTestResult result = userFlow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		final String json = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(json, HashMap.class);
 		final Map<?, ?> aplicacao = (Map<?, ?>) o.get("aplicacao");
@@ -117,7 +117,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		final UserFlow userFlow = navigate().get("/aplicacoes/" + id + "/edit",
 				parameters);
 		final VRaptorTestResult result = userFlow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		final String json = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(json, HashMap.class);
 		final Map<?, ?> aplicacao = (Map<?, ?>) o.get("aplicacao");
@@ -144,7 +144,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		json = "{}";
 		final UserFlow flow = navigate().get(url, parameters);
 		final VRaptorTestResult result = flow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		final String response = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		assertNotNull(o);
@@ -169,7 +169,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		final String url = "/aplicacoes";
 		final UserFlow flow = navigate().get(url, parameters);
 		final VRaptorTestResult result = flow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		final String response = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		assertNotNull(o);
@@ -195,7 +195,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		final String url = "/aplicacoes";
 		final UserFlow flow = navigate().get(url, parameters);
 		final VRaptorTestResult result = flow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		final String response = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(response, Map.class);
 		assertNotNull(o);
@@ -211,7 +211,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 	public void testIndex() {
 		final UserFlow flow = navigate().get("/aplicacoes");
 		final VRaptorTestResult result = flow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		final String response = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		assertNotNull(o);
@@ -224,7 +224,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 	public void testShow() {
 		final UserFlow flow = navigate().get("/aplicacoes/" + id);
 		final VRaptorTestResult result = flow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		final String response = result.getResponseBody();
 		final Map<?, ?> o = gson.fromJson(response, HashMap.class);
 		final Map<?, ?> aplicacao = (Map<?, ?>) o.get("aplicacao");
@@ -247,7 +247,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		Long id = aplicacao.getId();
 		final UserFlow flow = navigate().get("/aplicacoes/" + id);
 		final VRaptorTestResult result = flow.execute();
-		assertEquals(404, result.getResponse().getStatus());
+		result.wasStatus(404);
 	}
 
 	@Test
@@ -270,9 +270,9 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		final String url = "/recursos/" + recursoId;
 		final UserFlow userFlow = navigate().to(url, method, new Parameters());
 		final VRaptorTestResult result = userFlow.execute();
-		assertEquals(204, result.getResponse().getStatus());
+		result.wasStatus(204);
 		assertEquals("", result.getResponseBody());
-		assertEquals(404, navigate().get(url).execute().getResponse().getStatus());
+		navigate().get(url).execute().wasStatus(404);
 	}
 
 	@Test
@@ -303,7 +303,7 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		final HttpMethod method = HttpMethod.PATCH;
 		final UserFlow flow = navigate().to(url, method, parameters);
 		final VRaptorTestResult result = flow.execute();
-		assertEquals(200, result.getResponse().getStatus());
+		result.wasStatus(200);
 		assertAplicacao(atualizar, result.getResponseBody());
 		final Aplicacao resultado = entityManager.find(type, id);
 		assertEquals(nome, resultado.getNome());

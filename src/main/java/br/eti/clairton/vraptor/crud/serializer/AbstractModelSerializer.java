@@ -8,13 +8,13 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 import javax.persistence.EntityManager;
-import javax.validation.constraints.NotNull;
 
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.jpa.serializer.GsonJpaSerializer;
+import br.eti.clairton.jpa.serializer.Nodes;
 import br.eti.clairton.repository.Model;
 import br.eti.clairton.security.Resource;
 
@@ -22,8 +22,13 @@ public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSe
 	private static final long serialVersionUID = 1L;
 	private final br.eti.clairton.jpa.serializer.Tagable<T> tagable;
 
-	public AbstractModelSerializer(@NotNull final Inflector inflector, @NotNull EntityManager em) {
-		super(em);
+
+	public AbstractModelSerializer(final Inflector inflector, final EntityManager em) {
+		this(new Nodes(), inflector, em);
+	}
+	
+	public AbstractModelSerializer(final Nodes nodes, final Inflector inflector, final EntityManager em) {
+		super(nodes, em);
 		this.tagable = new Tagable<T>(inflector){
 			private static final long serialVersionUID = 1L;
 
