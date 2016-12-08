@@ -15,6 +15,7 @@ import com.google.gson.JsonSerializer;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.jpa.serializer.GsonJpaSerializer;
 import br.eti.clairton.jpa.serializer.Nodes;
+import br.eti.clairton.jpa.serializer.NodesProgramatic;
 import br.eti.clairton.repository.Model;
 import br.eti.clairton.security.Resource;
 
@@ -24,7 +25,7 @@ public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSe
 
 
 	public AbstractModelSerializer(final Inflector inflector, final EntityManager em) {
-		this(new Nodes(), inflector, em);
+		this(new NodesProgramatic(), inflector, em);
 	}
 	
 	public AbstractModelSerializer(final Nodes nodes, final Inflector inflector, final EntityManager em) {
