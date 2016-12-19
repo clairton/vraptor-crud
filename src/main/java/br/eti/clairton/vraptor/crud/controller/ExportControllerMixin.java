@@ -1,6 +1,7 @@
 package br.eti.clairton.vraptor.crud.controller;
 
 import static java.lang.String.format;
+import static java.nio.file.Files.probeContentType;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,13 +31,16 @@ public interface ExportControllerMixin<T> {
 		final Collection<T> collection = find();
 		final String path = getService().toFile(collection, getParameters(), "." + format);
 		final File file = getService().toFile(path);
+		export(file);
+	}
+	
+	@Ignore
+	default void export(final File file) {
 		try {
 			getResponse().setContentLength((int) file.length());
 			final String disposition = format("attachment; filename=\"%s\"", file.getName());
 			getResponse().setHeader("Content-Disposition", disposition);
-			getResponse().setContentType("application/"+format);
-			//getResponse().setContentType("application/octet-stream");
-			
+			getResponse().setContentType(probeContentType(file.toPath()));
 			final OutputStream out = getResponse().getOutputStream();
 			try (final FileInputStream in = new FileInputStream(file)) {
 				byte[] buffer = new byte[4096];
