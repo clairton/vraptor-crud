@@ -233,24 +233,6 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 	}
 
 	@Test
-	public void testShowWithTenant() throws Exception {
-		/*
-		 * Criado uma aplicação com o nome filtrado no tenant como não pode
-		 * encontrar deve retornar 404
-		 */
-		tm.begin();
-		final Aplicacao aplicacao = new Aplicacao(Resource.TENANT);
-		entityManager.persist(aplicacao);
-		entityManager.joinTransaction();
-		entityManager.flush();
-		tm.commit();
-		Long id = aplicacao.getId();
-		final UserFlow flow = navigate().get("/aplicacoes/" + id);
-		final VRaptorTestResult result = flow.execute();
-		result.wasStatus(404);
-	}
-
-	@Test
 	public void testShowRecursive() {
 		final UserFlow flow = navigate().get("/recursos/" + recursoId);
 		final VRaptorTestResult result = flow.execute();
