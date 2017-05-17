@@ -9,14 +9,13 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.Metamodel;
 
-import net.vidageek.mirror.list.dsl.Matcher;
-
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
+import net.vidageek.mirror.list.dsl.Matcher;
 
 @RunWith(CdiTestRunner.class)
 public class JpaMatcherTest {

@@ -21,41 +21,26 @@ import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.google.gson.Gson;
 
 import br.com.caelum.vraptor.controller.HttpMethod;
-import br.com.caelum.vraptor.test.VRaptorIntegration;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Locale;
-import br.eti.clairton.repository.http.Param;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
 import net.vidageek.mirror.dsl.Mirror;
 
 @RunWith(CdiTestRunner.class)
-public class CrudControllerIntegrationTest extends VRaptorIntegration{
+public class CrudControllerIntegrationTest extends ControllerIntegration{
 	private final Gson gson = new Gson();
 
 	private @Inject Mirror mirror;
 	private @Inject EntityManager entityManager;
 	private @Inject Connection connection;
-
-	private Parameters parameters = new Parameters() {
-		@Override
-		public void fill(MockHttpServletRequest request) {
-			mirror.on(request).set().field("content")
-					.withValue(json.getBytes());
-			mirror.on(request).set().field("contentType")
-					.withValue("application/json");
-		}
-	};
-
-	private String json;
 
 	private Long id;
 
@@ -89,7 +74,10 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 	@Test
 	public void testCreate() {
 		json = "{aplicacao:{nome:'teste'}}";
-		final UserFlow userFlow = navigate().post("/aplicacoes", parameters);
+		final UserFlow userFlow = navigate()
+									.addHeader("Content-Type", "application/json; charset=utf-8")
+									.addHeader("Authorization", token())
+									.post("/aplicacoes");
 		final VRaptorTestResult result = userFlow.execute();
 		result.wasStatus(200);
 		final Long id = assertAplicacao(new Aplicacao("teste"), result.getResponseBody());
@@ -99,7 +87,10 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 	@Test
 	public void testNew() {
 		json = "";
-		final UserFlow userFlow = navigate().get("/aplicacoes/new", parameters);
+		final UserFlow userFlow = navigate()
+									.get("/aplicacoes/new")
+									.addHeader("Content-Type", "application/json; charset=utf-8")
+									.addHeader("Authorization", token());
 		final VRaptorTestResult result = userFlow.execute();
 		result.wasStatus(200);
 		final String json = result.getResponseBody();
@@ -114,8 +105,10 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 	@Test
 	public void testEdit() {
 		json = "";
-		final UserFlow userFlow = navigate().get("/aplicacoes/" + id + "/edit",
-				parameters);
+		final UserFlow userFlow = navigate()
+									.get("/aplicacoes/" + id + "/edit")
+									.addHeader("Content-Type", "application/json; charset=utf-8")
+									.addHeader("Authorization", token());
 		final VRaptorTestResult result = userFlow.execute();
 		result.wasStatus(200);
 		final String json = result.getResponseBody();
@@ -130,19 +123,12 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 
 	@Test
 	public void testPaginate() {
-		final String url = "/aplicacoes";
-		final Parameters decorator = parameters;
-		parameters = new Parameters() {
-			@Override
-			public void fill(final MockHttpServletRequest request) {
-				decorator.fill(request);
-				// page=1&per_page=2
-				request.addParameter(Param.PAGE, "1");
-				request.addParameter(Param.PER_PAGE, "2");
-			}
-		};
+		final String url = "/aplicacoes?per_page=2&page=1";
 		json = "{}";
-		final UserFlow flow = navigate().get(url, parameters);
+		final UserFlow flow = navigate()
+								.addHeader("Content-Type", "application/json; charset=utf-8")
+								.addHeader("Authorization", token())
+								.get(url);
 		final VRaptorTestResult result = flow.execute();
 		result.wasStatus(200);
 		final String response = result.getResponseBody();
@@ -155,19 +141,12 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 
 	@Test
 	public void testQueryString() {
-		final Parameters decorator = parameters;
-		parameters = new Parameters() {
-			@Override
-			public void fill(final MockHttpServletRequest request) {
-				decorator.fill(request);
-				// nome=*Teste&id]=>=0
-				request.addParameter("nome", "*Teste");
-				request.addParameter("id", ">=" + CrudControllerIntegrationTest.this.id);
-			}
-		};
 		json = "{}";
-		final String url = "/aplicacoes";
-		final UserFlow flow = navigate().get(url, parameters);
+		final String url = "/aplicacoes?nome=*Teste&id=>="+id;
+		final UserFlow flow = navigate()
+									.get(url)
+									.addHeader("Content-Type", "application/json; charset=utf-8")
+									.addHeader("Authorization", token());
 		final VRaptorTestResult result = flow.execute();
 		result.wasStatus(200);
 		final String response = result.getResponseBody();
@@ -180,20 +159,12 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 
 	@Test
 	public void testOrder() {
-		final Parameters decorator = parameters;
-		parameters = new Parameters() {
-			@Override
-			public void fill(final MockHttpServletRequest request) {
-				decorator.fill(request);
-				// nome=*Teste&direction=AsC&sort=nome
-				request.addParameter("nome", "*Teste");
-				request.addParameter("direction", "AsC");
-				request.addParameter("sort", "nome");
-			}
-		};
 		json = "{}";
-		final String url = "/aplicacoes";
-		final UserFlow flow = navigate().get(url, parameters);
+		final String url = "/aplicacoes?nome=*Teste&direction=ASC&sort=name";
+		final UserFlow flow = navigate()
+								.get(url)
+								.addHeader("Content-Type", "application/json; charset=utf-8")
+								.addHeader("Authorization", token());
 		final VRaptorTestResult result = flow.execute();
 		result.wasStatus(200);
 		final String response = result.getResponseBody();
@@ -284,7 +255,10 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		json = "{'aplicacao':{'nome':'" + nome + "', 'id':'" + id + "'},recursos:[{'nome':'outroRecurso'}]}";
 		final String url = "/aplicacoes/" + id;
 		final HttpMethod method = HttpMethod.PUT;
-		final UserFlow flow = navigate().to(url, method, parameters);
+		final UserFlow flow = navigate()
+								.to(url, method, new Parameters())
+								.addHeader("Content-Type", "application/json; charset=utf-8")
+								.addHeader("Authorization", token());
 		final VRaptorTestResult result = flow.execute();
 		assertEquals(200, result.getResponse().getStatus());
 		assertAplicacao(atualizar, result.getResponseBody());
@@ -301,7 +275,10 @@ public class CrudControllerIntegrationTest extends VRaptorIntegration{
 		json = "{'aplicacao':{'nome':'" + nome + "', 'id':'" + id + "'},recursos:[{'nome':'outroRecursoDiferente'}]}";
 		final String url = "/aplicacoes/" + id;
 		final HttpMethod method = HttpMethod.PATCH;
-		final UserFlow flow = navigate().to(url, method, parameters);
+		final UserFlow flow = navigate()
+									.to(url, method, new Parameters())
+									.addHeader("Content-Type", "application/json; charset=utf-8")
+									.addHeader("Authorization", token());
 		final VRaptorTestResult result = flow.execute();
 		result.wasStatus(200);
 		assertAplicacao(atualizar, result.getResponseBody());

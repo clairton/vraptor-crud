@@ -9,7 +9,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import br.eti.clairton.jpa.serializer.Tagable;
-import br.eti.clairton.repository.Model;
+import br.eti.clairton.model.Model;
 
 @Default
 public class DefaultTagableExtrator implements TagableExtractor {

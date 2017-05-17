@@ -9,10 +9,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import br.eti.clairton.identificator.Identificator;
+import br.eti.clairton.model.Model;
 
 @Entity
 @Table(name = "recursos")
-public class Recurso extends br.eti.clairton.repository.Model {
+public class Recurso extends Model {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(cascade = CascadeType.ALL)

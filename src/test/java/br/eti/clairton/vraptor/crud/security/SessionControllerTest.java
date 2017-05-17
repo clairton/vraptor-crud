@@ -2,7 +2,6 @@ package br.eti.clairton.vraptor.crud.security;
 
 import static br.com.caelum.vraptor.controller.HttpMethod.DELETE;
 import static br.com.caelum.vraptor.controller.HttpMethod.POST;
-import static br.eti.clairton.vraptor.crud.controller.VRaptorRunner.navigate;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -15,26 +14,26 @@ import javax.inject.Inject;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
-import net.vidageek.mirror.dsl.Mirror;
-
+import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+import com.google.gson.GsonBuilder;
+
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.http.MutableRequest;
 import br.com.caelum.vraptor.http.VRaptorRequest;
+import br.com.caelum.vraptor.test.VRaptorIntegration;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
 import br.com.caelum.vraptor.util.test.MockHttpServletResponse;
 import br.eti.clairton.security.Locksmith;
-import br.eti.clairton.vraptor.crud.controller.VRaptorRunner;
+import net.vidageek.mirror.dsl.Mirror;
 
-import com.google.gson.GsonBuilder;
-
-@RunWith(VRaptorRunner.class)
-public class SessionControllerTest {
+@RunWith(CdiTestRunner.class)
+public class SessionControllerTest extends VRaptorIntegration{
 	private String user = "admin";
 	private String password = "123456";
 	private @Inject Mirror mirror;

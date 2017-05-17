@@ -9,13 +9,11 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Result;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.repository.Repository;
-import br.eti.clairton.repository.tenant.Tenant;
 import br.eti.clairton.repository.http.QueryParser;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 
 @Controller
-public class AplicacaoController extends CrudController<Aplicacao> implements
-		ExportControllerMixin<Aplicacao> {
+public class AplicacaoController extends CrudController<Aplicacao> implements ExportControllerMixin<Aplicacao> {
 	private final HttpServletResponse response;
 
 	@Deprecated
@@ -25,7 +23,7 @@ public class AplicacaoController extends CrudController<Aplicacao> implements
 
 	@Inject
 	public AplicacaoController(
-			@Tenant final Repository repository,
+			final Repository repository,
 			final Result result, 
 			@Default final Inflector inflector,
 			final ServletRequest request, 

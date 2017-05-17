@@ -23,7 +23,7 @@ import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 public interface ExportControllerMixin<T> {
 
 	/**
-	 * Exporta os recursos.<br/>
+	 * Exporta os recursos.
 	 * Parametros para pesquisa são mandados na URL.
 	 */
 	@Ignore
@@ -56,7 +56,7 @@ public interface ExportControllerMixin<T> {
 	}
 
 	/**
-	 * Exporta os recursos para csv.<br/>
+	 * Exporta os recursos para csv.
 	 * Parametros para pesquisa são mandados na URL.
 	 */
 	@Get(".csv")
@@ -69,7 +69,7 @@ public interface ExportControllerMixin<T> {
 	}
 
 	/**
-	 * Exporta os recursos para html.<br/>
+	 * Exporta os recursos para html.
 	 * Parametros para pesquisa são mandados na URL.
 	 */
 	@Get(".pdf")

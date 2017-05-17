@@ -20,7 +20,6 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.serialization.gson.WithRoot;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
-import br.eti.clairton.repository.Model;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.repository.http.QueryParser;
 import br.eti.clairton.security.Authenticated;
@@ -36,7 +35,7 @@ import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
  * @param <T>
  *            tipo do modelo
  */
-public abstract class CrudController<T extends Model> extends RetrieveController<T>{
+public abstract class CrudController<T> extends RetrieveController<T>{
 	private final Logger logger = getLogger(CrudController.class);
 
 	private final Repository repository;

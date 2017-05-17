@@ -31,8 +31,7 @@ public class NoCacheInterceptor {
 		response.setHeader("Expires", "Wed, 31 Dec 1969 21:00:00 GMT");
 
 		// no-cache headers for HTTP/1.1
-		response.setHeader("Cache-Control",
-				"no-store, no-cache, must-revalidate");
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
 
 		// no-cache headers for HTTP/1.1 (IE)
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");

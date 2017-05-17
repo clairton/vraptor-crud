@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.eti.clairton.repository.Model;
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.set.dsl.SetterHandler;
 
@@ -57,7 +56,7 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 			final Class<?> klass = method.getDeclaringClass();
 			if (CrudController.class.isAssignableFrom(klass)) {
 				for (final Parameter p : out) {
-					if ("model".equals(p.getName()) && Model.class.isAssignableFrom(p.getType())) {
+					if ("model".equals(p.getName())) {
 						final ControllerMethod controllerMethod = getControllerMethod();
 						if (controllerMethod == null) {
 							continue;
