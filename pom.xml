@@ -4,6 +4,8 @@
 	<groupId>br.eti.clairton</groupId>
 	<artifactId>vraptor-crud</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
+	<description>A crud bootstrap do use VRaptor</description>
+	<name>vraptor-crud</name>
 	<url>https://github.com/clairton/vraptor-crud</url>
 	<scm>
 		<connection>scm:git:git@github.com:clairton/vraptor-crud.git</connection>

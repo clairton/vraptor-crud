@@ -1,0 +1,11 @@
+language: java
+jdk:
+- oraclejdk8
+cache:
+  directories:
+    - ~/.m2/repository
+script: 
+- mvn clean package
+after_success:
+- openssl aes-256-cbc -K $encrypted_735615aa8f72_key -iv $encrypted_735615aa8f72_iv -in key.asc.enc -out key.asc -d && gpg --fast-import key.asc
+- mvn clean deploy -DskipTests --settings settings.xml -Pdeploy
