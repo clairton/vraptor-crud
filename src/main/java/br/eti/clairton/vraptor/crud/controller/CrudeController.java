@@ -10,38 +10,67 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 import br.com.caelum.vraptor.Get;
-import br.eti.clairton.paginated.collection.Meta;
-import br.eti.clairton.paginated.collection.PaginatedCollection;
+import br.com.caelum.vraptor.Result;
+import br.eti.clairton.inflector.Inflector;
+import br.eti.clairton.inflector.Language;
+import br.eti.clairton.repository.Model;
+import br.eti.clairton.repository.Repository;
+import br.eti.clairton.repository.http.QueryParser;
 import br.eti.clairton.security.Authenticated;
 import br.eti.clairton.security.Operation;
 import br.eti.clairton.security.Protected;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 
-public interface ExportControllerMixin<T> {
+public abstract class CrudeController<T extends Model> extends CrudController<T>{
+	private final HttpServletResponse response;
+	private final FileService service;
 
+	public CrudeController(
+			@NotNull final Class<T> modelType, 
+			@NotNull final Repository repository,
+			@NotNull final Result result, 
+			@Language @NotNull final Inflector inflector,
+			@NotNull final ServletRequest request, 
+			@NotNull final QueryParser queryParser,
+			@NotNull final HttpServletResponse response,
+			@NotNull final FileService service) {
+		super(modelType, repository, result, inflector, request, queryParser);
+		this.response = response;
+		this.service = service;
+	}
+	
 	/**
 	 * Exporta os recursos.<br/>
 	 * Parametros para pesquisa são mandados na URL.
 	 */
 	@Ignore
-	default void export(String format) {
+	public void export(String format) {
 		final Collection<T> collection = find();
-		final String path = getService().toFile(collection, getParameters(), "." + format);
-		final File file = getService().toFile(path);
+		final String path = service.toFile(collection, getParameters(), "." + format);
+		final File file = service.toFile(path);
 		export(file);
 	}
+
 	
 	@Ignore
-	default void export(final File file) {
+	public Map<String, Object> getParameters(){
+		return new HashMap<>();
+	}
+	
+	
+	@Ignore
+	public void export(final File file) {
 		try {
-			getResponse().setContentLength((int) file.length());
+			response.setContentLength((int) file.length());
 			final String disposition = format("attachment; filename=\"%s\"", file.getName());
-			getResponse().setHeader("Content-Disposition", disposition);
-			getResponse().setContentType(probeContentType(file.toPath()));
-			final OutputStream out = getResponse().getOutputStream();
+			response.setHeader("Content-Disposition", disposition);
+			response.setContentType(probeContentType(file.toPath()));
+			final OutputStream out = response.getOutputStream();
 			try (final FileInputStream in = new FileInputStream(file)) {
 				byte[] buffer = new byte[4096];
 				int length;
@@ -64,7 +93,7 @@ public interface ExportControllerMixin<T> {
 	@Authenticated
 	@ExceptionVerifier
 	@Operation("export")
-	default void csv() {
+	public void csv() {
 		export("csv");
 	}
 
@@ -77,21 +106,7 @@ public interface ExportControllerMixin<T> {
 	@Authenticated
 	@ExceptionVerifier
 	@Operation("export")
-	default void pdf() {
+	public void pdf() {
 		export("pdf");
 	}
-	
-	@Ignore
-	default Map<String, Object> getParameters(){
-		return new HashMap<>();
-	}
-
-	@Ignore
-	PaginatedCollection<T, Meta> find();
-
-	@Ignore
-	FileService getService();
-
-	@Ignore
-	HttpServletResponse getResponse();
 }

@@ -171,7 +171,7 @@ public class CrudControllerTest {
 			}
 		};
 		new Mirror().on(result).set().field("response").withValue(response);
-		controller = new AplicacaoController(repository, result, inflector, request, Mockito.mock(QueryParser.class), response){
+		controller = new AplicacaoController(repository, result, inflector, request, Mockito.mock(QueryParser.class), response, null){
 			@Override
 			protected Page paginate() {
 				return new Page(1, 100);
@@ -212,7 +212,7 @@ public class CrudControllerTest {
 			};
 		};
 
-		controller = new AplicacaoController(repository, result, inflector, request, Mockito.mock(QueryParser.class), response){
+		controller = new AplicacaoController(repository, result, inflector, request, Mockito.mock(QueryParser.class), response, null){
 			@Override
 			protected Page paginate() {
 				return new Page(1, 100);

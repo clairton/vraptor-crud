@@ -8,14 +8,16 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 
-public class ExportControllerMixinTest {
+public class CrudeControllerTest {
 	private MockHttpServletResponse response;
-	private ExportControllerMixin<Aplicacao> controller;
+	private CrudeController<Aplicacao> controller;
+	private FileService service;
 
 	@Before
 	public void init() {
 		response = new MockHttpServletResponse();
-		controller = new AplicacaoController2(response);
+		service = new FileServiceMock();
+		controller = new AplicacaoController2(Aplicacao.class, null, null, null, null, null, response, service);
 	}
 
 	@Test
