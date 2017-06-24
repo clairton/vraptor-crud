@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import br.eti.clairton.repository.Model;
+import br.eti.clairton.model.Model;
 
 /**
  * Representa uma Aplicação.

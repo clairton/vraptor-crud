@@ -18,7 +18,7 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Result;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
-import br.eti.clairton.repository.Model;
+import br.eti.clairton.model.Model;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.repository.http.QueryParser;
 import br.eti.clairton.security.Authenticated;

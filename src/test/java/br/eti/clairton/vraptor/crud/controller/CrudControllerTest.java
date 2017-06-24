@@ -40,7 +40,7 @@ import br.eti.clairton.jpa.serializer.Tagable;
 import br.eti.clairton.paginated.collection.Meta;
 import br.eti.clairton.paginated.collection.PaginatedCollection;
 import br.eti.clairton.paginated.collection.PaginatedMetaList;
-import br.eti.clairton.repository.Model;
+import br.eti.clairton.model.Model;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.repository.http.Page;
 import br.eti.clairton.repository.http.QueryParser;

@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
 import br.com.caelum.vraptor.http.ParanamerNameProvider;
-import br.eti.clairton.repository.Model;
+import br.eti.clairton.model.Model;
 import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.set.dsl.SetterHandler;
 

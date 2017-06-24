@@ -19,7 +19,7 @@ import com.google.gson.GsonBuilder;
 
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Locale;
-import br.eti.clairton.repository.Model;
+import br.eti.clairton.model.Model;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.ModelManyToMany;
 import br.eti.clairton.vraptor.crud.model.ModelOneToOne;

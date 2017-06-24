@@ -18,7 +18,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import br.eti.clairton.inflector.Inflector;
-import br.eti.clairton.repository.Model;
+import br.eti.clairton.model.Model;
 
 /**
  * Serializa os objetos da de forma a integrar com o modo
