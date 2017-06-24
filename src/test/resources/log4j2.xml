@@ -10,7 +10,7 @@
 		<Logger name="org.apache.log4j.xml" level="warn" />
 		<Logger name="org.jboss.weld" level="warn" />
 		<Logger name="br.eti.clairton" level="info" />
-		<Logger name="br.com.caelum" level="warn" />
+		<Logger name="br.com.caelum" level="debug" />
 		<Logger name="org.apache.deltaspike" level="warn" />
 		<Logger name="org.hibernate" level="WARN" />
 		<Logger name="org.hibernate.SQL" level="WARN" />

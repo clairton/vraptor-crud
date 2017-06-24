@@ -26,7 +26,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import com.google.gson.Gson;
 
 import br.com.caelum.vraptor.controller.HttpMethod;
-import br.com.caelum.vraptor.test.VRaptorIntegration;
 import br.com.caelum.vraptor.test.VRaptorTestResult;
 import br.com.caelum.vraptor.test.http.Parameters;
 import br.com.caelum.vraptor.test.requestflow.UserFlow;
@@ -38,7 +37,7 @@ import br.eti.clairton.vraptor.crud.model.Recurso;
 import net.vidageek.mirror.dsl.Mirror;
 
 @RunWith(CdiTestRunner.class)
-public class CrudControllerIntegrationTest extends VRaptorIntegration{
+public class CrudControllerIntegrationTest extends ControllerIntegration{
 	private final Gson gson = new Gson();
 
 	private @Inject Mirror mirror;

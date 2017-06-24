@@ -2,6 +2,7 @@ package br.eti.clairton.vraptor.crud.controller;
 
 import java.util.ArrayList;
 
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +11,8 @@ import br.eti.clairton.paginated.collection.PaginatedCollection;
 import br.eti.clairton.paginated.collection.PaginatedMetaList;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 
+
+@Vetoed
 public class AplicacaoController2 implements ExportControllerMixin<Aplicacao> {
 	private final HttpServletResponse response;
 

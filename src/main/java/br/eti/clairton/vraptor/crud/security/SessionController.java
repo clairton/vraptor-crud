@@ -84,5 +84,6 @@ public class SessionController implements Serializable {
 	@Consumes("application/json")
 	public void destroy(final String key) {
 		locksmith.invalidate(key);
+		result.use(http()).setStatusCode(204);
 	}
 }

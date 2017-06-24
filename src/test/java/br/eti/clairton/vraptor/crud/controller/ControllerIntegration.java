@@ -1,44 +1,50 @@
 package br.eti.clairton.vraptor.crud.controller;
 
 import static java.lang.String.format;
+import static javax.enterprise.inject.spi.CDI.current;
 
 import java.util.Map;
 
-import net.vidageek.mirror.dsl.Mirror;
-
+import org.apache.deltaspike.cdise.api.CdiContainerLoader;
+import org.apache.deltaspike.cdise.weld.WeldContainerControl;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.Before;
-import org.springframework.mock.web.HeaderValueHolderTest;
-import org.springframework.mock.web.MockHttpServletRequest;
-
-import br.com.caelum.vraptor.test.VRaptorIntegration;
-import br.com.caelum.vraptor.test.VRaptorTestResult;
-import br.com.caelum.vraptor.test.http.Parameters;
-import br.com.caelum.vraptor.test.requestflow.UserFlow;
+import org.junit.BeforeClass;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class ControllerIntegration extends VRaptorIntegration {
+import br.com.caelum.vraptor.ioc.cdi.CDIBasedContainer;
+import br.com.caelum.vraptor.test.VRaptorTestResult;
+import br.com.caelum.vraptor.test.container.CdiContainer;
+import br.com.caelum.vraptor.test.requestflow.UserFlow;
+import br.com.caelum.vraptor.test.requestflow.VRaptorNavigation;
+import net.vidageek.mirror.dsl.Mirror;
 
-	protected final Mirror mirror = new Mirror();
+public class ControllerIntegration {
 
 	protected Gson gson;
+
+	protected static CDIBasedContainer cdiBasedContainer;
+
+	private static CdiContainer cdiContainer;
 
 	protected final String authType = "Bearer";
 
 	protected String token = "asfdlhashsajhjksh==";
+	
+	@BeforeClass
+	public static void startCDIContainer(){
+		final WeldContainerControl container = (WeldContainerControl) CdiContainerLoader.getCdiContainer();
+		final Mirror mirror = new Mirror();
+		final Weld weld = (Weld) mirror.on(container).get().field("weld");
+		final WeldContainer weldContainer = (WeldContainer) mirror.on(container).get().field("weldContainer");
+		cdiContainer = new CdiContainer(weld, weldContainer, null);
+		cdiContainer.start();
+		cdiBasedContainer = current().select(CDIBasedContainer.class).get();
+	}
 
-	protected Parameters parameters = new Parameters() {
-		@Override
-		public void fill(MockHttpServletRequest request) {
-			final Object field = mirror.on(request).get().field("headers");
-			@SuppressWarnings("unchecked")
-			final Map<String, HeaderValueHolderTest> headers = (Map<String, HeaderValueHolderTest>) field;
-			final HeaderValueHolderTest valueHolder = new HeaderValueHolderTest();
-			valueHolder.setValue(authType + " " + token);
-			headers.put("Authorization", valueHolder);
-		}
-	};
 
 	@Before
 	public void setUp() {
@@ -47,21 +53,24 @@ public class ControllerIntegration extends VRaptorIntegration {
 	}
 
 	protected void authenticate(final String user, final String password) {
-		final Parameters p = new Parameters() {
-			@Override
-			public void fill(final MockHttpServletRequest request) {
-				final String pattern = "{'user': '%s', 'password': '%s'}";
-				final String json = format(pattern, user, password);
-				mirror.on(request).set().field("content")
-						.withValue(json.getBytes());
-				mirror.on(request).set().field("contentType")
-						.withValue("application/json");
-			}
-		};
-		final UserFlow flow = navigate().post("/sessions", p);
+		final String pattern = "{'user': '%s', 'password': '%s'}";
+		final String auth = format(pattern, user, password);
+		final UserFlow flow = navigate()
+								.post("/sessions")
+								.setContent(auth)
+								.addHeader("Content-Type", "application/json");
 		final VRaptorTestResult result = flow.execute();
 		final String json = result.getResponseBody();
 		token = gson.fromJson(json, Map.class).get("token").toString();
 	}
 
+	public String token(){
+		return authType + " " + token;
+	}
+	
+	protected static UserFlow navigate(){
+		final VRaptorNavigation navigation = cdiBasedContainer.instanceFor(VRaptorNavigation.class);
+		navigation.setContainer(cdiContainer);
+		return navigation.start();
+	}
 }
