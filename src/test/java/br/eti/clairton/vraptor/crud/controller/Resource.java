@@ -43,7 +43,7 @@ import net.vidageek.mirror.dsl.Mirror;
 /**
  * Produz os recursos.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  */
 @ApplicationScoped
 public class Resource {

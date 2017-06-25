@@ -27,7 +27,7 @@ import net.vidageek.mirror.set.dsl.SetterHandler;
 /**
  * Adequa os parametros dos metodos herdados do {@link CrudController}.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  */
 @Specializes
 public class ParanamerNameCrudProvider extends ParanamerNameProvider {

@@ -17,7 +17,7 @@ import br.eti.clairton.inflector.Inflector;
  * 
  * Posteriormente será serializado de uma forma que o front-end possa entender.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  */
 @Dependent
 public class ConstraintValidationAdapter {
@@ -39,6 +39,9 @@ public class ConstraintValidationAdapter {
 	 * 
 	 * @param violations
 	 *            violações do bean validation
+	 * @param <T>  
+	 *            tipo do registro a ser validado
+	 *
 	 * @return map com os erros, sendo a chave o nome do atributo
 	 */
 	public <T>Map<String, List<String>> to(final Set<ConstraintViolation<T>> violations) {

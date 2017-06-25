@@ -33,7 +33,7 @@ import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 /**
  * Controller abstrato para servir como base para um CRUD.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  *
  * @param <T>
  *            tipo do modelo
@@ -66,8 +66,6 @@ public abstract class RetrieveController<T> {
 	 *            instancia de result
 	 * @param inflector
 	 *            instancia de inflector
-	 * @param mirror
-	 *            instancia de mirror
 	 * @param request
 	 *            instancia de request
 	 * @param queryParser
@@ -90,7 +88,7 @@ public abstract class RetrieveController<T> {
 		this.resourceName = resourceName();
 	}
 	/**
-	 * Mostra os recursos.<br/>
+	 * Mostra os recursos.
 	 * Parametros para pesquisa são mandados na URL.
 	 */
 	@Get
@@ -118,7 +116,7 @@ public abstract class RetrieveController<T> {
 	}
 
 	/**
-	 * Nome do recurso atual.
+	 * @return Nome do recurso atual
 	 */
 	@Resource
 	@Ignore

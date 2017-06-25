@@ -34,7 +34,7 @@ import br.eti.clairton.vraptor.crud.controller.NotInstanceableExeception;
  * Verifica o encaminhando diante das exceções lançadas para os metodos
  * annotados com {@link ExceptionVerifier}.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  */
 @Interceptor
 @ExceptionVerifier
@@ -50,8 +50,6 @@ public class ExceptionVerifierInterceptor {
 	 * 
 	 * @param result
 	 *            instancia de {@link Result}
-	 * @param logger
-	 *            instancia de {@link Logger}
 	 * @param adapter
 	 *            instancia de {@link ConstraintValidationAdapter}
 	 */

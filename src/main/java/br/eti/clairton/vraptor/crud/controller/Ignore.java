@@ -11,7 +11,7 @@ import br.com.caelum.vraptor.Controller;
  * Ignora um metodo publico de ser exposto no http em uma classe anotada com
  * {@link Controller}.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  *
  */
 @Target(ElementType.METHOD)

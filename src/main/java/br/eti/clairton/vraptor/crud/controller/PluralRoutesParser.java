@@ -22,7 +22,7 @@ import br.eti.clairton.inflector.Language;
 /**
  * Deixa o nome do controller no plural.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  */
 @Specializes
 @ApplicationScoped

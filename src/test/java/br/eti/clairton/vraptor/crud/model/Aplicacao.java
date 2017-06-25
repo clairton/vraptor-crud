@@ -19,7 +19,7 @@ import br.eti.clairton.model.Model;
 /**
  * Representa uma Aplicação.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  */
 @Entity
 @Table(name = "aplicacoes", uniqueConstraints = { @UniqueConstraint(columnNames = "nome") })

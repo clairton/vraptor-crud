@@ -44,7 +44,11 @@ public class SessionController implements Serializable {
 	 * @param locksmith
 	 *            manager de tokens
 	 * @param response
-	 *            resposta servlet
+	 *            resposta http
+	 * @param request
+	 *            requisicao servlet
+	 * @param result
+	 *            resultado da respota
 	 */
 	@Inject
 	public SessionController(final Locksmith locksmith,

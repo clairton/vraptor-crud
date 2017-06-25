@@ -45,8 +45,10 @@ public abstract class CrudeController<T extends Model> extends CrudController<T>
 	}
 	
 	/**
-	 * Exporta os recursos.<br/>
+	 * Exporta os recursos.
 	 * Parametros para pesquisa são mandados na URL.
+	 * 	
+	 * @param format formato de saida da exportação
 	 */
 	@Ignore
 	public void export(String format) {
@@ -85,7 +87,7 @@ public abstract class CrudeController<T extends Model> extends CrudController<T>
 	}
 
 	/**
-	 * Exporta os recursos para csv.<br/>
+	 * Exporta os recursos para csv.
 	 * Parametros para pesquisa são mandados na URL.
 	 */
 	@Get(".csv")
@@ -98,7 +100,7 @@ public abstract class CrudeController<T extends Model> extends CrudController<T>
 	}
 
 	/**
-	 * Exporta os recursos para html.<br/>
+	 * Exporta os recursos para html.
 	 * Parametros para pesquisa são mandados na URL.
 	 */
 	@Get(".pdf")

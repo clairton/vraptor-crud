@@ -24,7 +24,7 @@ import br.eti.clairton.model.Model;
  * Serializa os objetos da de forma a integrar com o modo
  * ActiveSerializerSerializer do ember.
  *
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  */
 @Default
 @TagableTo(Model.class)

@@ -31,7 +31,7 @@ import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 /**
  * Controller abstrato para servir como base para um CRUD.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  *
  * @param <T>
  *            tipo do modelo
@@ -56,8 +56,6 @@ public abstract class CrudController<T extends Model> extends RetrieveController
 	 *            instancia de result
 	 * @param inflector
 	 *            instancia de inflector
-	 * @param mirror
-	 *            instancia de mirror
 	 * @param request
 	 *            instancia de request
 	 * @param queryParser
@@ -160,6 +158,9 @@ public abstract class CrudController<T extends Model> extends RetrieveController
 
 	/**
 	 * Atualiza o model no banco de dados e serializa a reposta.
+	 *
+	 * @param model
+	 *            recurso a ser atualizado e serializado
 	 */
 	protected void updateAndSerializeRecord(final T model) {
 		final T response = updateRecord(model);
@@ -168,6 +169,9 @@ public abstract class CrudController<T extends Model> extends RetrieveController
 
 	/**
 	 * Cria o model no model de dados e serializa a reposta.
+	 *
+	 * @param model
+	 *            recurso a ser criado e serializado
 	 */
 	protected void createAndSerializeRecord(final T model) {
 		final T response = createRecord(model);
@@ -247,8 +251,11 @@ public abstract class CrudController<T extends Model> extends RetrieveController
 	/**
 	 * Remove um registro do banco de dados e serializa reposta.
 	 * 
-	 * @param model
-	 *            registro a ser removido
+	 * @param modelType
+	 *            tipo do registro a ser removido
+	 * 
+	 * @param id
+	 *            id do registro a ser removido
 	 */
 	protected void removeAndSerializeResource(final Class<T> modelType, final Long id) {
 		removeRecord(modelType, id);

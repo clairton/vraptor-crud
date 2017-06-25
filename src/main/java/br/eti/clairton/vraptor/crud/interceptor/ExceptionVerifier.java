@@ -12,7 +12,7 @@ import javax.interceptor.InterceptorBinding;
 /**
  * Annotação Interceptar metodos e tratar exceções.
  * 
- * @author Clairton Rodrigo Heinzen<clairton.rodrigo@gmail.com>
+ * @author Clairton Rodrigo Heinzen clairton.rodrigo@gmail.com
  */
 @Inherited
 @Documented
