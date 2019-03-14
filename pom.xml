@@ -76,19 +76,19 @@
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>security</artifactId>
-			<version>2.3.0</version>
+			<version>2.4.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>repository</artifactId>
-			<version>3.0.0</version>
+			<version>3.2.4</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>br.eti.clairton</groupId>
 			<artifactId>repository-http</artifactId>
-			<version>1.4.0</version>
+			<version>1.4.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
