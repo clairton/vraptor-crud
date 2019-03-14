@@ -19,7 +19,7 @@ import com.google.gson.GsonBuilder;
 
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Locale;
-import br.eti.clairton.model.Model;
+import br.eti.clairton.model.Base;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.ModelManyToMany;
 import br.eti.clairton.vraptor.crud.model.ModelOneToOne;
@@ -39,7 +39,7 @@ public class ModelSerializerTest {
 	public void init() {
 		final GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(OutroModel.class, new OutroModelSerializer(inflector, null));
-		builder.registerTypeHierarchyAdapter(Model.class, new ModelSerializer(inflector, null));
+		builder.registerTypeHierarchyAdapter(Base.class, new ModelSerializer(inflector, null));
 		gson = builder.create();
 	}
 

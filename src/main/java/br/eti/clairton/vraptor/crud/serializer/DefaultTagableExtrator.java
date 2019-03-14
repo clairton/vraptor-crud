@@ -9,7 +9,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import br.eti.clairton.jpa.serializer.Tagable;
-import br.eti.clairton.model.Model;
+import br.eti.clairton.model.Base;
 
 @Default
 public class DefaultTagableExtrator implements TagableExtractor {
@@ -42,7 +42,7 @@ public class DefaultTagableExtrator implements TagableExtractor {
 		if (!instance.isUnsatisfied()) {
 			tagable = instances.select(qualifier).get();
 		} else {
-			tagable = instances.select(getType(Model.class)).get();
+			tagable = instances.select(getType(Base.class)).get();
 		}
 		@SuppressWarnings("unchecked")
 		final Tagable<Object> t = (Tagable<Object>) tagable;

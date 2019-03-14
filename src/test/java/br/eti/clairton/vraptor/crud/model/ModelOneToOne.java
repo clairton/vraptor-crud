@@ -3,9 +3,9 @@ package br.eti.clairton.vraptor.crud.model;
 import javax.persistence.OneToOne;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.eti.clairton.model.Model;
+import br.eti.clairton.model.Base;
 
-public class ModelOneToOne extends Model {
+public class ModelOneToOne extends Base {
 	private static final long serialVersionUID = 6016230217349046379L;
 
 	@OneToOne

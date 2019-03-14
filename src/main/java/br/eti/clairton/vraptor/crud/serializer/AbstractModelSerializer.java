@@ -16,10 +16,10 @@ import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.jpa.serializer.GsonJpaSerializer;
 import br.eti.clairton.jpa.serializer.Nodes;
 import br.eti.clairton.jpa.serializer.NodesProgramatic;
-import br.eti.clairton.model.Model;
+import br.eti.clairton.model.Base;
 import br.eti.clairton.security.Resource;
 
-public abstract class AbstractModelSerializer<T extends Model> extends GsonJpaSerializer<T> implements JsonSerializer<T>, JsonDeserializer<T>, Resourceable<T> {
+public abstract class AbstractModelSerializer<T extends Base> extends GsonJpaSerializer<T> implements JsonSerializer<T>, JsonDeserializer<T>, Resourceable<T> {
 	private static final long serialVersionUID = 1L;
 	private final br.eti.clairton.jpa.serializer.Tagable<T> tagable;
 

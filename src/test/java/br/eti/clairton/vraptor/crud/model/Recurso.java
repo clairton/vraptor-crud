@@ -12,7 +12,7 @@ import br.eti.clairton.identificator.Identificator;
 
 @Entity
 @Table(name = "recursos")
-public class Recurso extends br.eti.clairton.model.Model {
+public class Recurso extends br.eti.clairton.model.Base {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(cascade = CascadeType.ALL)

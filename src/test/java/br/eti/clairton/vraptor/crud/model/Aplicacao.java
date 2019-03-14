@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import br.eti.clairton.model.Model;
+import br.eti.clairton.model.Base;
 
 /**
  * Representa uma Aplicação.
@@ -23,7 +23,7 @@ import br.eti.clairton.model.Model;
  */
 @Entity
 @Table(name = "aplicacoes", uniqueConstraints = { @UniqueConstraint(columnNames = "nome") })
-public class Aplicacao extends Model {
+public class Aplicacao extends Base {
 	private static final long serialVersionUID = 1L;
 
 	@NotNull

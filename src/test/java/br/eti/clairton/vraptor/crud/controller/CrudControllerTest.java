@@ -40,7 +40,7 @@ import br.eti.clairton.jpa.serializer.Tagable;
 import br.eti.clairton.paginated.collection.Meta;
 import br.eti.clairton.paginated.collection.PaginatedCollection;
 import br.eti.clairton.paginated.collection.PaginatedMetaList;
-import br.eti.clairton.model.Model;
+import br.eti.clairton.model.Base;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.repository.http.Page;
 import br.eti.clairton.repository.http.QueryParser;
@@ -59,47 +59,47 @@ public class CrudControllerTest {
 
 	private final Inflector inflector = Inflector.getForLocale(Locale.pt_BR);
 
-	private final JsonSerializer<Model> serializer = new ModelSerializer(inflector, Mockito.mock(EntityManager.class)){
+	private final JsonSerializer<Base> serializer = new ModelSerializer(inflector, Mockito.mock(EntityManager.class)){
 		private static final long serialVersionUID = 1L;
 		{
 			record("recursos");
 		}
 
 		@Override
-		public String getRootTag(final Model src) {
+		public String getRootTag(final Base src) {
 			return tag;
 		}
 		
 		@Override
-		public String getResource(final Model src) {
+		public String getResource(final Base src) {
 			return "coracao";
 		};
 		
 		@Override
-		public String getResource(final Collection<Model> src) {
+		public String getResource(final Collection<Base> src) {
 			return "coracao";
 		};
 	};
 
-	private final JsonSerializer<Model> serializerRecurso = new ModelSerializer(inflector, Mockito.mock(EntityManager.class)){
+	private final JsonSerializer<Base> serializerRecurso = new ModelSerializer(inflector, Mockito.mock(EntityManager.class)){
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public String getRootTag(final Model src) {
+		public String getRootTag(final Base src) {
 			return "recurso";
 		}
 		
-		public String getRootTagCollection(java.util.Collection<Model> collection) {
+		public String getRootTagCollection(java.util.Collection<Base> collection) {
 			return "recursos";
 		};
 		
 		@Override
-		public String getResource(final Model src) {
+		public String getResource(final Base src) {
 			return "recurso";
 		};
 		
 		@Override
-		public String getResource(final Collection<Model> src) {
+		public String getResource(final Collection<Base> src) {
 			return "recurso";
 		};
 	};
@@ -108,7 +108,7 @@ public class CrudControllerTest {
 		private static final long serialVersionUID = 1L;
 		private final Recurso recurso = new Recurso("abc");
 		private final Aplicacao aplicacao = new Aplicacao(nome, recurso);
-		private final PaginatedCollection<Model, Meta> collection = new PaginatedMetaList<>(Arrays.asList(aplicacao), new Meta(1l, 100l));
+		private final PaginatedCollection<Base, Meta> collection = new PaginatedMetaList<>(Arrays.asList(aplicacao), new Meta(1l, 100l));
 		
 		@SuppressWarnings("unchecked")
 		public <T, Y> T byId(@NotNull final Class<T> klass, @NotNull final Y id) throws NoResultException {
@@ -195,7 +195,7 @@ public class CrudControllerTest {
 	public void testEmptyCollection() throws Exception {
 		final Repository repository = new Repository(null){
 			private static final long serialVersionUID = 1L;
-			private final PaginatedCollection<Model, Meta> collection = new PaginatedMetaList<>(new ArrayList<>(), new Meta(1l, 100l));
+			private final PaginatedCollection<Base, Meta> collection = new PaginatedMetaList<>(new ArrayList<>(), new Meta(1l, 100l));
 		
 			
 			@SuppressWarnings("unchecked")

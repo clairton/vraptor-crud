@@ -18,7 +18,7 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Result;
 import br.eti.clairton.inflector.Inflector;
 import br.eti.clairton.inflector.Language;
-import br.eti.clairton.model.Model;
+import br.eti.clairton.model.Base;
 import br.eti.clairton.repository.Repository;
 import br.eti.clairton.repository.http.QueryParser;
 import br.eti.clairton.security.Authenticated;
@@ -26,7 +26,7 @@ import br.eti.clairton.security.Operation;
 import br.eti.clairton.security.Protected;
 import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
 
-public abstract class CrudeController<T extends Model> extends CrudController<T>{
+public abstract class CrudeController<T extends Base> extends CrudController<T>{
 	private final HttpServletResponse response;
 	private final FileService service;
 

@@ -6,9 +6,9 @@ import java.util.List;
 import javax.persistence.ManyToMany;
 
 import net.vidageek.mirror.dsl.Mirror;
-import br.eti.clairton.model.Model;
+import br.eti.clairton.model.Base;
 
-public class ModelManyToMany extends Model {
+public class ModelManyToMany extends Base {
 	private static final long serialVersionUID = 6016230217349046379L;
 
 	@ManyToMany
