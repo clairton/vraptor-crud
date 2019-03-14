@@ -18,8 +18,6 @@ import javax.persistence.Persistence;
 import javax.persistence.metamodel.Metamodel;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.mockito.Mockito;
 
 import br.eti.clairton.inflector.Inflector;
@@ -80,13 +78,6 @@ public class Resource {
 	@Produces
 	public Cache getCache() {
 		return Mockito.mock(Cache.class);
-	}
-
-	@Produces
-	public Logger produceLogger(final InjectionPoint injectionPoint) {
-		final Class<?> type = injectionPoint.getMember().getDeclaringClass();
-		final String klass = type.getName();
-		return LogManager.getLogger(klass);
 	}
 
 	@Produces

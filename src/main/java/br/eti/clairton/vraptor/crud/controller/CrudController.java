@@ -1,14 +1,14 @@
 package br.eti.clairton.vraptor.crud.controller;
 
 import static br.com.caelum.vraptor.view.Results.http;
-import static org.apache.logging.log4j.LogManager.getLogger;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Logger.getLogger;
 
 import java.lang.reflect.Constructor;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletRequest;
 import javax.validation.constraints.NotNull;
-
-import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Consumes;
 import br.com.caelum.vraptor.Delete;
@@ -37,7 +37,7 @@ import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
  *            tipo do modelo
  */
 public abstract class CrudController<T extends Base> extends RetrieveController<T>{
-	private final Logger logger = getLogger(CrudController.class);
+	private final Logger logger = getLogger(CrudController.class.getSimpleName());
 
 	private final Repository repository;
 
@@ -86,7 +86,7 @@ public abstract class CrudController<T extends Base> extends RetrieveController<
 	@ExceptionVerifier
 	@Consumes(value = "application/json", options = WithRoot.class)
 	public void create(final T model) {
-		logger.debug("Salvando registro");
+		logger.log(FINE, "Salvando registro");
 		createAndSerializeRecord(model);
 		result.use(http()).setStatusCode(201);
 	}
@@ -103,7 +103,7 @@ public abstract class CrudController<T extends Base> extends RetrieveController<
 	@Operation("new")
 	@ExceptionVerifier
 	public void new_() {
-		logger.debug("Criando registro");
+		logger.log(FINE, "Criando registro");
 		instanceAndSerializeRecord();
 	}
 
@@ -118,7 +118,7 @@ public abstract class CrudController<T extends Base> extends RetrieveController<
 	@Authenticated
 	@ExceptionVerifier
 	public void edit(final Long id) {
-		logger.debug("Editando registro");
+		logger.log(FINE, "Editando registro");
 		retrieveAndSerializeRecordToEdit(id);
 	}
 
@@ -133,7 +133,7 @@ public abstract class CrudController<T extends Base> extends RetrieveController<
 	@Authenticated
 	@ExceptionVerifier
 	public void remove(final Long id) {
-		logger.debug("Removendo registro");
+		logger.log(FINE, "Removendo registro");
 		removeAndSerializeResource(modelType, id);
 	}
 
@@ -152,7 +152,7 @@ public abstract class CrudController<T extends Base> extends RetrieveController<
 	@Authenticated
 	@ExceptionVerifier
 	public void update(final T model, Long id) {
-		logger.debug("Atualizando registro");
+		logger.log(FINE, "Atualizando registro");
 		updateAndSerializeRecord(model);
 	}
 

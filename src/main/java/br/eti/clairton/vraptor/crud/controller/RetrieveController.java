@@ -3,15 +3,15 @@ package br.eti.clairton.vraptor.crud.controller;
 import static br.com.caelum.vraptor.view.Results.json;
 import static br.eti.clairton.inflector.Inflector.getForLocale;
 import static br.eti.clairton.inflector.Locale.pt_BR;
-import static org.apache.logging.log4j.LogManager.getLogger;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Logger.getLogger;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletRequest;
 import javax.validation.constraints.NotNull;
-
-import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Result;
@@ -39,7 +39,7 @@ import br.eti.clairton.vraptor.crud.interceptor.ExceptionVerifier;
  *            tipo do modelo
  */
 public abstract class RetrieveController<T> {
-	private final Logger logger = getLogger(RetrieveController.class);
+	private final Logger logger = getLogger(RetrieveController.class.getSimpleName());
 
 	private final Repository repository;
 
@@ -96,7 +96,7 @@ public abstract class RetrieveController<T> {
 	@Authenticated
 	@ExceptionVerifier
 	public void index() {
-		logger.debug("Recuperando registros");
+		logger.log(FINE, "Recuperando registros");
 		findAndSerializeRecord();
 	}
 
@@ -111,7 +111,7 @@ public abstract class RetrieveController<T> {
 	@Authenticated
 	@ExceptionVerifier
 	public void show(final Long id) {
-		logger.debug("Mostrando registro");
+		logger.log(FINE, "Mostrando registro");
 		retrieveAndSerializeRecordToShow(id);
 	}
 

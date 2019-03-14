@@ -3,13 +3,15 @@ package br.eti.clairton.vraptor.crud.interceptor;
 import static br.com.caelum.vraptor.view.Results.http;
 import static br.com.caelum.vraptor.view.Results.json;
 import static java.util.Arrays.asList;
-import static org.apache.logging.log4j.LogManager.getLogger;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Logger.getLogger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -19,8 +21,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.OptimisticLockException;
 import javax.security.auth.login.CredentialNotFoundException;
 import javax.validation.ConstraintViolationException;
-
-import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.Result;
 import br.eti.clairton.security.InvalidUserException;
@@ -39,7 +39,7 @@ import br.eti.clairton.vraptor.crud.controller.NotInstanceableExeception;
 @Interceptor
 @ExceptionVerifier
 public class ExceptionVerifierInterceptor {
-	private static final Logger logger = getLogger(ExceptionVerifierInterceptor.class);
+	private static final Logger logger = getLogger(ExceptionVerifierInterceptor.class.getSimpleName());
 
 	private final Result result;
 
@@ -76,25 +76,25 @@ public class ExceptionVerifierInterceptor {
 		try {
 			return invocationContext.proceed();
 		} catch (final NoResultException e) {
-			logger.debug("NoResult: {}", e.getMessage());
+			logger.log(FINE, "NoResult: {0}", e.getMessage());
 			status = 404;
 			errors = asMessage(e.getMessage());
 		} catch (final UnauthorizedException e) {
-			logger.debug("Unauthorized: {}", e.getMessage());
+			logger.log(FINE, "Unauthorized: {0}", e.getMessage());
 			status = 403;
 			errors = asMessage(e.getMessage());
 		} catch (final UnauthenticatedException e) {
-			logger.debug("Unauthenticated: {}", e.getMessage());
+			logger.log(FINE, "Unauthenticated: {0}", e.getMessage());
 			status = 401;
 			errors = asMessage(e.getMessage());
 		} catch (final PasswordExpiredException e) {
-			logger.debug("PasswordExpired: {}", e.getMessage());
+			logger.log(FINE, "PasswordExpired: {0}", e.getMessage());
 			status = 403;
 			final Map<String, Integer> message = new HashMap<>();
 			message.put("status", 403);
 			errors = message;
 		}  catch (final ConstraintViolationException e) {
-			logger.debug("ConstraintViolation: {}", e.getMessage());
+			logger.log(FINE, "ConstraintViolation: {0}", e.getMessage());
 			@SuppressWarnings("rawtypes")
 			final Set violations = e.getConstraintViolations();
 			@SuppressWarnings("unchecked")
@@ -102,16 +102,16 @@ public class ExceptionVerifierInterceptor {
 			errors = b;
 			status = 422;
 		} catch (final InvalidUserException e) {
-			logger.debug("InvalidUserException: {}", e.getMessage());
+			logger.log(FINE, "InvalidUserException: {0}", e.getMessage());
 			final String m = "Usuário não pode ser criado pois esta invalido!!";
 			errors = asMessage(m);
 			status = 422;
 		} catch (final OptimisticLockException e) {
-			logger.debug("OptimisticLock: {}", e.getMessage());
+			logger.log(FINE, "OptimisticLock: {0}", e.getMessage());
 			status = 409;
 			errors = asMessage(e.getMessage());
 		} catch (final CredentialNotFoundException e) {
-			logger.debug("CredentialNotFound: {}", e.getMessage());
+			logger.log(FINE, "CredentialNotFound: {0}", e.getMessage());
 			status = 401;
 			final String m;
 			if (e.getMessage() == null) {
@@ -122,15 +122,15 @@ public class ExceptionVerifierInterceptor {
 			errors = asMessage(m);
 		} catch (final PasswordPolicyException e) {
 			final String m = "A senha informada não atende a politica de segurança!!";
-			logger.debug("PasswordPolicyException: " + m, e);
+			logger.log(FINE, "PasswordPolicyException: " + m, e);
 			status = 401;
 			errors = asMessage(m);
 		} catch (final NotInstanceableExeception e) {
-			logger.debug("NotNewableExeception: {}", e.getMessage());
+			logger.log(FINE, "NotNewableExeception: {0}", e.getMessage());
 			errors = asMessage(e.getCause().getMessage());
 			status = 422;
 		} catch (final InvocationTargetException e) {
-			logger.debug("InvocationTarget: {}", e.getTargetException());
+			logger.log(FINE, "InvocationTarget: {0}", e.getTargetException());
 			throw e.getTargetException();
 		} catch (final Throwable e) {
 			// logger.error("Throwable", e);

@@ -1,18 +1,18 @@
 package br.eti.clairton.vraptor.crud;
 
 import static java.util.Collections.singletonList;
+import static java.util.logging.Level.CONFIG;
+import static java.util.logging.Logger.getLogger;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
@@ -27,7 +27,7 @@ import br.eti.clairton.iterablebypriority.Iterables;
 
 @Specializes
 public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson.GsonBuilderWrapper {
-	private final Logger logger = LogManager.getLogger(GsonBuilderWrapper.class);
+	private final Logger logger = getLogger(GsonBuilderWrapper.class.getSimpleName());
 	private final Iterable<JsonSerializer<?>> jsonSerializers;
 	private final Iterable<JsonDeserializer<?>> jsonDeserializers;
 	private List<ExclusionStrategy> exclusions;
@@ -59,7 +59,7 @@ public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson
 	}
 
 	protected void registerAdapter(final Class<?> adapterType, final Object adapter) {
-		logger.info("Add adapter {} to type {}", adapter.getClass().getSimpleName(), adapterType.getSimpleName());
+		logger.log(CONFIG, "Add adapter {0} to type {1}", new Object[]{adapter.getClass().getSimpleName(), adapterType.getSimpleName()});
 		final RegisterStrategy registerStrategy = adapter.getClass().getAnnotation(RegisterStrategy.class);
 		if ((registerStrategy != null) && (registerStrategy.value().equals(RegisterType.SINGLE))) {
 			getGsonBuilder().registerTypeAdapter(adapterType, adapter);

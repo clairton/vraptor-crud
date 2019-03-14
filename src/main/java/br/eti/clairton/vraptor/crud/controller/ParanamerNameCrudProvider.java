@@ -1,21 +1,21 @@
 package br.eti.clairton.vraptor.crud.controller;
 
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Logger.getLogger;
 import static javax.enterprise.inject.spi.CDI.current;
-import static org.apache.logging.log4j.LogManager.getLogger;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Specializes;
 import javax.enterprise.inject.spi.BeanManager;
-
-import org.apache.logging.log4j.Logger;
 
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.http.Parameter;
@@ -33,7 +33,7 @@ import net.vidageek.mirror.set.dsl.SetterHandler;
 public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 	private static final Mirror mirror = new Mirror();
 
-	private static final Logger logger = getLogger(ParanamerNameCrudProvider.class);
+	private static final Logger logger = getLogger(ParanamerNameCrudProvider.class.getSimpleName());
 
 	/**
 	 * Altera o nome do parametro que pode ser recebido nos metodos do
@@ -51,7 +51,7 @@ public class ParanamerNameCrudProvider extends ParanamerNameProvider {
 			out[i] = new Parameter(i, parameters[i].getName(), executable);
 		}
 
-		logger.debug("parameter names for {}: {}", executable, Arrays.toString(out));
+		logger.log(FINE, "parameter names for {0}: {1}", new Object[] { executable, Arrays.toString(out) });
 		if (isActive() && executable instanceof Method) {
 			final Method method = (Method) executable;
 			final Class<?> klass = method.getDeclaringClass();
