@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.route.Router;
 import br.eti.clairton.inflector.Inflector;
 
@@ -16,7 +17,8 @@ public class PluralRoutesParserTest {
 	public void testGetUrisMustEmpty() throws Exception {
 		final Inflector i = mock(Inflector.class);
 		final Router r = mock(Router.class);
-		final PluralRoutesParser p = new PluralRoutesParser(r, i);
+		final ReflectionProvider rp = mock(ReflectionProvider.class);
+		final PluralRoutesParser p = new PluralRoutesParser(r, rp, i);
 		final Class<?> type = RetrieveController.class;
 		final Method method = type.getDeclaredMethod("getResourceName");
 		assertFalse(p.isEligible(method));

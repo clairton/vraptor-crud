@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.serialization.Serializee;
 import br.com.caelum.vraptor.serialization.gson.Exclusions;
 import br.com.caelum.vraptor.serialization.gson.RegisterStrategy;
@@ -33,11 +34,15 @@ public class GsonBuilderWrapper extends br.com.caelum.vraptor.serialization.gson
 	private List<ExclusionStrategy> exclusions;
 
 	@Inject
-	public GsonBuilderWrapper(final @Any Instance<JsonSerializer<?>> jsonSerializers, final @Any Instance<JsonDeserializer<?>> jsonDeserializers, final Serializee serializee) {
-		super(jsonSerializers, jsonDeserializers, serializee);
+	public GsonBuilderWrapper(
+			final @Any Instance<JsonSerializer<?>> jsonSerializers, 
+			final @Any Instance<JsonDeserializer<?>> jsonDeserializers, 
+			final Serializee serializee,
+			final ReflectionProvider reflectionProvider) {
+		super(jsonSerializers, jsonDeserializers, serializee, reflectionProvider);
 		this.jsonSerializers = Iterables.sort(jsonSerializers);
 		this.jsonDeserializers = Iterables.sort(jsonDeserializers);
-		ExclusionStrategy exclusion = new Exclusions(serializee);
+		ExclusionStrategy exclusion = new Exclusions(serializee, reflectionProvider);
 		exclusions = singletonList(exclusion);
 	}
 

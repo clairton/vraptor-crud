@@ -13,7 +13,7 @@ import br.eti.clairton.jpa.serializer.Mode;
 import br.eti.clairton.vraptor.crud.model.OutroModel;
 
 @RegisterStrategy(RegisterType.SINGLE)
-public class OutroModelSerializer extends AbstractModelSerializer<OutroModel> implements JsonSerializer<OutroModel>, JsonDeserializer<OutroModel> {
+public class OutroModelSerializer extends AbstractBaseSerializer<OutroModel> implements JsonSerializer<OutroModel>, JsonDeserializer<OutroModel> {
 	private static final long serialVersionUID = 1L;
 
 	@Inject

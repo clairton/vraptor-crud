@@ -5,6 +5,7 @@ import java.io.Writer;
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.interceptor.TypeNameExtractor;
 import br.com.caelum.vraptor.serialization.Serializer;
 import br.com.caelum.vraptor.serialization.gson.GsonSerializerBuilder;
@@ -15,8 +16,13 @@ public class GsonSerializer extends br.com.caelum.vraptor.serialization.gson.Gso
 	private final TagableExtractor tagableExtractor;
 
 	@Inject
-	public GsonSerializer(final GsonSerializerBuilder builder, final Writer writer, final TypeNameExtractor extractor, final TagableExtractor tagableExtractor) {
-		super(builder, writer, extractor);
+	public GsonSerializer(
+			final GsonSerializerBuilder builder, 
+			final Writer writer, 
+			final TypeNameExtractor extractor, 
+			final TagableExtractor tagableExtractor,
+			final ReflectionProvider reflectionProvider) {
+		super(builder, writer, extractor, reflectionProvider);
 		this.tagableExtractor = tagableExtractor;
 	}
 

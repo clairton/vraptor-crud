@@ -13,6 +13,7 @@ import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 
 import br.com.caelum.vraptor.controller.BeanClass;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.http.route.PathAnnotationRoutesParser;
 import br.com.caelum.vraptor.http.route.Route;
 import br.com.caelum.vraptor.http.route.Router;
@@ -30,9 +31,11 @@ public class PluralRoutesParser extends PathAnnotationRoutesParser {
 	private final Inflector inflector;
 
 	@Inject
-	public PluralRoutesParser(final Router router,
+	public PluralRoutesParser(
+			final Router router,
+			final ReflectionProvider reflectionProvider,
 			@Language final Inflector inflector) {
-		super(router);
+		super(router, reflectionProvider);
 		this.inflector = inflector;
 	}
 

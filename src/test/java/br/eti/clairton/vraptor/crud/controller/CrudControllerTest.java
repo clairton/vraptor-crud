@@ -22,6 +22,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
 import br.com.caelum.vraptor.View;
+import br.com.caelum.vraptor.core.DefaultReflectionProvider;
+import br.com.caelum.vraptor.core.ReflectionProvider;
 import br.com.caelum.vraptor.environment.DefaultEnvironment;
 import br.com.caelum.vraptor.environment.Environment;
 import br.com.caelum.vraptor.environment.EnvironmentType;
@@ -49,7 +51,7 @@ import br.eti.clairton.vraptor.crud.GsonJSONSerialization;
 import br.eti.clairton.vraptor.crud.model.Aplicacao;
 import br.eti.clairton.vraptor.crud.model.Recurso;
 import br.eti.clairton.vraptor.crud.serializer.DefaultTagableExtrator;
-import br.eti.clairton.vraptor.crud.serializer.ModelSerializer;
+import br.eti.clairton.vraptor.crud.serializer.BaseSerializer;
 import br.eti.clairton.vraptor.crud.serializer.TagableExtractor;
 import net.vidageek.mirror.dsl.Mirror;
 
@@ -59,7 +61,7 @@ public class CrudControllerTest {
 
 	private final Inflector inflector = Inflector.getForLocale(Locale.pt_BR);
 
-	private final JsonSerializer<Base> serializer = new ModelSerializer(inflector, Mockito.mock(EntityManager.class)){
+	private final JsonSerializer<Base> serializer = new BaseSerializer(inflector, Mockito.mock(EntityManager.class)){
 		private static final long serialVersionUID = 1L;
 		{
 			record("recursos");
@@ -81,7 +83,7 @@ public class CrudControllerTest {
 		};
 	};
 
-	private final JsonSerializer<Base> serializerRecurso = new ModelSerializer(inflector, Mockito.mock(EntityManager.class)){
+	private final JsonSerializer<Base> serializerRecurso = new BaseSerializer(inflector, Mockito.mock(EntityManager.class)){
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -136,6 +138,8 @@ public class CrudControllerTest {
 	private MockHttpServletRequest request;
 
 	private MockHttpServletResponse response;
+
+	private ReflectionProvider reflectionProvider;
 	
 	private String tag = "xpto";
 
@@ -145,7 +149,8 @@ public class CrudControllerTest {
 	public void init() throws Exception{
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
-		final GsonSerializerBuilder builder = new GsonBuilderWrapper(jsonSerializers,  jsonDeserializers, new Serializee()){
+		reflectionProvider = new DefaultReflectionProvider();
+		final GsonSerializerBuilder builder = new GsonBuilderWrapper(jsonSerializers,  jsonDeserializers, new Serializee(reflectionProvider), reflectionProvider){
 			@Override
 			public Gson create() {
 				getGsonBuilder().registerTypeAdapter(Aplicacao.class, serializer);
@@ -162,8 +167,8 @@ public class CrudControllerTest {
 				return (Tagable<Object>) serializer;
 			}
 		};
-		final GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, environment, tagableExtractor);
-		result = new MockSerializationResult(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(), builder, environment){
+		final GsonJSONSerialization serialization = new GsonJSONSerialization(response, extractor, builder, environment, tagableExtractor, reflectionProvider);
+		result = new MockSerializationResult(new JavassistProxifier(), XStreamBuilderImpl.cleanInstance(), builder, environment, reflectionProvider){
 			
 			@Override
 			public <T extends View> T use(final Class<T> view) {

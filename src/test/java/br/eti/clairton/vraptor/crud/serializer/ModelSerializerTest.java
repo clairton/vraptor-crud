@@ -39,7 +39,7 @@ public class ModelSerializerTest {
 	public void init() {
 		final GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(OutroModel.class, new OutroModelSerializer(inflector, null));
-		builder.registerTypeHierarchyAdapter(Base.class, new ModelSerializer(inflector, null));
+		builder.registerTypeHierarchyAdapter(Base.class, new BaseSerializer(inflector, null));
 		gson = builder.create();
 	}
 
